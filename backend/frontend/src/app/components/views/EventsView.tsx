@@ -38,6 +38,21 @@ import SustainBG from '../../../assets/SustainBG.jpg';
 import ExcelBG from '../../../assets/ExcelBG.jpg';
 import PharmaBG from '../../../assets/PharmaBG.jpg';
 
+const IMAGE_MAP: Record<string, string> = {
+  EngageWebDevBG, StocksBG, Swim101, DigitalMarket, DesignThinkBG, LeadershipBG,
+  ChristmasReunion, DataSciBG, CareerFairBG, GolfTournaBG, LeaderSummitBG,
+  GuestLectureBG, WorkshopBG, MentorCapBG, FinancialManageBG, HealthCareBG,
+  WorkshopLeadBG, CareerAdviceBG, LabInstructBG, SkillWorkshopBG, AccountingBG,
+  LeaderDigitalBG, AdvFinanceBG, AIandMachineBG, ProjectManagementBG, LegalLawBG,
+  EntrepBG, MentalHealthBG, MarketingBG, CybersecBG, SustainBG, ExcelBG, PharmaBG,
+};
+
+function getEventImage(image: string): string {
+  if (!image) return CareerFairBG;
+  if (IMAGE_MAP[image]) return IMAGE_MAP[image];
+  return image; // full URL (uploaded) or blob URL (preview)
+}
+
 interface Event {
   id: string;
   title: string;
@@ -48,6 +63,7 @@ interface Event {
   participants: number;
   description: string;
   image: string;
+  date_value?: string; // raw ISO date for form inputs
   tab: 'Upcoming Events' | 'Past Events' | 'Teaching Opportunities' | 'Seminars & Workshops' | 'Alumni Proposals';
   postedBy?: string;
   postedDate?: string;
@@ -102,7 +118,7 @@ function EventCard({ event, userRole, onApprove, onReject, onView, onRemove, onE
   return (
     <div className="bg-white rounded-[24px] overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all flex flex-col h-full text-left">
       <div className="relative h-56 overflow-hidden">
-        <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
+        <img src={getEventImage(event.image)} alt={event.title} className="w-full h-full object-cover" />
         <div className="absolute top-4 right-4 flex flex-col gap-2 items-end">
           {isAdmin && (
             <>
@@ -214,17 +230,17 @@ function EventCard({ event, userRole, onApprove, onReject, onView, onRemove, onE
   );
 }
 
-export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: string; userName?: string }) {
+export function EventsView({ userRole, userName = 'Alumni User', userEmail = '' }: { userRole: string; userName?: string; userEmail?: string }) {
   const [activeTab, setActiveTab] = useState('Upcoming Events');
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [registrationEvent, setRegistrationEvent] = useState<Event | null>(null);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [events, setEvents] = useState<Event[]>(() => {
-    const saved = localStorage.getItem('addu_events');
-    return saved ? JSON.parse(saved) : INITIAL_EVENTS;
-  });
+  const [events, setEvents] = useState<Event[]>([]);
+  const [newEventFile, setNewEventFile] = useState<File | null>(null);
+  const [editEventFile, setEditEventFile] = useState<File | null>(null);
 
   const [newEvent, setNewEvent] = useState({
     title: '',
@@ -250,9 +266,24 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
     image: ''
   });
 
+  const API_URL = 'http://localhost:8000';
+
+  const fetchEvents = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/api/events`);
+      const data = await res.json();
+      setEvents(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error('Failed to fetch events:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    localStorage.setItem('addu_events', JSON.stringify(events));
-  }, [events]);
+    fetchEvents();
+  }, []);
 
   useEffect(() => {
     const handleRegisterEvent = (event: any) => {
@@ -267,24 +298,37 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
     setTimeout(() => setShowSuccessToast(false), 3000);
   };
 
-  const handleApprove = (id: string) => {
-    setEvents(prev => prev.map(ev => 
-      ev.id === id ? { ...ev, status: 'Approved' as const, tab: 'Upcoming Events' as const } : ev
-    ));
-    triggerToast();
-  };
-
-  const handleReject = (id: string) => {
-    setEvents(prev => prev.map(ev => 
-      ev.id === id ? { ...ev, status: 'Rejected' as const } : ev
-    ));
-    triggerToast();
-  };
-
-  const handleRemove = (id: string) => {
-    if (window.confirm("Are you sure you want to permanently remove this event?")) {
-      setEvents(prev => prev.filter(ev => ev.id !== id));
+  const handleApprove = async (id: string) => {
+    try {
+      const res = await fetch(`${API_URL}/api/events/${id}/approve`, { method: 'PATCH' });
+      const updated = await res.json();
+      setEvents(prev => prev.map(ev => ev.id === id ? updated : ev));
       triggerToast();
+    } catch (err) {
+      console.error('Failed to approve event:', err);
+    }
+  };
+
+  const handleReject = async (id: string) => {
+    try {
+      const res = await fetch(`${API_URL}/api/events/${id}/reject`, { method: 'PATCH' });
+      const updated = await res.json();
+      setEvents(prev => prev.map(ev => ev.id === id ? updated : ev));
+      triggerToast();
+    } catch (err) {
+      console.error('Failed to reject event:', err);
+    }
+  };
+
+  const handleRemove = async (id: string) => {
+    if (window.confirm('Are you sure you want to permanently remove this event?')) {
+      try {
+        await fetch(`${API_URL}/api/events/${id}`, { method: 'DELETE' });
+        setEvents(prev => prev.filter(ev => ev.id !== id));
+        triggerToast();
+      } catch (err) {
+        console.error('Failed to delete event:', err);
+      }
     }
   };
 
@@ -294,18 +338,18 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
     setEditEvent({
       title: event.title,
       category: event.category,
-      date: event.date,
+      date: event.date_value || '',
       startTime: timeParts[0] || '',
       endTime: timeParts[1] || '',
       location: event.location,
       description: event.description,
       capacity: event.participants.toString(),
-      image: event.image
+      image: getEventImage(event.image)
     });
     setActiveTab('Edit Event');
   };
 
-  const handleUpdateEvent = () => {
+  const handleUpdateEvent = async () => {
     if (!editEvent.title || !editEvent.category || !editEvent.date || !editEvent.startTime || !editEvent.endTime || !editEvent.location || !editEvent.description) {
       alert('Please fill in all required fields');
       return;
@@ -313,37 +357,36 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
 
     if (!editingEvent) return;
 
-    const updatedEvent: Event = {
-      ...editingEvent,
-      title: editEvent.title,
-      category: editEvent.category,
-      date: editEvent.date,
-      time: `${editEvent.startTime} - ${editEvent.endTime}`,
-      location: editEvent.location,
-      participants: parseInt(editEvent.capacity) || editingEvent.participants,
-      description: editEvent.description,
-      image: editEvent.image || editingEvent.image,
-    };
+    const formData = new FormData();
+    formData.append('title', editEvent.title);
+    formData.append('category', editEvent.category);
+    formData.append('date', editEvent.date);
+    formData.append('time_display', `${editEvent.startTime} - ${editEvent.endTime}`);
+    formData.append('location', editEvent.location);
+    formData.append('participants', editEvent.capacity || editingEvent.participants.toString());
+    formData.append('description', editEvent.description);
+    if (editEventFile) {
+      formData.append('image', editEventFile);
+    }
 
-    setEvents(prev => prev.map(ev => ev.id === editingEvent.id ? updatedEvent : ev));
-    setEditingEvent(null);
-    setEditEvent({
-      title: '',
-      category: '',
-      date: '',
-      startTime: '',
-      endTime: '',
-      location: '',
-      description: '',
-      capacity: '',
-      image: ''
-    });
-    setActiveTab('Upcoming Events');
-    triggerToast();
+    try {
+      const res = await fetch(`${API_URL}/api/events/${editingEvent.id}/update`, { method: 'POST', body: formData });
+      const updated = await res.json();
+      setEvents(prev => prev.map(ev => ev.id === editingEvent.id ? updated : ev));
+      setEditingEvent(null);
+      setEditEventFile(null);
+      setEditEvent({ title: '', category: '', date: '', startTime: '', endTime: '', location: '', description: '', capacity: '', image: '' });
+      setActiveTab('Upcoming Events');
+      triggerToast();
+    } catch (err) {
+      console.error('Failed to update event:', err);
+      alert('Failed to update event. Please try again.');
+    }
   };
 
   const handleCancelEdit = () => {
     setEditingEvent(null);
+    setEditEventFile(null);
     setEditEvent({
       title: '',
       category: '',
@@ -358,39 +401,37 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
     setActiveTab('Upcoming Events');
   };
 
-  const handleCreateEvent = () => {
+  const handleCreateEvent = async () => {
     if (!newEvent.title || !newEvent.category || !newEvent.date || !newEvent.startTime || !newEvent.endTime || !newEvent.location || !newEvent.description) {
       alert('Please fill in all required fields');
       return;
     }
 
-    const createdEvent: Event = {
-      id: Date.now().toString(),
-      title: newEvent.title,
-      category: newEvent.category,
-      date: newEvent.date,
-      time: `${newEvent.startTime} - ${newEvent.endTime}`,
-      location: newEvent.location,
-      participants: parseInt(newEvent.capacity) || 0,
-      description: newEvent.description,
-      image: newEvent.image || CareerFairBG,
-      tab: 'Upcoming Events',
-    };
+    const formData = new FormData();
+    formData.append('title', newEvent.title);
+    formData.append('category', newEvent.category);
+    formData.append('date', newEvent.date);
+    formData.append('time_display', `${newEvent.startTime} - ${newEvent.endTime}`);
+    formData.append('location', newEvent.location);
+    formData.append('participants', newEvent.capacity || '0');
+    formData.append('description', newEvent.description);
+    formData.append('tab', 'Upcoming Events');
+    if (newEventFile) {
+      formData.append('image', newEventFile);
+    }
 
-    setEvents(prev => [createdEvent, ...prev]);
-    setNewEvent({
-      title: '',
-      category: '',
-      date: '',
-      startTime: '',
-      endTime: '',
-      location: '',
-      description: '',
-      capacity: '',
-      image: ''
-    });
-    setActiveTab('Upcoming Events');
-    triggerToast();
+    try {
+      const res = await fetch(`${API_URL}/api/events`, { method: 'POST', body: formData });
+      const created = await res.json();
+      setEvents(prev => [created, ...prev]);
+      setNewEvent({ title: '', category: '', date: '', startTime: '', endTime: '', location: '', description: '', capacity: '', image: '' });
+      setNewEventFile(null);
+      setActiveTab('Upcoming Events');
+      triggerToast();
+    } catch (err) {
+      console.error('Failed to create event:', err);
+      alert('Failed to create event. Please try again.');
+    }
   };
 
   const baseTabs = ['Upcoming Events', 'Past Events', 'Teaching Opportunities', 'Seminars & Workshops'];
@@ -400,7 +441,7 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
   }
 
   const filteredEvents = events.filter(event => {
-    if (activeTab === 'My Submissions') return event.status !== undefined && event.submittedBy === userName;
+    if (activeTab === 'My Submissions') return event.status != null && event.submittedBy === userName;
     if (activeTab === 'Create Event' || activeTab === 'Submit Proposal' || activeTab === 'Edit Event') return false;
     return event.tab === activeTab;
   });
@@ -615,8 +656,8 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) {
-                      const imageUrl = URL.createObjectURL(file);
-                      setNewEvent({ ...newEvent, image: imageUrl });
+                      setNewEventFile(file);
+                      setNewEvent({ ...newEvent, image: URL.createObjectURL(file) });
                     }
                   }}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
@@ -765,8 +806,8 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) {
-                      const imageUrl = URL.createObjectURL(file);
-                      setEditEvent({ ...editEvent, image: imageUrl });
+                      setEditEventFile(file);
+                      setEditEvent({ ...editEvent, image: URL.createObjectURL(file) });
                     }
                   }}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
@@ -902,8 +943,8 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) {
-                      const imageUrl = URL.createObjectURL(file);
-                      setNewEvent({ ...newEvent, image: imageUrl });
+                      setNewEventFile(file);
+                      setNewEvent({ ...newEvent, image: URL.createObjectURL(file) });
                     }
                   }}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
@@ -912,44 +953,39 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
               
               <div className="flex gap-3 pt-6 border-t border-gray-200">
                 <button 
-                  onClick={() => {
+                  onClick={async () => {
                     if (!newEvent.title || !newEvent.category || !newEvent.date || !newEvent.startTime || !newEvent.endTime || !newEvent.location || !newEvent.description) {
                       alert('Please fill in all required fields');
                       return;
                     }
 
-                    const proposedEvent: Event = {
-                      id: Date.now().toString(),
-                      title: newEvent.title,
-                      category: newEvent.category,
-                      date: newEvent.date,
-                      time: `${newEvent.startTime} - ${newEvent.endTime}`,
-                      location: newEvent.location,
-                      participants: parseInt(newEvent.capacity) || 0,
-                      description: newEvent.description,
-                      image: newEvent.image || CareerFairBG,
-                      tab: 'Alumni Proposals',
-                      status: 'Pending',
-                      postedBy: userName,
-                      postedDate: 'Just now',
-                      submittedBy: userName
-                    };
+                    const formData = new FormData();
+                    formData.append('title', newEvent.title);
+                    formData.append('category', newEvent.category);
+                    formData.append('date', newEvent.date);
+                    formData.append('time_display', `${newEvent.startTime} - ${newEvent.endTime}`);
+                    formData.append('location', newEvent.location);
+                    formData.append('participants', newEvent.capacity || '0');
+                    formData.append('description', newEvent.description);
+                    formData.append('submitted_by', userName);
+                    formData.append('submitted_by_email', userEmail);
+                    if (newEventFile) {
+                      formData.append('image', newEventFile);
+                    }
 
-                    setEvents(prev => [proposedEvent, ...prev]);
-                    setNewEvent({
-                      title: '',
-                      category: '',
-                      date: '',
-                      startTime: '',
-                      endTime: '',
-                      location: '',
-                      description: '',
-                      capacity: '',
-                      image: ''
-                    });
-                    setActiveTab('My Submissions');
-                    alert('Event proposal submitted successfully! The admin will review and approve your event before it goes live.');
-                    triggerToast();
+                    try {
+                      const res = await fetch(`${API_URL}/api/events/proposals`, { method: 'POST', body: formData });
+                      const created = await res.json();
+                      setEvents(prev => [created, ...prev]);
+                      setNewEvent({ title: '', category: '', date: '', startTime: '', endTime: '', location: '', description: '', capacity: '', image: '' });
+                      setNewEventFile(null);
+                      setActiveTab('My Submissions');
+                      alert('Event proposal submitted successfully! The admin will review and approve your event before it goes live.');
+                      triggerToast();
+                    } catch (err) {
+                      console.error('Failed to submit proposal:', err);
+                      alert('Failed to submit proposal. Please try again.');
+                    }
                   }}
                   className="px-6 py-3 bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold"
                 >
@@ -957,6 +993,7 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
                 </button>
                 <button 
                   onClick={() => {
+                    setNewEventFile(null);
                     setNewEvent({
                       title: '',
                       category: '',
@@ -985,7 +1022,7 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
         <div className="fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-white rounded-[32px] w-full max-w-lg overflow-hidden shadow-2xl">
             <div className="relative h-48">
-                <img src={selectedEvent.image} alt={selectedEvent.title} className="w-full h-full object-cover" />
+                <img src={getEventImage(selectedEvent.image)} alt={selectedEvent.title} className="w-full h-full object-cover" />
                 <button onClick={() => setSelectedEvent(null)} className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 rounded-full text-white backdrop-blur-md transition-colors">
                     <X className="w-5 h-5" />
                 </button>
@@ -1020,11 +1057,18 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
       {registrationEvent && (
         <EventRegistrationModal 
           event={{
+            id: registrationEvent.id,
             title: registrationEvent.title,
             date: registrationEvent.date,
             time: registrationEvent.time,
             location: registrationEvent.location,
-            image: registrationEvent.image
+            image: getEventImage(registrationEvent.image)
+          }}
+          userEmail={userEmail}
+          onSuccess={(eventId) => {
+            setEvents(prev => prev.map(ev =>
+              ev.id === eventId ? { ...ev, participants: ev.participants + 1 } : ev
+            ));
           }}
           onClose={() => setRegistrationEvent(null)}
           pricePerGuest={1000}

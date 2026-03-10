@@ -3,17 +3,20 @@ import { X, Users, CreditCard, Smartphone, Wallet } from 'lucide-react';
 
 interface EventRegistrationModalProps {
   event: {
+    id: string;
     title: string;
     date: string;
     time: string;
     location: string;
     image: string;
   };
+  userEmail?: string;
   onClose: () => void;
+  onSuccess?: (eventId: string) => void;
   pricePerGuest?: number;
 }
 
-export function EventRegistrationModal({ event, onClose, pricePerGuest = 1000 }: EventRegistrationModalProps) {
+export function EventRegistrationModal({ event, userEmail = '', onClose, onSuccess, pricePerGuest = 1000 }: EventRegistrationModalProps) {
   const [step, setStep] = useState<'form' | 'payment'>('form');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -61,14 +64,35 @@ export function EventRegistrationModal({ event, onClose, pricePerGuest = 1000 }:
     setStep('payment');
   };
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     setIsProcessing(true);
-    
-    // Simulate payment processing
-    setTimeout(() => {
+    try {
+      const res = await fetch(`http://localhost:8000/api/events/${event.id}/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email: userEmail || `${firstName.toLowerCase()}.${lastName.toLowerCase()}@addu.edu.ph`,
+          guest_count: guestCount,
+          guests_data: guests,
+          payment_method: paymentMethod,
+          total_amount: totalPrice,
+        }),
+      });
+
+      if (res.ok) {
+        onSuccess?.(event.id);
+        onClose();
+      } else {
+        alert('Registration failed. Please try again.');
+      }
+    } catch (err) {
+      console.error('Registration error:', err);
+      alert('Registration failed. Please check your connection.');
+    } finally {
       setIsProcessing(false);
-      onClose();
-    }, 2000);
+    }
   };
 
   const incrementGuests = () => {

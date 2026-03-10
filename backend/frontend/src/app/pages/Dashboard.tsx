@@ -15,8 +15,10 @@ import { Sidebar } from '../components/Sidebar';
 export function Dashboard() {
   const [activeView, setActiveView] = useState<'home'|'profile'|'directory'|'events'|'surveys'|'careers'|'news'|'give'|'analytics'|'internships'|'users'>('home');
   
-  // Get user role from localStorage
+  // Get user info from localStorage
   const userRole = (localStorage.getItem('userRole') as 'alumni' | 'admin') || 'alumni';
+  const userName = localStorage.getItem('userName') || 'Alumni User';
+  const userEmail = localStorage.getItem('userEmail') || '';
 
   const renderView = () => {
     switch (activeView) {
@@ -27,7 +29,7 @@ export function Dashboard() {
       case 'directory': 
         return <DirectoryView userRole={userRole} />;
       case 'events': 
-        return <EventsView userRole={userRole} />;
+        return <EventsView userRole={userRole} userName={userName} userEmail={userEmail} />;
       case 'surveys': 
         return <SurveysView userRole={userRole} />;
       case 'careers': 

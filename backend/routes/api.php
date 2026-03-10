@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\DonationCampaignController;
 use App\Http\Controllers\Api\DonationController;
+use App\Http\Controllers\Api\EventController;
 
 Route::get('/test', function () {
     return response()->json([
@@ -43,3 +44,14 @@ Route::get('/donations', [DonationController::class, 'index']); // Get all donat
 Route::get('/donations/email/{email}', [DonationController::class, 'getByEmail']); // Get donations by email
 Route::get('/donations/statistics', [DonationController::class, 'getStatistics']); // Get donation statistics
 Route::get('/donations/analytics', [DonationController::class, 'getAnalytics']); // Get detailed analytics (admin)
+
+// Events / Engagement API
+Route::get('/events', [EventController::class, 'index']);                          // List events (optional ?tab= filter)
+Route::post('/events/proposals', [EventController::class, 'submitProposal']);      // Alumni submits proposal (must be before {id} wildcard)
+Route::get('/events/my-proposals/{email}', [EventController::class, 'getMyProposals']); // Alumni views own proposals
+Route::post('/events', [EventController::class, 'store']);                         // Admin creates event
+Route::post('/events/{id}/update', [EventController::class, 'update']);            // Admin updates event (FormData)
+Route::delete('/events/{id}', [EventController::class, 'destroy']);                // Admin deletes event
+Route::patch('/events/{id}/approve', [EventController::class, 'approve']);         // Admin approves proposal
+Route::patch('/events/{id}/reject', [EventController::class, 'reject']);           // Admin rejects proposal
+Route::post('/events/{id}/register', [EventController::class, 'register']);        // Register for event

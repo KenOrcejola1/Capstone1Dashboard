@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Database\Seeders\SampleEventsSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,6 +16,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([SampleEventsSeeder::class]);
+
         // Create sample alumni user
         User::create([
             'name' => 'Juan Santos Dela Cruz',
