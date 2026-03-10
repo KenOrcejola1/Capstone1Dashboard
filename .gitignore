@@ -1,10 +1,31 @@
 # Node
 node_modules/
+/node_modules
 npm-debug.log*
+*.log
 
 # Laravel
 /vendor/
+vendor/
 .env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+/.fleet
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+/auth.json
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+Homestead.json
+Homestead.yaml
 
 # OS
 .DS_Store
