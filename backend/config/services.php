@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'supabase' => [
+        'url' => env('SUPABASE_URL'),
+        'anon_key' => env('SUPABASE_ANON_KEY'),
+        'publishable_key' => env('SUPABASE_PUBLISHABLE_KEY'),
+        'access_token' => env('SUPABASE_ACCESS_TOKEN'),
+        'jwt_secret' => env('SUPABASE_JWT_SECRET'),
+    ],
+
 ];
