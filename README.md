@@ -1,1 +1,1 @@
-# Capstone1Dashboard
+ONLY PULL THE (NEWSVIEW.TSX FILE< Nothing Else)
