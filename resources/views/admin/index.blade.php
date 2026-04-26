@@ -3,31 +3,35 @@
 @section('title', 'Admin - Tracer Study')
 
 @section('content')
-<div x-data="adminApp()" x-cloak>
+<div x-data="adminApp()" x-cloak class="admin-shell min-h-screen bg-[#F4F7FC]" style="background-image: radial-gradient(circle at 10% -20%, rgba(0,48,135,0.14), transparent 30%), radial-gradient(circle at 90% 0%, rgba(255,159,26,0.15), transparent 25%);">
     {{-- Admin Header --}}
-    <div class="bg-white border-b border-border sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-6 py-4">
+    <div class="admin-header bg-white/90 backdrop-blur border-b border-blue-100 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 py-5">
             <div class="flex items-center justify-between gap-4">
                 <div class="flex-1">
-                    <h1 class="text-2xl font-bold text-[#003087]">ADDU Tracer Study Admin</h1>
-                    <p class="text-sm text-muted-foreground mt-1">Manage your survey</p>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#EAF1FF] text-[#003087] rounded-full text-xs font-bold tracking-wider uppercase mb-2">
+                        Tracer Admin
+                    </div>
+                    <h1 class="text-3xl font-bold text-[#003087] tracking-tight">ADDU Tracer Study Admin</h1>
+                    <p class="text-sm text-slate-500 mt-1">Manage categories, questions, and survey flow from one control center.</p>
                 </div>
-                <a href="/" class="flex items-center gap-2 px-4 py-2 bg-[#003087] text-white rounded-lg hover:bg-[#002366] transition-colors whitespace-nowrap">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    Back to Form
-                </a>
+                <div class="flex items-center gap-2">
+                    <a href="http://localhost:3000/login" class="flex items-center gap-2 px-4 py-2 bg-white text-slate-700 rounded-xl hover:bg-slate-50 transition-colors whitespace-nowrap border border-slate-200 shadow-sm">
+                        Back to Portal Login
+                    </a>
+                </div>
             </div>
         </div>
 
         {{-- Navigation Tabs --}}
-        <div class="max-w-7xl mx-auto px-6">
-            <nav class="flex gap-1 -mb-px overflow-x-auto">
+        <div class="max-w-7xl mx-auto px-6 pb-3">
+            <nav class="admin-nav-tabs inline-flex gap-1 p-1 rounded-xl bg-[#EAF1FF] border border-blue-100 overflow-x-auto">
                 <a href="/admin"
-                   class="px-4 py-2.5 text-sm font-medium border-b-2 transition-colors border-[#003087] text-[#003087] whitespace-nowrap">
+                   class="px-4 py-2.5 text-sm font-semibold rounded-lg transition-colors bg-white text-[#003087] shadow-sm whitespace-nowrap">
                     Dashboard
                 </a>
                 <a href="/admin/responses"
-                   class="px-4 py-2.5 text-sm font-medium border-b-2 transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
+                   class="px-4 py-2.5 text-sm font-semibold rounded-lg transition-colors text-[#33598F] hover:bg-white/80 whitespace-nowrap">
                     Responses
                 </a>
             </nav>
@@ -36,32 +40,42 @@
 
     {{-- Main Content --}}
     <div class="max-w-7xl mx-auto px-6 py-8">
-        <div class="bg-white rounded-lg shadow-sm p-8">
+        <div class="admin-main-card bg-white rounded-2xl shadow-xl shadow-blue-900/5 border border-blue-100 p-8">
             {{-- Tracer Study Management Header --}}
-            <div class="bg-gradient-to-br from-[#003087] to-[#0052CC] text-white p-6 rounded-lg shadow-lg mb-6">
-                <h1 class="text-3xl mb-2">Tracer Study Management</h1>
-                <p class="text-white/90">Create and manage survey categories, questions, and answer options</p>
-                <div class="mt-3 flex gap-4 text-sm text-white/80">
-                    <span>📋 <span x-text="categories.length"></span> Categories</span>
-                    <span>•</span>
-                    <span>❓ <span x-text="totalQuestions"></span> Questions</span>
+            <div class="admin-hero text-white p-6 rounded-2xl shadow-lg mb-6 relative overflow-hidden" style="background: linear-gradient(125deg, #003087 0%, #0046B8 55%, #0052CC 100%);">
+                <div class="absolute -right-10 -top-14 w-40 h-40 rounded-full bg-white/10"></div>
+                <div class="absolute -left-8 -bottom-14 w-32 h-32 rounded-full bg-[#FF9F1A]/20"></div>
+                <div class="relative z-10">
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-white/15 text-[#FFE5BF] text-xs font-semibold uppercase tracking-wider mb-3">Admin Workspace</div>
+                    <h1 class="text-3xl mb-2 font-bold tracking-tight">Tracer Study Management</h1>
+                    <p class="text-white/90">Create and manage survey categories, questions, and answer options</p>
+                </div>
+                <div class="relative z-10 mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md">
+                    <div class="px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-sm">
+                        <span class="text-white/80">📋 Categories</span>
+                        <div class="font-bold text-lg" x-text="categories.length"></div>
+                    </div>
+                    <div class="px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-sm">
+                        <span class="text-white/80">❓ Questions</span>
+                        <div class="font-bold text-lg" x-text="totalQuestions"></div>
+                    </div>
                 </div>
             </div>
 
             {{-- Tabs --}}
-            <div class="border-b border-gray-200 mb-6">
-                <div class="flex gap-6">
+            <div class="mb-6">
+                <div class="inline-flex gap-2 p-1 rounded-xl bg-[#F1F5FF] border border-blue-100">
                     <button
                         @click="activeTab = 'categories'"
-                        :class="activeTab === 'categories' ? 'border-[#003087] text-[#003087]' : 'border-transparent text-gray-600 hover:text-gray-900'"
-                        class="px-4 py-4 font-medium border-b-2 transition-colors"
+                        :class="activeTab === 'categories' ? 'bg-white text-[#003087] shadow-sm' : 'text-[#4F6FA8] hover:bg-white/70'"
+                        class="px-4 py-2.5 rounded-lg font-semibold transition-colors"
                     >
                         Manage Categories & Questions
                     </button>
                     <button
                         @click="activeTab = 'preview'"
-                        :class="activeTab === 'preview' ? 'border-[#003087] text-[#003087]' : 'border-transparent text-gray-600 hover:text-gray-900'"
-                        class="px-4 py-4 font-medium border-b-2 transition-colors flex items-center gap-2"
+                        :class="activeTab === 'preview' ? 'bg-white text-[#003087] shadow-sm' : 'text-[#4F6FA8] hover:bg-white/70'"
+                        class="px-4 py-2.5 rounded-lg font-semibold transition-colors flex items-center gap-2"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                         Preview Survey
@@ -71,10 +85,10 @@
 
             {{-- Categories Tab --}}
             <template x-if="activeTab === 'categories'">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-0">
                     {{-- Left Column - Categories --}}
-                    <div class="lg:col-span-1">
-                        <div class="bg-white rounded-lg border border-gray-200 shadow-sm">
+                    <div class="lg:col-span-1 lg:pr-6 lg:border-r lg:border-slate-300/80">
+                        <div class="admin-panel bg-white rounded-lg border border-gray-200 shadow-sm">
                             <div class="p-4 border-b border-gray-200">
                                 <div class="flex items-center justify-between mb-4">
                                     <h2 class="font-semibold">Categories</h2>
@@ -112,7 +126,7 @@
                             </div>
 
                             {{-- Category List --}}
-                            <div class="divide-y divide-gray-200 max-h-[600px] overflow-y-auto">
+                            <div class="divide-y divide-slate-300/80 max-h-[600px] overflow-y-auto">
                                 <template x-if="categories.length === 0">
                                     <div class="p-8 text-center text-gray-500">
                                         <svg class="w-12 h-12 mx-auto mb-3 opacity-30 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
@@ -123,7 +137,7 @@
                                 <template x-for="category in categories" :key="category.id">
                                     <div
                                         :class="selectedCategory?.id === category.id ? 'bg-blue-50 border-l-4 border-l-[#003087]' : 'hover:bg-gray-50'"
-                                        class="p-4 cursor-pointer transition-colors"
+                                        class="admin-category-item p-4 cursor-pointer transition-colors"
                                         @click="selectedCategory = category"
                                     >
                                         <div class="flex items-start justify-between gap-2">
@@ -151,9 +165,9 @@
                     </div>
 
                     {{-- Right Column - Questions --}}
-                    <div class="lg:col-span-2">
+                    <div class="lg:col-span-2 lg:pl-6">
                         <template x-if="selectedCategory">
-                            <div class="bg-white rounded-lg border border-gray-200 shadow-sm">
+                            <div class="admin-panel bg-white rounded-lg border border-gray-200 shadow-sm">
                                 <div class="p-4 border-b border-gray-200">
                                     <div class="flex items-center justify-between mb-4">
                                         <div>
@@ -308,7 +322,7 @@
                         </template>
 
                         <template x-if="!selectedCategory">
-                            <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-12 text-center">
+                            <div class="admin-panel bg-white rounded-lg border border-gray-200 shadow-sm p-12 text-center admin-empty-state">
                                 <svg class="w-16 h-16 mx-auto mb-4 text-gray-400 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                 <h3 class="text-lg font-medium mb-2">No Category Selected</h3>
                                 <p class="text-sm text-gray-600">Select a category from the left to manage its questions</p>
@@ -335,7 +349,7 @@
 
                     <div class="space-y-8">
                         <template x-for="(category, catIndex) in categories" :key="category.id">
-                            <div class="border border-gray-300 rounded-lg p-6">
+                            <div class="preview-card border border-gray-300 rounded-lg p-6">
                                 <div class="mb-6">
                                     <h3 class="text-lg font-semibold mb-1" x-text="'Section ' + (catIndex + 1) + ': ' + category.title"></h3>
                                     <p class="text-sm text-gray-600" x-text="category.description"></p>
@@ -627,5 +641,129 @@ function adminApp() {
 
 <style>
 [x-cloak] { display: none !important; }
+
+.admin-shell {
+    color: #0f172a;
+}
+
+.admin-header {
+    box-shadow: 0 16px 35px rgba(15, 23, 42, 0.08);
+}
+
+.admin-main-card {
+    border-radius: 26px;
+    border-color: #dbeafe;
+    box-shadow: 0 30px 80px rgba(15, 23, 42, 0.12);
+}
+
+.admin-hero {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 22px 50px rgba(0, 48, 135, 0.34);
+}
+
+.admin-nav-tabs a {
+    border-radius: 10px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.admin-panel {
+    border-radius: 18px;
+    border-color: #dbe4f5;
+    box-shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
+}
+
+.admin-panel .border-b {
+    border-color: #e2e8f0;
+}
+
+.admin-panel .divide-y > :not([hidden]) ~ :not([hidden]) {
+    border-color: #cbd5e1;
+}
+
+.admin-panel .max-h-\[600px\] {
+    scrollbar-width: thin;
+    scrollbar-color: #94a3b8 transparent;
+}
+
+.admin-panel .max-h-\[600px\]::-webkit-scrollbar {
+    width: 8px;
+}
+
+.admin-panel .max-h-\[600px\]::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 9999px;
+}
+
+.admin-panel .max-h-\[600px\]::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.preview-card {
+    border-radius: 18px;
+    border-color: #cbd5e1;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
+}
+
+.admin-category-item {
+    border-left: 4px solid transparent;
+    border-bottom: 1px solid #cbd5e1;
+}
+
+.admin-category-item:hover {
+    transform: translateX(2px);
+    background: #f8fbff;
+}
+
+.admin-panel .divide-y > :not([hidden]):last-child {
+    border-bottom: 0;
+}
+
+.admin-empty-state {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+}
+
+.admin-shell button,
+.admin-shell a {
+    transition: all 200ms ease;
+}
+
+.admin-shell .bg-\[\#003087\] {
+    box-shadow: 0 10px 24px rgba(0, 48, 135, 0.22);
+}
+
+.admin-shell .bg-\[\#003087\]:hover {
+    transform: translateY(-1px);
+}
+
+.admin-shell input,
+.admin-shell textarea,
+.admin-shell select {
+    border-radius: 10px;
+    border-color: #cbd5e1;
+    background: #ffffff;
+}
+
+.admin-shell input:focus,
+.admin-shell textarea:focus,
+.admin-shell select:focus {
+    outline: none;
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.admin-shell .bg-blue-50 {
+    background-color: #eff6ff;
+}
+
+.admin-shell .text-gray-500,
+.admin-shell .text-gray-600 {
+    color: #475569 !important;
+}
+
+.admin-shell .text-gray-900 {
+    color: #0f172a !important;
+}
 </style>
 @endsection

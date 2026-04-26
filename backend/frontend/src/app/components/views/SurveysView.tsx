@@ -16,6 +16,8 @@ interface Survey {
 
 export function SurveysView({ userRole }: { userRole: string }) {
   const navigate = useNavigate();
+  const userEmail = localStorage.getItem('userEmail') || '';
+  const tracerBaseUrl = 'http://localhost:8002';
   const [activeTab, setActiveTab] = useState('Available Surveys');
   const baseTabs = ['Available Surveys', 'Completed'];
   const tabs = userRole === 'admin' ? [...baseTabs, 'Create Survey'] : baseTabs;
@@ -140,7 +142,18 @@ export function SurveysView({ userRole }: { userRole: string }) {
               </p>
               {/* UPDATED BLUE BUTTON */}
               <button
-                onClick={() => navigate('/survey/tracer')}
+                onClick={() => {
+                  if (userRole === 'admin') {
+                    const params = new URLSearchParams({
+                      email: userEmail,
+                      role: 'admin',
+                    });
+                    window.location.href = `${tracerBaseUrl}/admin?${params.toString()}`;
+                    return;
+                  }
+
+                  navigate('/survey/tracer');
+                }}
                 className="bg-[#003087] text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-[#002566] transition-all flex items-center gap-2 shadow-md"
               >
                 Take the Tracer Survey <ArrowRight className="w-4 h-4" />
