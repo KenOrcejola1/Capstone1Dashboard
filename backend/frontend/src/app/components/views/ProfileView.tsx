@@ -558,8 +558,8 @@ export function ProfileView({ userRole }: ProfileViewProps) {
                 <div className="flex items-center gap-3 text-gray-600"><Mail className="w-4 h-4 text-[#003087]" /><span className="text-sm">{formData.email || 'Not provided'}</span></div>
                 <div className="flex items-center gap-3 text-gray-600"><Phone className="w-4 h-4 text-[#003087]" /><span className="text-sm">{formData.phone || 'Not provided'}</span></div>
                 <div className="flex items-center gap-3 text-gray-600"><MapPin className="w-4 h-4 text-[#003087]" /><span className="text-sm">
-                  {formData.country === 'Philippines' 
-                    ? `${formData.city || 'City not set'}, ${formData.province || 'Province not set'}`
+                  {formData.country === 'Philippines'
+                    ? `${formData.city || 'City not set'}, ${formData.province || 'Province not set'}, Philippines`
                     : formData.country || 'Location not set'}
                 </span></div>
                 <div className="flex items-center gap-3 text-gray-600"><Briefcase className="w-4 h-4 text-[#003087]" /><span className="text-sm">{formData.jobTitle || 'Job title not set'} {formData.company && `at ${formData.company}`}</span></div>
@@ -575,36 +575,33 @@ export function ProfileView({ userRole }: ProfileViewProps) {
             {/* First Name */}
             <div className="space-y-1">
               <label className="text-sm font-semibold text-gray-700">First Name</label>
-              <input 
+              <input
                 type="text"
                 value={formData.firstName || ''}
-                onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                disabled={!isEditing}
-                className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${isEditing ? 'bg-white border-blue-400 text-gray-900' : 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'}`}
+                disabled
+                className="w-full px-3 py-2 border rounded-lg transition-all text-sm bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed"
               />
             </div>
 
             {/* Middle Name */}
             <div className="space-y-1">
               <label className="text-sm font-semibold text-gray-700">Middle Name</label>
-              <input 
+              <input
                 type="text"
                 value={formData.middleName || ''}
-                onChange={(e) => setFormData({...formData, middleName: e.target.value})}
-                disabled={!isEditing}
-                className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${isEditing ? 'bg-white border-blue-400 text-gray-900' : 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'}`}
+                disabled
+                className="w-full px-3 py-2 border rounded-lg transition-all text-sm bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed"
               />
             </div>
 
             {/* Last Name */}
             <div className="space-y-1">
               <label className="text-sm font-semibold text-gray-700">Last Name</label>
-              <input 
+              <input
                 type="text"
                 value={formData.lastName || ''}
-                onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                disabled={!isEditing}
-                className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${isEditing ? 'bg-white border-blue-400 text-gray-900' : 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'}`}
+                disabled
+                className="w-full px-3 py-2 border rounded-lg transition-all text-sm bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed"
               />
             </div>
 
@@ -614,9 +611,8 @@ export function ProfileView({ userRole }: ProfileViewProps) {
               <input
                 type="email"
                 value={formData.email || ''}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
-                disabled={!isEditing}
-                className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${isEditing ? 'bg-white border-blue-400 text-gray-900' : 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'}`}
+                disabled
+                className="w-full px-3 py-2 border rounded-lg transition-all text-sm bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed"
               />
             </div>
 
@@ -626,16 +622,10 @@ export function ProfileView({ userRole }: ProfileViewProps) {
               <input
                 type="text"
                 value={formData.phone || ''}
-                onChange={(e) => handleFieldChange('phone', e.target.value)}
-                disabled={!isEditing}
+                disabled
                 inputMode="numeric"
-                className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${
-                  !isEditing ? 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'
-                  : phoneError ? 'bg-red-50 border-red-500 text-gray-900'
-                  : 'bg-white border-blue-400 text-gray-900'
-                }`}
+                className="w-full px-3 py-2 border rounded-lg transition-all text-sm bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed"
               />
-              {phoneError && isEditing && <p className="text-xs text-red-500 mt-1">{phoneError}</p>}
             </div>
 
             {/* Telephone Number */}
@@ -659,12 +649,11 @@ export function ProfileView({ userRole }: ProfileViewProps) {
             {/* Birth Date */}
             <div className="space-y-1">
               <label className="text-sm font-semibold text-gray-700">Birth Date</label>
-              <input 
+              <input
                 type="date"
                 value={formData.birthDate || ''}
-                onChange={(e) => setFormData({...formData, birthDate: e.target.value})}
-                disabled={!isEditing}
-                className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${isEditing ? 'bg-white border-blue-400 text-gray-900' : 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'}`}
+                disabled
+                className="w-full px-3 py-2 border rounded-lg transition-all text-sm bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed"
               />
             </div>
 
@@ -702,9 +691,8 @@ export function ProfileView({ userRole }: ProfileViewProps) {
               <label className="text-sm font-semibold text-gray-700">Religion</label>
               <select
                 value={formData.religion || ''}
-                onChange={(e) => setFormData({...formData, religion: e.target.value})}
-                disabled={!isEditing}
-                className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${isEditing ? 'bg-white border-blue-400 text-gray-900' : 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'}`}
+                disabled
+                className="w-full px-3 py-2 border rounded-lg transition-all text-sm bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed"
               >
                 <option value="">Select your religion</option>
                 <option value="roman_catholic">Roman Catholic</option>
@@ -722,13 +710,12 @@ export function ProfileView({ userRole }: ProfileViewProps) {
             {formData.religion === 'other' && (
               <div className="space-y-1">
                 <label className="text-sm font-semibold text-gray-700">Religion (Other)</label>
-                <input 
+                <input
                   type="text"
                   value={formData.religionOther || ''}
-                  onChange={(e) => setFormData({...formData, religionOther: e.target.value})}
-                  disabled={!isEditing}
+                  disabled
                   placeholder="Please specify"
-                  className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${isEditing ? 'bg-white border-blue-400 text-gray-900' : 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'}`}
+                  className="w-full px-3 py-2 border rounded-lg transition-all text-sm bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed"
                 />
               </div>
             )}
@@ -757,7 +744,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
             {['married', 'separated', 'annulled', 'divorced', 'widowed'].includes(formData.maritalStatus) && (
               <div className="space-y-1">
                 <label className="text-sm font-semibold text-gray-700">Marriage Date</label>
-                <input 
+                <input
                   type="month"
                   value={formData.marriageDate || ''}
                   onChange={(e) => setFormData({...formData, marriageDate: e.target.value})}
@@ -787,7 +774,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
                 {formData.intendToMarry === 'yes' && (
                   <div className="space-y-1">
                     <label className="text-sm font-semibold text-gray-700">Intended Age</label>
-                    <input 
+                    <input
                       type="number"
                       value={formData.intendedMarriageAge || ''}
                       onChange={(e) => setFormData({...formData, intendedMarriageAge: e.target.value})}
@@ -903,16 +890,10 @@ export function ProfileView({ userRole }: ProfileViewProps) {
             <div className="space-y-1">
               <label className="text-sm font-semibold text-gray-700">Course</label>
               <input
-                list="course-options"
                 value={formData.course || ''}
-                onChange={(e) => setFormData({ ...formData, course: e.target.value })}
-                disabled={!isEditing}
-                placeholder="Type or select your course"
-                className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${isEditing ? 'bg-white border-blue-400 text-gray-900' : 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'}`}
+                disabled
+                className="w-full px-3 py-2 border rounded-lg transition-all text-sm bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed"
               />
-              <datalist id="course-options">
-                {PROGRAM_OPTIONS.map(opt => <option key={opt} value={opt} />)}
-              </datalist>
             </div>
 
             {/* Batch Year */}
@@ -920,9 +901,8 @@ export function ProfileView({ userRole }: ProfileViewProps) {
               <label className="text-sm font-semibold text-gray-700">Batch Year</label>
               <select
                 value={formData.batchYear || ''}
-                onChange={(e) => setFormData({...formData, batchYear: e.target.value})}
-                disabled={!isEditing}
-                className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${isEditing ? 'bg-white border-blue-400 text-gray-900' : 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'}`}
+                disabled
+                className="w-full px-3 py-2 border rounded-lg transition-all text-sm bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed"
               >
                 <option value="">Select batch year</option>
                 {years.map(year => (
