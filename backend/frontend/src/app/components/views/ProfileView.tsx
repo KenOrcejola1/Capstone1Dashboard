@@ -77,10 +77,6 @@ export function ProfileView({ userRole }: ProfileViewProps) {
     religion: "",
     religionOther: "",
     maritalStatus: "",
-    marriageDate: "",
-    intendToMarry: "",
-    intendedMarriageAge: "",
-    noMarriageReason: "",
     birthDate: "",
     region: "",
     province: "",
@@ -168,10 +164,6 @@ export function ProfileView({ userRole }: ProfileViewProps) {
         religion: userData.religion || '',
         religionOther: userData.religion_other || '',
         maritalStatus: userData.marital_status || '',
-        marriageDate: userData.marriage_date || '',
-        intendToMarry: userData.intend_to_marry || '',
-        intendedMarriageAge: userData.intended_marriage_age || '',
-        noMarriageReason: userData.no_marriage_reason || '',
         birthDate: userData.birth_date || '',
         region: userData.region || '',
         province: userData.province || '',
@@ -325,9 +317,6 @@ export function ProfileView({ userRole }: ProfileViewProps) {
       // Clean other optional fields
       const cleanTelephone = formData.telephone && formData.telephone.trim() !== '' ? formData.telephone.trim() : null;
       const cleanReligionOther = formData.religionOther && formData.religionOther.trim() !== '' ? formData.religionOther.trim() : null;
-      const cleanMarriageDate = formData.marriageDate && formData.marriageDate !== '' ? formData.marriageDate : null;
-      const cleanIntendedMarriageAge = formData.intendedMarriageAge && formData.intendedMarriageAge.trim() !== '' ? formData.intendedMarriageAge.trim() : null;
-      const cleanNoMarriageReason = formData.noMarriageReason && formData.noMarriageReason.trim() !== '' ? formData.noMarriageReason.trim() : null;
 
       const response = await fetch(`http://localhost:8000/api/users/${encodeURIComponent(userEmail)}`, {
         method: 'PUT',
@@ -348,10 +337,6 @@ export function ProfileView({ userRole }: ProfileViewProps) {
           religion: formData.religion,
           religion_other: cleanReligionOther,
           marital_status: formData.maritalStatus,
-          marriage_date: cleanMarriageDate,
-          intend_to_marry: formData.intendToMarry,
-          intended_marriage_age: cleanIntendedMarriageAge,
-          no_marriage_reason: cleanNoMarriageReason,
           birth_date: formData.birthDate,
           region: formData.country === 'Philippines' ? formData.region : null,
           province: formData.country === 'Philippines' ? formData.province : null,
@@ -739,67 +724,6 @@ export function ProfileView({ userRole }: ProfileViewProps) {
                 <option value="widowed">Widowed</option>
               </select>
             </div>
-
-            {/* Marriage Date (if applicable) */}
-            {['married', 'separated', 'annulled', 'divorced', 'widowed'].includes(formData.maritalStatus) && (
-              <div className="space-y-1">
-                <label className="text-sm font-semibold text-gray-700">Marriage Date</label>
-                <input
-                  type="month"
-                  value={formData.marriageDate || ''}
-                  onChange={(e) => setFormData({...formData, marriageDate: e.target.value})}
-                  disabled={!isEditing}
-                  className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${isEditing ? 'bg-white border-blue-400 text-gray-900' : 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'}`}
-                />
-              </div>
-            )}
-
-            {/* Marriage Intentions (if single) */}
-            {formData.maritalStatus === 'single' && (
-              <>
-                <div className="space-y-1">
-                  <label className="text-sm font-semibold text-gray-700">Intend to Marry?</label>
-                  <select
-                    value={formData.intendToMarry || ''}
-                    onChange={(e) => setFormData({...formData, intendToMarry: e.target.value})}
-                    disabled={!isEditing}
-                    className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${isEditing ? 'bg-white border-blue-400 text-gray-900' : 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'}`}
-                  >
-                    <option value="">Select</option>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                  </select>
-                </div>
-
-                {formData.intendToMarry === 'yes' && (
-                  <div className="space-y-1">
-                    <label className="text-sm font-semibold text-gray-700">Intended Age</label>
-                    <input
-                      type="number"
-                      value={formData.intendedMarriageAge || ''}
-                      onChange={(e) => setFormData({...formData, intendedMarriageAge: e.target.value})}
-                      disabled={!isEditing}
-                      min="18"
-                      max="100"
-                      className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${isEditing ? 'bg-white border-blue-400 text-gray-900' : 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'}`}
-                    />
-                  </div>
-                )}
-
-                {formData.intendToMarry === 'no' && (
-                  <div className="space-y-1 md:col-span-2">
-                    <label className="text-sm font-semibold text-gray-700">Reason</label>
-                    <textarea
-                      value={formData.noMarriageReason || ''}
-                      onChange={(e) => setFormData({...formData, noMarriageReason: e.target.value})}
-                      disabled={!isEditing}
-                      rows={2}
-                      className={`w-full px-3 py-2 border rounded-lg transition-all text-sm resize-none ${isEditing ? 'bg-white border-blue-400 text-gray-900' : 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'}`}
-                    />
-                  </div>
-                )}
-              </>
-            )}
 
             {/* Country/Location */}
             <div className="space-y-1">

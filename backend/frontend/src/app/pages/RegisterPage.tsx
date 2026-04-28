@@ -107,10 +107,6 @@ export function RegisterPage() {
     religion: '',
     religionOther: '',
     maritalStatus: '',
-    marriageDate: '',
-    intendToMarry: '',
-    intendedMarriageAge: '',
-    noMarriageReason: '',
     birthDate: '',
     region: '',
     province: '',
@@ -285,10 +281,6 @@ export function RegisterPage() {
       formDataToSend.append('religion', formData.religion);
       formDataToSend.append('religion_other', formData.religionOther && formData.religionOther.trim() !== '' ? formData.religionOther.trim() : '');
       formDataToSend.append('marital_status', formData.maritalStatus);
-      formDataToSend.append('marriage_date', formData.marriageDate && formData.marriageDate !== '' ? formData.marriageDate : '');
-      formDataToSend.append('intend_to_marry', formData.intendToMarry || '');
-      formDataToSend.append('intended_marriage_age', formData.intendedMarriageAge && formData.intendedMarriageAge.trim() !== '' ? formData.intendedMarriageAge.trim() : '');
-      formDataToSend.append('no_marriage_reason', formData.noMarriageReason && formData.noMarriageReason.trim() !== '' ? formData.noMarriageReason.trim() : '');
       formDataToSend.append('birth_date', formData.birthDate);
       formDataToSend.append('region', formData.country === 'Philippines' ? formData.region : '');
       formDataToSend.append('province', formData.country === 'Philippines' ? formData.province.trim() : '');
@@ -962,90 +954,7 @@ export function RegisterPage() {
               </select>
             </div>
 
-            {/* Conditional: Marriage Date for Married/Separated/Annulled/Divorced/Widowed */}
-            {['married', 'separated', 'annulled', 'divorced', 'widowed'].includes(formData.maritalStatus) && (
-              <div className="mb-6">
-                <label htmlFor="marriageDate" className="block text-gray-700 font-medium mb-2">Month and Year of Marriage</label>
-                <input
-                  id="marriageDate"
-                  type="month"
-                  name="marriageDate"
-                  value={formData.marriageDate}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003D7A] focus:border-transparent transition"
-                  required
-                />
-              </div>
-            )}
 
-            {/* Conditional: Marriage Intentions for Single */}
-            {formData.maritalStatus === 'single' && (
-              <div className="mb-6 space-y-4">
-                <div>
-                  <label className="block text-gray-700 font-medium mb-2">Do you intend to get married in the future?</label>
-                  <div className="flex gap-6">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="intendToMarry"
-                        value="yes"
-                        checked={formData.intendToMarry === 'yes'}
-                        onChange={handleChange}
-                        className="w-4 h-4 text-[#003D7A] focus:ring-2 focus:ring-[#003D7A]"
-                        required
-                      />
-                      <span className="text-gray-700">Yes</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="intendToMarry"
-                        value="no"
-                        checked={formData.intendToMarry === 'no'}
-                        onChange={handleChange}
-                        className="w-4 h-4 text-[#003D7A] focus:ring-2 focus:ring-[#003D7A]"
-                      />
-                      <span className="text-gray-700">No</span>
-                    </label>
-                  </div>
-                </div>
-
-                {/* If Yes: Age */}
-                {formData.intendToMarry === 'yes' && (
-                  <div>
-                    <label htmlFor="intendedMarriageAge" className="block text-gray-700 font-medium mb-2">At what age?</label>
-                    <input
-                      id="intendedMarriageAge"
-                      type="number"
-                      name="intendedMarriageAge"
-                      value={formData.intendedMarriageAge}
-                      onChange={handleChange}
-                      placeholder="Enter age"
-                      min="18"
-                      max="100"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003D7A] focus:border-transparent transition"
-                      required
-                    />
-                  </div>
-                )}
-
-                {/* If No: Reason */}
-                {formData.intendToMarry === 'no' && (
-                  <div>
-                    <label htmlFor="noMarriageReason" className="block text-gray-700 font-medium mb-2">Reason (Optional)</label>
-                    <textarea
-                      id="noMarriageReason"
-                      name="noMarriageReason"
-                      value={formData.noMarriageReason}
-                      onChange={handleChange}
-                      rows={3}
-                      placeholder="Please share your reason (optional)"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003D7A] focus:border-transparent transition resize-none"
-                    />
-                  </div>
-                )}
-              </div>
-            )}
 
             {/* Course & Batch Year */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
