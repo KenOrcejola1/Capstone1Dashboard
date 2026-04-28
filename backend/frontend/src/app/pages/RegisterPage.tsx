@@ -2,6 +2,15 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowLeft, Eye, EyeOff, User, Phone, Calendar, MapPin, Upload } from 'lucide-react';
 import ADDULogo from '../../assets/ADDULogo.jpg';
+import campusNight from '../../assets/Roxas-Colored.jpg';
+
+const C = {
+  navy:   '#001F5B',
+  navyDk: '#00153D',
+  blue:   '#003087',
+  gold:   '#C5A96A',
+  goldLt: '#D4BC86',
+} as const;
 
 const PROGRAM_OPTIONS = [
   'BS Computer Science',
@@ -357,45 +366,131 @@ export function RegisterPage() {
   const years = Array.from({ length: currentYear - 1949 }, (_, i) => currentYear - i);
 
   return (
-    <div className="min-h-screen flex bg-gray-100">
-      {/* Left Side - Blue Background with Campus Image */}
-      <div 
-        className="hidden lg:flex lg:w-1/2 bg-[#003087] relative overflow-hidden"
+    <div className="min-h-screen flex bg-gray-100" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;700&display=swap');
+      `}</style>
+
+      {/* Left Side */}
+      <div
+        className="hidden lg:flex lg:w-1/2 relative overflow-hidden"
         style={{
-          background: `linear-gradient(rgba(0, 61, 122, 0.85), rgba(0, 61, 122, 0.85)), url('https://upload.wikimedia.org/wikipedia/en/3/3e/Ateneo_De_Davao_University_%28Roxas_Avenue%2C_Davao_City%3B_08-21-2023%29.jpg') center/cover`
+          background: `linear-gradient(160deg, rgba(0,21,61,0.92) 0%, rgba(0,48,135,0.75) 60%, rgba(0,21,61,0.88) 100%), url(${campusNight}) center/cover`
         }}
       >
-        {/* Back to Home Button - Desktop */}
+        {/* Gold line accent */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, bottom: 0, width: 3,
+          background: `linear-gradient(to bottom, transparent, ${C.gold}, transparent)`,
+          opacity: 0.6,
+        }} />
+
+        {/* Back to Home */}
         <button
           onClick={() => navigate('/')}
-          className="absolute top-8 left-8 flex items-center gap-2 text-white hover:text-gray-200 transition"
+          style={{
+            position: 'absolute', top: 36, left: 36, zIndex: 10,
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            background: 'none', border: 'none', cursor: 'pointer',
+            fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 400,
+            letterSpacing: '0.03em', color: 'rgba(255,255,255,0.7)',
+            transition: 'opacity 0.2s',
+          }}
+          onMouseOver={e => (e.currentTarget.style.opacity = '0.7')}
+          onMouseOut={e => (e.currentTarget.style.opacity = '1')}
         >
-          <ArrowLeft className="w-5 h-5" />
-          <span className="font-medium">Back to Home</span>
+          <ArrowLeft size={16} />
+          Back to Home
         </button>
 
-        {/* Content */}
-        <div className="flex flex-col justify-center items-center w-full px-12 text-white">
+        {/* Centered content */}
+        <div style={{
+          position: 'relative', zIndex: 2,
+          height: '100%',
+          display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center',
+          padding: '0 4rem', textAlign: 'center',
+        }}>
           {/* Logo */}
-          <div className="mb-8">
-            <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center mb-6 p-4">
-              <img src={ADDULogo} alt="ADDU Logo" className="w-full h-full object-contain" />
-            </div>
+          <div style={{
+            width: 88, height: 88, borderRadius: '50%',
+            background: '#fff',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            overflow: 'hidden', marginBottom: 28,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+          }}>
+            <img src={ADDULogo} alt="ADDU Logo" style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
           </div>
 
-          {/* Title */}
-          <h1 className="text-4xl font-bold mb-2 text-center">Alumni Portal</h1>
-          <p className="text-xl mb-8 text-blue-100">Ateneo de Davao University</p>
+          {/* Eyebrow badge */}
+          <span style={{
+            display: 'inline-block',
+            padding: '3px 14px',
+            borderRadius: 100,
+            border: `1px solid ${C.gold}`,
+            color: C.gold,
+            fontSize: 10,
+            fontWeight: 500,
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            marginBottom: 20,
+          }}>
+            Ad Majorem Dei Gloriam
+          </span>
 
-          {/* Welcome Text */}
-          <h2 className="text-3xl font-bold mb-6 text-center">
-            Welcome Home, <span className="text-orange-400">Ateneans</span>
-          </h2>
+          {/* Headline */}
+          <h1 style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: 'clamp(2.4rem, 3.5vw, 3.2rem)',
+            fontWeight: 500,
+            color: '#fff',
+            lineHeight: 1.15,
+            marginBottom: 16,
+          }}>
+            Welcome Home,<br />
+            <em style={{ color: C.goldLt, fontStyle: 'italic' }}>Ateneans.</em>
+          </h1>
 
-          {/* Description */}
-          <p className="text-lg text-center max-w-md text-blue-100">
+          <p style={{
+            fontSize: 14, fontWeight: 300,
+            color: 'rgba(255,255,255,0.55)',
+            lineHeight: 1.8, maxWidth: 340,
+            marginBottom: 40,
+          }}>
             Connecting generations of excellence. Join our thriving community of over 50,000 alumni making a difference worldwide.
           </p>
+
+          {/* Stats */}
+          <div style={{
+            display: 'flex', gap: '2rem',
+            borderTop: '1px solid rgba(255,255,255,0.1)',
+            paddingTop: 32,
+          }}>
+            {[
+              { n: '50K+', l: 'Alumni' },
+              { n: '50+',  l: 'Countries' },
+              { n: '60+',  l: 'Years' },
+            ].map(({ n, l }) => (
+              <div key={l} style={{ textAlign: 'center' }}>
+                <div style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: '1.7rem', fontWeight: 600,
+                  color: C.gold, lineHeight: 1,
+                }}>
+                  {n}
+                </div>
+                <div style={{
+                  fontSize: 10, fontWeight: 300,
+                  color: 'rgba(255,255,255,0.4)',
+                  letterSpacing: '0.1em', textTransform: 'uppercase',
+                  marginTop: 4,
+                }}>
+                  {l}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -404,7 +499,8 @@ export function RegisterPage() {
         {/* Mobile Back Button */}
         <button
           onClick={() => navigate('/')}
-          className="absolute top-8 left-8 flex items-center gap-2 text-[#003D7A] hover:text-[#002855] transition lg:hidden"
+          className="absolute top-8 left-8 flex items-center gap-2 text-[#003087] hover:text-[#00153D] transition lg:hidden"
+          style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13 }}
         >
           <ArrowLeft className="w-5 h-5" />
           <span className="font-medium">Back to Home</span>
