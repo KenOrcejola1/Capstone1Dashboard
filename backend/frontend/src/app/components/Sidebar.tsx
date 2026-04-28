@@ -134,16 +134,16 @@ export function Sidebar({ activeView, onNavigate, userRole }: SidebarProps) {
           alignItems: 'center',
           zIndex: 50,
           fontFamily: "'DM Sans', sans-serif",
-          padding: '0 24px',
+          padding: '0 16px',
         }}
       >
         {/* ── LEFT: Logo + Title (fixed width) ── */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: 10,
+          gap: 8,
           flexShrink: 0,
-          width: 210,
+          width: 185,
         }}>
           <img
             src={ADDULogo}
@@ -178,8 +178,8 @@ export function Sidebar({ activeView, onNavigate, userRole }: SidebarProps) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 18,
-          overflow: 'hidden',
+          gap: 8,
+          overflow: 'visible',
         }}>
           {menuItems.map((item) => {
             const isActive = activeView === item.id;
@@ -193,9 +193,9 @@ export function Sidebar({ activeView, onNavigate, userRole }: SidebarProps) {
                   borderBottom: isActive ? `2px solid ${C.gold}` : '2px solid transparent',
                   background: 'transparent',
                   cursor: 'pointer',
-                  fontSize: 10,
+                  fontSize: 9,
                   fontWeight: 700,
-                  letterSpacing: '0.08em',
+                  letterSpacing: '0.05em',
                   textTransform: 'uppercase',
                   color: isActive ? '#fff' : 'rgba(255,255,255,0.7)',
                   paddingBottom: 2,
@@ -219,7 +219,7 @@ export function Sidebar({ activeView, onNavigate, userRole }: SidebarProps) {
           alignItems: 'center',
           gap: 12,
           flexShrink: 0,
-          width: 210,
+          width: 195,
           justifyContent: 'flex-end',
         }}>
           {/* Avatar + role label — clickable to go to profile */}
