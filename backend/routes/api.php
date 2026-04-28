@@ -30,6 +30,7 @@ Route::get('/users/analytics/course-approvals', [UserController::class, 'getCour
 Route::get('/users/{email}', [UserController::class, 'show']);
 Route::put('/users/{email}', [UserController::class, 'update']);
 Route::post('/users/{email}/profile-image', [UserController::class, 'uploadProfileImage']);
+Route::post('/users/{email}/change-password', [UserController::class, 'changePassword']);
 Route::put('/users/id/{id}', [UserController::class, 'updateById']);
 Route::delete('/users/{id}', [UserController::class, 'destroy']);
 Route::patch('/users/{id}/toggle-active', [UserController::class, 'toggleActive']);
