@@ -4,39 +4,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Donation extends Model
+class EngagementRegistration extends Model
 {
     protected $fillable = [
-        'campaign_id',
+        'activity_id',
         'first_name',
         'last_name',
         'email',
-        'amount',
-        'frequency',
-        'designation',
+        'guests_count',
+        'amount_due',
         'payment_method',
         'reference_number',
-        'transaction_date',
-        'gcash_number',
-        'account_name',
-        'bank_name',
-        'card_number',
         'proof_path',
         'payment_status',
+        'status',
         'is_hidden',
     ];
 
     protected $casts = [
-        'amount' => 'decimal:2',
-        'transaction_date' => 'date',
+        'guests_count' => 'integer',
+        'amount_due' => 'decimal:2',
         'is_hidden' => 'boolean',
     ];
 
     protected $appends = ['full_name'];
 
-    public function campaign()
+    public function activity()
     {
-        return $this->belongsTo(DonationCampaign::class, 'campaign_id');
+        return $this->belongsTo(EngagementActivity::class, 'activity_id');
     }
 
     public function getFullNameAttribute()
