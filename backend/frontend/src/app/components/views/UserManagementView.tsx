@@ -90,6 +90,7 @@ interface User {
   diploma_file_path?: string;
   id_type?: string;
   valid_id_file_path?: string;
+  photo_2x2_file_path?: string;
   profile_image_path?: string;
   created_at?: string;
 }
@@ -924,6 +925,29 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                         />
                         <button
                           onClick={() => { setImageViewerUrl(`http://localhost:8000/storage/${selectedPendingUser.valid_id_file_path}`); setImageViewerTitle('Valid ID'); }}
+                          className="px-3 py-1.5 text-sm bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors"
+                        >
+                          View Full Image
+                        </button>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-400 italic">No file uploaded</p>
+                    )}
+                  </div>
+
+                  {/* 2x2 Photo */}
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <p className="font-medium text-gray-700 mb-2">2x2 Photo</p>
+                    {selectedPendingUser.photo_2x2_file_path ? (
+                      <div className="space-y-3">
+                        <img
+                          src={`http://localhost:8000/storage/${selectedPendingUser.photo_2x2_file_path}`}
+                          alt="2x2 Photo"
+                          className="w-full max-h-48 object-contain rounded-lg border border-gray-200 bg-white cursor-pointer hover:opacity-90 transition-opacity"
+                          onClick={() => { setImageViewerUrl(`http://localhost:8000/storage/${selectedPendingUser.photo_2x2_file_path}`); setImageViewerTitle('2x2 Photo'); }}
+                        />
+                        <button
+                          onClick={() => { setImageViewerUrl(`http://localhost:8000/storage/${selectedPendingUser.photo_2x2_file_path}`); setImageViewerTitle('2x2 Photo'); }}
                           className="px-3 py-1.5 text-sm bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors"
                         >
                           View Full Image

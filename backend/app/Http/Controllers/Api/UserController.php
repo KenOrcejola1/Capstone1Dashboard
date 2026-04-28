@@ -86,6 +86,7 @@ class UserController extends Controller
             'diploma_file' => 'nullable|file|mimes:png,jpg,jpeg,pdf|max:10240',
             'id_type' => 'nullable|string',
             'valid_id_file' => 'nullable|file|mimes:png,jpg,jpeg,pdf|max:10240',
+            'photo_2x2_file' => 'nullable|file|mimes:png,jpg,jpeg|max:10240',
             'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
@@ -122,6 +123,14 @@ class UserController extends Controller
             $profileImagePath = $profileImage->storeAs('uploads/profile-images', $profileImageName, 'public');
         }
 
+        // Handle 2x2 photo upload
+        $photo2x2FilePath = null;
+        if ($request->hasFile('photo_2x2_file')) {
+            $photo2x2File = $request->file('photo_2x2_file');
+            $photo2x2FileName = time() . '_2x2_' . $photo2x2File->getClientOriginalName();
+            $photo2x2FilePath = $photo2x2File->storeAs('uploads/2x2-photos', $photo2x2FileName, 'public');
+        }
+
         $user = User::create([
             'name' => $fullName,
             'first_name' => $request->first_name,
@@ -154,6 +163,7 @@ class UserController extends Controller
             'id_type' => $request->id_type,
             'valid_id_file_path' => $validIdFilePath,
             'profile_image_path' => $profileImagePath,
+            'photo_2x2_file_path' => $photo2x2FilePath,
             'is_active' => $request->approval_status === 'approved' ? 1 : 0,
             'approval_status' => $request->approval_status ?? 'pending',
             'email_verified_at' => now(),

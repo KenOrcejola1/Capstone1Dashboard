@@ -121,6 +121,7 @@ export function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [diplomaFile, setDiplomaFile] = useState<File | null>(null);
   const [validIdFile, setValidIdFile] = useState<File | null>(null);
+  const [photo2x2File, setPhoto2x2File] = useState<File | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [countries, setCountries] = useState<string[]>([]);
   const [provinces, setProvinces] = useState<{ code: string; name: string }[]>([]);
@@ -130,6 +131,13 @@ export function RegisterPage() {
   const [phoneError, setPhoneError] = useState('');
   const [telephoneError, setTelephoneError] = useState('');
   const [passwordMismatch, setPasswordMismatch] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(
+    () => sessionStorage.getItem('termsAccepted') === 'true'
+  );
+
+  useEffect(() => {
+    setTermsAccepted(sessionStorage.getItem('termsAccepted') === 'true');
+  }, []);
 
   useEffect(() => {
     fetch('https://restcountries.com/v3.1/all?fields=name')
@@ -228,6 +236,11 @@ export function RegisterPage() {
       return;
     }
 
+    if (!photo2x2File) {
+      alert('Please upload your 2x2 photo');
+      return;
+    }
+
     if (formData.hasDiploma === 'yes' && !diplomaFile) {
       alert('Please upload your Diploma/Degree');
       return;
@@ -298,6 +311,9 @@ export function RegisterPage() {
       if (validIdFile) {
         formDataToSend.append('valid_id_file', validIdFile);
       }
+      if (photo2x2File) {
+        formDataToSend.append('photo_2x2_file', photo2x2File);
+      }
 
       const response = await fetch('http://localhost:8000/api/users', {
         method: 'POST',
@@ -306,6 +322,7 @@ export function RegisterPage() {
 
       if (response.ok) {
         await response.json();
+        sessionStorage.removeItem('termsAccepted');
         setShowSuccessModal(true);
       } else {
         const error = await response.json();
@@ -343,13 +360,15 @@ export function RegisterPage() {
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fileType: 'diploma' | 'validId') => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fileType: 'diploma' | 'validId' | 'photo2x2') => {
     const file = e.target.files?.[0];
     if (file) {
       if (fileType === 'diploma') {
         setDiplomaFile(file);
-      } else {
+      } else if (fileType === 'validId') {
         setValidIdFile(file);
+      } else {
+        setPhoto2x2File(file);
       }
     }
   };
@@ -1083,25 +1102,74 @@ export function RegisterPage() {
               </div>
             </div>
 
+            {/* 2x2 Photo */}
+            <div className="mb-6">
+              <label className="block text-gray-700 font-medium mb-2">2x2 Photo (Required)</label>
+              <div className="border-2 border-dashed border-blue-300 rounded-lg p-8 text-center bg-blue-50 hover:bg-blue-100 transition cursor-pointer relative">
+                <input
+                  type="file"
+                  id="photo2x2File"
+                  accept="image/png,image/jpeg,image/jpg"
+                  onChange={(e) => handleFileChange(e, 'photo2x2')}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <div className="pointer-events-none">
+                  <Upload className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+                  <p className="text-gray-600 font-medium mb-1">
+                    {photo2x2File ? photo2x2File.name : 'Click to upload your 2x2 photo'}
+                  </p>
+                  <p className="text-gray-500 text-sm">PNG, JPG up to 10MB</p>
+                </div>
+              </div>
+            </div>
+
             {/* Register Button */}
             <button
               type="submit"
-              className="w-full bg-[#003D7A] text-white py-4 rounded-lg hover:bg-[#002855] transition font-semibold text-lg shadow-lg mb-6"
+              disabled={!termsAccepted}
+              className={`w-full py-4 rounded-lg font-semibold text-lg shadow-lg mb-3 transition ${
+                termsAccepted
+                  ? 'bg-[#003D7A] text-white hover:bg-[#002855] cursor-pointer'
+                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              }`}
             >
               Register
             </button>
 
-            {/* Sign In Link */}
+            {!termsAccepted && (
+              <p className="text-center text-xs text-red-500 mb-4">
+                You must accept the Terms &amp; Conditions before registering.
+              </p>
+            )}
+
+            {/* Terms & Conditions Link */}
             <div className="text-center">
               <p className="text-gray-600">
-                Already have an account?{' '}
-                <button
-                  type="button"
-                  onClick={() => navigate('/login')}
-                  className="text-[#003D7A] hover:text-[#002855] font-bold transition"
-                >
-                  Sign in here
-                </button>
+                {termsAccepted ? (
+                  <>
+                    <span className="text-green-600 font-medium text-sm">✓ Terms &amp; Conditions accepted</span>
+                    {' — '}
+                    <button
+                      type="button"
+                      onClick={() => navigate('/terms')}
+                      className="text-[#003D7A] hover:text-[#002855] font-bold transition text-sm"
+                    >
+                      Review Terms &amp; Conditions
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {'Review '}
+                    <button
+                      type="button"
+                      onClick={() => navigate('/terms')}
+                      className="text-[#003D7A] hover:text-[#002855] font-bold transition"
+                    >
+                      Terms &amp; Conditions
+                    </button>
+                    {' before registering.'}
+                  </>
+                )}
               </p>
             </div>
           </form>

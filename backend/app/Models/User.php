@@ -51,6 +51,7 @@ class User extends Authenticatable
         'id_type',
         'valid_id_file_path',
         'profile_image_path',
+        'photo_2x2_file_path',
         'approval_status',
     ];
 
