@@ -1,4 +1,3 @@
-import React from 'react';
 import { Users, Calendar, Globe, MapPin, Clock, GraduationCap, Heart, BookOpen, Award, Leaf, Scale, Stethoscope, Cpu } from 'lucide-react';
 import { Footer } from '../Footer';
 import campusNight from '../../../assets/Roxas-Colored.jpg';
