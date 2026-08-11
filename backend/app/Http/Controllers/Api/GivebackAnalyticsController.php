@@ -22,9 +22,9 @@ class GivebackAnalyticsController extends Controller
         $activePrograms = GivebackProgram::where('status', 'ongoing')->where('is_archived', false)->count();
 
         $monthlyRegistrations = EngagementRegistration::select(
-                DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
+                DB::raw("TO_CHAR(created_at, 'YYYY-MM') as month"),
                 DB::raw('COUNT(*) as registrations'),
-                DB::raw('SUM(CASE WHEN payment_status = "verified" THEN amount_due ELSE 0 END) as verified_total')
+                DB::raw("SUM(CASE WHEN payment_status = 'verified' THEN amount_due ELSE 0 END) as verified_total")
             )
             ->groupBy('month')
             ->orderBy('month')

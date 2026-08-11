@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -20,9 +21,6 @@ return new class extends Migration
             $table->string('phone_number', 20)->nullable()->change();
             $table->string('country')->nullable()->default(null)->change();
             $table->string('geocode')->nullable()->change();
-            $table->enum('sex', ['male', 'female', 'prefer_not_to_say'])->nullable()->change();
-            $table->enum('religion', ['roman_catholic', 'protestant', 'iglesia_ni_cristo', 'islam', 'born_again_christian', 'buddhist', 'other', 'prefer_not_to_say'])->nullable()->change();
-            $table->enum('marital_status', ['single', 'married', 'living_in', 'separated', 'annulled', 'divorced', 'widowed'])->nullable()->change();
             $table->date('birth_date')->nullable()->change();
             $table->string('region')->nullable()->change();
             $table->string('province')->nullable()->change();
@@ -32,6 +30,21 @@ return new class extends Migration
             $table->string('id_type')->nullable()->change();
             $table->string('valid_id_file_path')->nullable()->change();
         });
+
+        // Postgres emulates enum() as varchar + CHECK, and combining a TYPE
+        // change with a CHECK clause in one ALTER COLUMN is invalid syntax there.
+        // The CHECK constraint already permits NULL, so just drop NOT NULL directly.
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE users ALTER COLUMN sex DROP NOT NULL');
+            DB::statement('ALTER TABLE users ALTER COLUMN religion DROP NOT NULL');
+            DB::statement('ALTER TABLE users ALTER COLUMN marital_status DROP NOT NULL');
+        } else {
+            Schema::table('users', function (Blueprint $table) {
+                $table->enum('sex', ['male', 'female', 'prefer_not_to_say'])->nullable()->change();
+                $table->enum('religion', ['roman_catholic', 'protestant', 'iglesia_ni_cristo', 'islam', 'born_again_christian', 'buddhist', 'other', 'prefer_not_to_say'])->nullable()->change();
+                $table->enum('marital_status', ['single', 'married', 'living_in', 'separated', 'annulled', 'divorced', 'widowed'])->nullable()->change();
+            });
+        }
     }
 
     /**
