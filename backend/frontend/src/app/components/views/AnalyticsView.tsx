@@ -81,6 +81,8 @@ export function AnalyticsView({ userRole }: AnalyticsViewProps) {
 
   useEffect(() => {
     if (userRole !== 'admin') {
+      setCourseAnalytics([]);
+      setCourseAnalyticsError('You do not have permission to view analytics.');
       return;
     }
 
@@ -89,7 +91,7 @@ export function AnalyticsView({ userRole }: AnalyticsViewProps) {
       setCourseAnalyticsError(null);
 
       try {
-        const response = await fetch('http://localhost:8000/api/users/analytics/course-approvals');
+        const response = await fetch(`http://localhost:8000/api/users/analytics/course-approvals?role=${userRole}`);
         if (!response.ok) {
           throw new Error('Failed to fetch course analytics');
         }

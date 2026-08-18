@@ -25,21 +25,62 @@ class DonationController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'payment_method' => 'nullable|string|max:255',
+            'reference_number' => 'required|string|max:120|unique:donations,reference_number',
+            'proof_of_payment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:6144',
         ]);
 
+        $proofOfPaymentPath = null;
+        if ($request->hasFile('proof_of_payment')) {
+            $proofOfPaymentPath = '/storage/' . $request->file('proof_of_payment')->store('donation-payment-proofs', 'public');
+        }
+
         $donation = Donation::create([
-            'campaign_id' => null, // General donation
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'email' => $validated['email'],
-            'amount' => $validated['amount'],
+            'campaign_id'    => null,
+            'first_name'     => $validated['first_name'],
+            'last_name'      => $validated['last_name'],
+            'email'          => $validated['email'],
+            'amount'         => $validated['amount'],
             'payment_method' => $validated['payment_method'] ?? 'Credit Card',
+            'payment_status' => 'pending',
+            'reference_number' => $validated['reference_number'],
+            'proof_of_payment_path' => $proofOfPaymentPath,
         ]);
         
         return response()->json([
             'message' => 'Donation recorded successfully',
             'donation' => $donation,
         ], 201);
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'payment_status' => 'required|in:pending,verified,rejected',
+            'verified_by'    => 'nullable|string|max:255',
+        ]);
+
+        $donation = Donation::findOrFail($id);
+        $previousStatus = $donation->payment_status;
+        $donation->payment_status = $validated['payment_status'];
+        $donation->verified_by    = $validated['verified_by'] ?? null;
+        $donation->verified_at    = $validated['payment_status'] === 'pending' ? null : now();
+        $donation->save();
+
+        if ($donation->campaign_id) {
+            $campaign = $donation->campaign;
+
+            if ($campaign) {
+                if ($previousStatus !== 'verified' && $validated['payment_status'] === 'verified') {
+                    $campaign->raised_amount += $donation->amount;
+                } elseif ($previousStatus === 'verified' && $validated['payment_status'] !== 'verified') {
+                    $campaign->raised_amount = max(0, $campaign->raised_amount - $donation->amount);
+                }
+
+                $campaign->save();
+            }
+        }
+
+        return response()->json(['message' => 'Donation status updated.', 'donation' => $donation]);
     }
 
     public function getByEmail($email)
@@ -77,20 +118,20 @@ class DonationController extends Controller
 
     public function getAnalytics()
     {
-        // Get all donations with campaign info
         $allDonations = Donation::with('campaign')
+            ->where('payment_status', 'verified')
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // General donations (no campaign_id)
         $generalDonations = Donation::whereNull('campaign_id')
+            ->where('payment_status', 'verified')
             ->orderBy('created_at', 'desc')
             ->get();
-        
+
         $generalTotal = $generalDonations->sum('amount');
 
-        // Campaign donations grouped by campaign
         $campaignDonations = Donation::whereNotNull('campaign_id')
+            ->where('payment_status', 'verified')
             ->with('campaign')
             ->get()
             ->groupBy('campaign_id')

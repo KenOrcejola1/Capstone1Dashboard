@@ -1,15 +1,12 @@
 import { useState, useEffect } from 'react';
 import { 
-  Heart, 
-  ArrowRight, 
-  GraduationCap, 
-  Building2, 
-  Microscope, 
-  Globe, 
-  BookOpen, 
+  Heart,
+  GraduationCap,
+  Building2,
+  Microscope,
+  Globe,
+  BookOpen,
   Presentation,
-  Mail,
-  Phone,
   CheckCircle2,
   Lock,
   ChevronLeft,
@@ -29,9 +26,11 @@ import {
   TrendingUp,
   BarChart3,
   Users,
-  TrendingDown
+  TrendingDown,
+  Package
 } from 'lucide-react';
 import { Footer } from '../Footer';
+import { AcknowledgementModal } from '../AcknowledgementModal';
 
 interface DonationsViewProps {
   userRole?: "alumni" | "admin";
@@ -67,6 +66,49 @@ interface Donor {
   created_at: string;
 }
 
+interface VolunteerEvent {
+  id: number;
+  title: string;
+  description: string;
+  location?: string;
+  event_date?: string | null;
+  registration_deadline: string;
+  volunteer_slots?: number | null;
+  is_active: boolean;
+  registrants_count: number;
+  slots_remaining: number | null;
+  is_registration_open: boolean;
+}
+
+interface VolunteerRegistration {
+  id: number;
+  volunteer_event_id: number;
+  full_name: string;
+  email: string;
+  phone?: string;
+  notes?: string;
+  created_at: string;
+}
+
+interface ItemDonation {
+  id: number;
+  donor_first_name: string;
+  donor_last_name: string;
+  donor_full_name: string;
+  donor_email: string;
+  donor_phone?: string;
+  item_name: string;
+  category: string;
+  description?: string;
+  quantity: number;
+  condition: 'new' | 'like_new' | 'good' | 'fair';
+  delivery_method: 'drop_off' | 'pickup_request';
+  pickup_address?: string;
+  photo_path?: string;
+  status: 'pending' | 'received' | 'rejected';
+  created_at: string;
+}
+
 interface AnalyticsData {
   all_donations: Donor[];
   general_donations: {
@@ -86,7 +128,10 @@ interface AnalyticsData {
 
 export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
   const [showForm, setShowForm] = useState(false);
-  const [activeTab, setActiveTab] = useState<'gift' | 'needs'>('gift');
+  const [notice, setNotice] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [activeTab, setActiveTab] = useState<'gift' | 'needs' | 'volunteer' | 'items' | 'my-donations'>('gift');
+  const [myDonations, setMyDonations] = useState<any[]>([]);
+  const [loadingMyDonations, setLoadingMyDonations] = useState(false);
   const [managementView, setManagementView] = useState(false);
   const [adminManagementView, setAdminManagementView] = useState(false);
   const [isCreatingCampaign, setIsCreatingCampaign] = useState(false);
@@ -120,7 +165,104 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
   const [donationLastName, setDonationLastName] = useState('');
   const [donationEmail, setDonationEmail] = useState('');
   const [donationPaymentMethod, setDonationPaymentMethod] = useState('Credit Card');
+  const [donationReferenceNumber, setDonationReferenceNumber] = useState('');
+  const [donationReceiptFile, setDonationReceiptFile] = useState<File | null>(null);
   const [isDonating, setIsDonating] = useState(false);
+
+  // Volunteer Events State
+  const [volunteerEvents, setVolunteerEvents] = useState<VolunteerEvent[]>([]);
+  const [loadingVolunteerEvents, setLoadingVolunteerEvents] = useState(false);
+  const [myVolunteerRegistrations, setMyVolunteerRegistrations] = useState<VolunteerRegistration[]>([]);
+  const [volunteerRegistrationsByEvent, setVolunteerRegistrationsByEvent] = useState<Record<number, VolunteerRegistration[]>>({});
+  const [expandedVolunteerEventId, setExpandedVolunteerEventId] = useState<number | null>(null);
+
+  const [isCreatingVolunteerEvent, setIsCreatingVolunteerEvent] = useState(false);
+  const [editingVolunteerEventId, setEditingVolunteerEventId] = useState<number | null>(null);
+  const [volunteerEventForm, setVolunteerEventForm] = useState({
+    title: '',
+    description: '',
+    location: '',
+    event_date: '',
+    registration_deadline: '',
+    volunteer_slots: '',
+  });
+
+  const [showVolunteerRegModal, setShowVolunteerRegModal] = useState(false);
+  const [selectedVolunteerEvent, setSelectedVolunteerEvent] = useState<VolunteerEvent | null>(null);
+  const [volunteerRegForm, setVolunteerRegForm] = useState({ full_name: '', email: '', phone: '', notes: '' });
+  const [isSubmittingVolunteerReg, setIsSubmittingVolunteerReg] = useState(false);
+
+  // Item (In-Kind) Donations State
+  const [itemDonations, setItemDonations] = useState<ItemDonation[]>([]);
+  const [loadingItemDonations, setLoadingItemDonations] = useState(false);
+  const [donationPhone, setDonationPhone] = useState('');
+  const [itemDonationForm, setItemDonationForm] = useState({
+    item_name: '',
+    category: 'Books',
+    description: '',
+    quantity: '1',
+    condition: 'good',
+    delivery_method: 'drop_off',
+    pickup_address: '',
+  });
+  const [itemDonationPhoto, setItemDonationPhoto] = useState<File | null>(null);
+  const [itemDonationPhotoPreview, setItemDonationPhotoPreview] = useState<string | null>(null);
+  const [isSubmittingItemDonation, setIsSubmittingItemDonation] = useState(false);
+
+  const resetItemDonationForm = () => {
+    setItemDonationForm({
+      item_name: '',
+      category: 'Books',
+      description: '',
+      quantity: '1',
+      condition: 'good',
+      delivery_method: 'drop_off',
+      pickup_address: '',
+    });
+    setItemDonationPhoto(null);
+    setItemDonationPhotoPreview(null);
+  };
+
+  const handleItemDonationPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setItemDonationPhoto(file);
+    setItemDonationPhotoPreview(URL.createObjectURL(file));
+  };
+
+  const resetVolunteerEventForm = () => {
+    setVolunteerEventForm({ title: '', description: '', location: '', event_date: '', registration_deadline: '', volunteer_slots: '' });
+  };
+
+  const hydrateDonorIdentity = () => {
+    const storedEmail = (localStorage.getItem('userEmail') || '').trim();
+    const storedName = (localStorage.getItem('userName') || '').trim();
+
+    const parts = storedName.split(/\s+/).filter(Boolean);
+    const firstName = parts[0] || '';
+    const lastName = parts.length > 1 ? parts.slice(1).join(' ') : '';
+
+    setDonationFirstName(firstName);
+    setDonationLastName(lastName);
+    setDonationEmail(storedEmail);
+
+    return {
+      firstName,
+      lastName,
+      email: storedEmail,
+    };
+  };
+
+  const ensureDonorIdentity = () => {
+    const identity = hydrateDonorIdentity();
+
+    if (!identity.firstName || !identity.email) {
+      setNotice({ type: 'error', text: 'Missing account information. Please sign out and sign in again before donating.' });
+      return false;
+    }
+
+    return true;
+  };
 
   // Dashboard States
   const [dashboardView, setDashboardView] = useState(false);
@@ -152,14 +294,296 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
     endDate: ''
   });
 
+  const fetchMyDonations = async () => {
+    const email = localStorage.getItem('userEmail');
+    if (!email) return;
+    setLoadingMyDonations(true);
+    try {
+      const response = await fetch(`http://localhost:8000/api/donations/email/${encodeURIComponent(email)}`);
+      if (response.ok) {
+        setMyDonations(await response.json());
+      }
+    } catch (error) {
+      console.error('Error fetching my donations:', error);
+    } finally {
+      setLoadingMyDonations(false);
+    }
+  };
+
   // Fetch campaigns from API
   useEffect(() => {
     fetchCampaigns();
     if (dashboardView && userRole === 'admin') {
       fetchAnalytics();
     }
+    hydrateDonorIdentity();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userRole, dashboardView]);
+
+  useEffect(() => {
+    if (activeTab === 'my-donations' && userRole !== 'admin') {
+      fetchMyDonations();
+    }
+    if (activeTab === 'volunteer') {
+      fetchVolunteerEvents();
+      if (userRole !== 'admin') {
+        fetchMyVolunteerRegistrations();
+      }
+    }
+    if (activeTab === 'items') {
+      fetchItemDonations();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
+
+  const fetchItemDonations = async () => {
+    setLoadingItemDonations(true);
+    try {
+      const email = localStorage.getItem('userEmail') || '';
+      const query = userRole === 'admin' ? '?role=admin' : `?email=${encodeURIComponent(email)}`;
+      const response = await fetch(`http://localhost:8000/api/item-donations${query}`);
+      if (response.ok) {
+        setItemDonations(await response.json());
+      }
+    } catch (error) {
+      console.error('Error fetching item donations:', error);
+    } finally {
+      setLoadingItemDonations(false);
+    }
+  };
+
+  const handleSubmitItemDonation = async () => {
+    if (!ensureDonorIdentity()) return;
+    if (!itemDonationForm.item_name || !itemDonationForm.quantity) {
+      setNotice({ type: 'error', text: 'Please fill in the item name and quantity.' });
+      return;
+    }
+    if (itemDonationForm.delivery_method === 'pickup_request' && !itemDonationForm.pickup_address) {
+      setNotice({ type: 'error', text: 'Please provide a pickup address, or choose to drop the item off instead.' });
+      return;
+    }
+
+    setIsSubmittingItemDonation(true);
+    try {
+      const formData = new FormData();
+      formData.append('donor_first_name', donationFirstName);
+      formData.append('donor_last_name', donationLastName);
+      formData.append('donor_email', donationEmail);
+      if (donationPhone) formData.append('donor_phone', donationPhone);
+      formData.append('item_name', itemDonationForm.item_name);
+      formData.append('category', itemDonationForm.category);
+      if (itemDonationForm.description) formData.append('description', itemDonationForm.description);
+      formData.append('quantity', itemDonationForm.quantity);
+      formData.append('condition', itemDonationForm.condition);
+      formData.append('delivery_method', itemDonationForm.delivery_method);
+      if (itemDonationForm.delivery_method === 'pickup_request') {
+        formData.append('pickup_address', itemDonationForm.pickup_address);
+      }
+      if (itemDonationPhoto) formData.append('photo', itemDonationPhoto);
+
+      const response = await fetch('http://localhost:8000/api/item-donations', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        setNotice({ type: 'success', text: 'Thank you! Your item donation has been submitted for review.' });
+        resetItemDonationForm();
+        fetchItemDonations();
+      } else {
+        const errorData = await response.json();
+        setNotice({ type: 'error', text: `Failed to submit item donation: ${errorData.message || 'Unknown error'}` });
+      }
+    } catch (error) {
+      setNotice({ type: 'error', text: `Error submitting item donation: ${error instanceof Error ? error.message : 'Unknown error'}` });
+    } finally {
+      setIsSubmittingItemDonation(false);
+    }
+  };
+
+  const handleUpdateItemDonationStatus = async (id: number, status: 'received' | 'rejected') => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/item-donations/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+      if (response.ok) {
+        setNotice({ type: 'success', text: `Item donation marked as ${status}.` });
+        fetchItemDonations();
+      } else {
+        setNotice({ type: 'error', text: 'Failed to update item donation status.' });
+      }
+    } catch (error) {
+      setNotice({ type: 'error', text: `Error updating status: ${error instanceof Error ? error.message : 'Unknown error'}` });
+    }
+  };
+
+  const fetchVolunteerEvents = async () => {
+    setLoadingVolunteerEvents(true);
+    try {
+      const roleParam = userRole === 'admin' ? '?role=admin' : '';
+      const response = await fetch(`http://localhost:8000/api/volunteer/events${roleParam}`);
+      if (response.ok) {
+        setVolunteerEvents(await response.json());
+      }
+    } catch (error) {
+      console.error('Error fetching volunteer events:', error);
+    } finally {
+      setLoadingVolunteerEvents(false);
+    }
+  };
+
+  const fetchMyVolunteerRegistrations = async () => {
+    const email = localStorage.getItem('userEmail');
+    if (!email) return;
+    try {
+      const response = await fetch(`http://localhost:8000/api/volunteer/registrations?email=${encodeURIComponent(email)}`);
+      if (response.ok) {
+        setMyVolunteerRegistrations(await response.json());
+      }
+    } catch (error) {
+      console.error('Error fetching my volunteer registrations:', error);
+    }
+  };
+
+  const fetchVolunteerEventRegistrants = async (eventId: number) => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/volunteer/registrations?volunteer_event_id=${eventId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setVolunteerRegistrationsByEvent((prev) => ({ ...prev, [eventId]: data }));
+      }
+    } catch (error) {
+      console.error('Error fetching event registrants:', error);
+    }
+  };
+
+  const toggleVolunteerRegistrants = (eventId: number) => {
+    if (expandedVolunteerEventId === eventId) {
+      setExpandedVolunteerEventId(null);
+      return;
+    }
+    setExpandedVolunteerEventId(eventId);
+    if (!volunteerRegistrationsByEvent[eventId]) {
+      fetchVolunteerEventRegistrants(eventId);
+    }
+  };
+
+  const startEditVolunteerEvent = (event: VolunteerEvent) => {
+    setEditingVolunteerEventId(event.id);
+    setIsCreatingVolunteerEvent(false);
+    setVolunteerEventForm({
+      title: event.title,
+      description: event.description,
+      location: event.location || '',
+      event_date: event.event_date ? event.event_date.slice(0, 16) : '',
+      registration_deadline: event.registration_deadline.slice(0, 16),
+      volunteer_slots: event.volunteer_slots ? String(event.volunteer_slots) : '',
+    });
+  };
+
+  const handleSaveVolunteerEvent = async () => {
+    if (!volunteerEventForm.title || !volunteerEventForm.description || !volunteerEventForm.registration_deadline) {
+      setNotice({ type: 'error', text: 'Please fill in the title, description, and registration deadline.' });
+      return;
+    }
+
+    const payload = {
+      title: volunteerEventForm.title,
+      description: volunteerEventForm.description,
+      location: volunteerEventForm.location || null,
+      event_date: volunteerEventForm.event_date || null,
+      registration_deadline: volunteerEventForm.registration_deadline,
+      volunteer_slots: volunteerEventForm.volunteer_slots ? Number(volunteerEventForm.volunteer_slots) : null,
+    };
+
+    try {
+      const isEditing = editingVolunteerEventId !== null;
+      const url = isEditing
+        ? `http://localhost:8000/api/volunteer/events/${editingVolunteerEventId}`
+        : `http://localhost:8000/api/volunteer/events`;
+      const response = await fetch(url, {
+        method: isEditing ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        setNotice({ type: 'success', text: isEditing ? 'Community engagement event updated.' : 'Community engagement event created.' });
+        setIsCreatingVolunteerEvent(false);
+        setEditingVolunteerEventId(null);
+        resetVolunteerEventForm();
+        fetchVolunteerEvents();
+      } else {
+        const errorData = await response.json();
+        setNotice({ type: 'error', text: `Failed to save event: ${errorData.message || 'Unknown error'}` });
+      }
+    } catch (error) {
+      setNotice({ type: 'error', text: `Error saving event: ${error instanceof Error ? error.message : 'Unknown error'}` });
+    }
+  };
+
+  const handleDeleteVolunteerEvent = async (eventId: number) => {
+    if (!window.confirm('Delete this community engagement event? All registrations for it will be removed.')) return;
+    try {
+      const response = await fetch(`http://localhost:8000/api/volunteer/events/${eventId}`, { method: 'DELETE' });
+      if (response.ok) {
+        setNotice({ type: 'success', text: 'Community engagement event deleted.' });
+        fetchVolunteerEvents();
+      } else {
+        setNotice({ type: 'error', text: 'Failed to delete community engagement event.' });
+      }
+    } catch (error) {
+      setNotice({ type: 'error', text: `Error deleting event: ${error instanceof Error ? error.message : 'Unknown error'}` });
+    }
+  };
+
+  const openVolunteerRegModal = (event: VolunteerEvent) => {
+    const storedEmail = (localStorage.getItem('userEmail') || '').trim();
+    const storedName = (localStorage.getItem('userName') || '').trim();
+    setVolunteerRegForm({ full_name: storedName, email: storedEmail, phone: '', notes: '' });
+    setSelectedVolunteerEvent(event);
+    setShowVolunteerRegModal(true);
+  };
+
+  const handleSubmitVolunteerRegistration = async () => {
+    if (!selectedVolunteerEvent) return;
+    if (!volunteerRegForm.full_name || !volunteerRegForm.email) {
+      setNotice({ type: 'error', text: 'Missing account information. Please sign out and sign in again before registering.' });
+      return;
+    }
+
+    setIsSubmittingVolunteerReg(true);
+    try {
+      const response = await fetch('http://localhost:8000/api/volunteer/registrations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          volunteer_event_id: selectedVolunteerEvent.id,
+          full_name: volunteerRegForm.full_name,
+          email: volunteerRegForm.email,
+          phone: volunteerRegForm.phone || null,
+          notes: volunteerRegForm.notes || null,
+        }),
+      });
+
+      if (response.ok) {
+        setNotice({ type: 'success', text: 'You have successfully registered for this community engagement event!' });
+        setShowVolunteerRegModal(false);
+        setSelectedVolunteerEvent(null);
+        fetchVolunteerEvents();
+        fetchMyVolunteerRegistrations();
+      } else {
+        const errorData = await response.json();
+        setNotice({ type: 'error', text: errorData.message || 'Failed to register for this event.' });
+      }
+    } catch (error) {
+      setNotice({ type: 'error', text: `Error registering: ${error instanceof Error ? error.message : 'Unknown error'}` });
+    } finally {
+      setIsSubmittingVolunteerReg(false);
+    }
+  };
 
   const fetchCampaigns = async () => {
     try {
@@ -386,54 +810,68 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
   };
 
   const openDonationModal = (campaign: Campaign) => {
+    hydrateDonorIdentity();
     setSelectedCampaignForDonation(campaign);
     setShowDonationModal(true);
   };
 
   const handleDonateToCampaign = async () => {
-    if (!donationAmount || !donationFirstName || !donationLastName || !donationEmail) {
-      alert("Please fill in all required fields");
+    if (!donationAmount) {
+      setNotice({ type: 'error', text: 'Please enter a donation amount.' });
+      return;
+    }
+
+    if (!ensureDonorIdentity()) {
       return;
     }
 
     if (!selectedCampaignForDonation) {
-      alert("No campaign selected");
+      setNotice({ type: 'error', text: 'No campaign selected.' });
+      return;
+    }
+
+    if (!donationReferenceNumber.trim()) {
+      setNotice({ type: 'error', text: 'Please enter a reference number.' });
+      return;
+    }
+
+    if (!donationReceiptFile) {
+      setNotice({ type: 'error', text: 'Please upload a receipt before donating to a campaign.' });
       return;
     }
 
     setIsDonating(true);
     try {
+      const formData = new FormData();
+      formData.append('amount', donationAmount);
+      formData.append('first_name', donationFirstName);
+      formData.append('last_name', donationLastName);
+      formData.append('email', donationEmail);
+      formData.append('payment_method', donationPaymentMethod);
+      formData.append('reference_number', donationReferenceNumber.trim());
+      formData.append('proof_of_payment', donationReceiptFile);
+
       const response = await fetch(`http://localhost:8000/api/campaigns/${selectedCampaignForDonation.id}/donate`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount: parseFloat(donationAmount),
-          first_name: donationFirstName,
-          last_name: donationLastName,
-          email: donationEmail,
-          payment_method: donationPaymentMethod
-        })
+        body: formData,
       });
 
       if (response.ok) {
-        alert("Thank you for your donation!");
+        setNotice({ type: 'success', text: 'Thank you for your donation! Please wait for the admin to approve your payment.' });
         setShowDonationModal(false);
         setDonationAmount('');
-        setDonationFirstName('');
-        setDonationLastName('');
-        setDonationEmail('');
         setDonationPaymentMethod('Credit Card');
+        setDonationReferenceNumber('');
+        setDonationReceiptFile(null);
         setSelectedCampaignForDonation(null);
         fetchCampaigns(); // Refresh campaigns to update amounts
       } else {
         const errorData = await response.json();
-        alert(`Failed to process donation: ${errorData.message || 'Unknown error'}`);
+        setNotice({ type: 'error', text: `Failed to process donation: ${errorData.message || 'Unknown error'}` });
       }
     } catch (error) {
       console.error('Error processing donation:', error);
-      alert(`Error processing donation: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setNotice({ type: 'error', text: `Error processing donation: ${error instanceof Error ? error.message : 'Unknown error'}` });
     } finally {
       setIsDonating(false);
     }
@@ -473,48 +911,61 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
   };
 
   const handleDonation = async () => {
-    if (!donationAmount || !donationFirstName || !donationLastName || !donationEmail) {
-      alert("Please fill in all required fields");
+    if (!donationAmount) {
+      setNotice({ type: 'error', text: 'Please enter a donation amount.' });
+      return;
+    }
+
+    if (!ensureDonorIdentity()) {
       return;
     }
 
     if (!selectedPayment) {
-      alert("Please select a payment method");
+      setNotice({ type: 'error', text: 'Please select a payment method.' });
+      return;
+    }
+
+    if (!donationReferenceNumber.trim()) {
+      setNotice({ type: 'error', text: 'Please enter a reference number.' });
+      return;
+    }
+
+    if (!donationReceiptFile) {
+      setNotice({ type: 'error', text: 'Please upload a receipt before completing your donation.' });
       return;
     }
 
     setIsDonating(true);
     try {
+      const formData = new FormData();
+      formData.append('amount', donationAmount);
+      formData.append('first_name', donationFirstName);
+      formData.append('last_name', donationLastName);
+      formData.append('email', donationEmail);
+      formData.append('payment_method', selectedPayment);
+      formData.append('reference_number', donationReferenceNumber.trim());
+      formData.append('proof_of_payment', donationReceiptFile);
+
       const response = await fetch(`http://localhost:8000/api/donations`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount: parseFloat(donationAmount),
-          first_name: donationFirstName,
-          last_name: donationLastName,
-          email: donationEmail,
-          payment_method: selectedPayment
-        })
+        body: formData,
       });
 
       if (response.ok) {
-        alert("Thank you for your donation! Your generosity supports ADDU's mission of excellence.");
+        setNotice({ type: 'success', text: 'Thank you for your donation! Please wait for the admin to approve your payment.' });
         setShowForm(false);
         setDonationAmount('');
-        setDonationFirstName('');
-        setDonationLastName('');
-        setDonationEmail('');
         setSelectedAmount(null);
         setSelectedPayment('Credit Card');
+        setDonationReferenceNumber('');
+        setDonationReceiptFile(null);
       } else {
         const errorData = await response.json();
-        alert(`Failed to process donation: ${errorData.message || 'Unknown error'}`);
+        setNotice({ type: 'error', text: `Failed to process donation: ${errorData.message || 'Unknown error'}` });
       }
     } catch (error) {
       console.error('Error processing donation:', error);
-      alert(`Error processing donation: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setNotice({ type: 'error', text: `Error processing donation: ${error instanceof Error ? error.message : 'Unknown error'}` });
     } finally {
       setIsDonating(false);
     }
@@ -1269,28 +1720,20 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                     <div className="space-y-6">
                       <h3 className="text-xl font-bold flex items-center gap-3"><span className="w-8 h-8 rounded-full bg-[#003087] text-white flex items-center justify-center text-sm">3</span>Your Information</h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input 
-                          type="text" 
-                          placeholder="First Name *" 
-                          value={donationFirstName}
-                          onChange={(e) => setDonationFirstName(e.target.value)}
-                          className="p-4 bg-gray-50 border border-gray-100 rounded-xl" 
-                        />
-                        <input 
-                          type="text" 
-                          placeholder="Last Name *" 
-                          value={donationLastName}
-                          onChange={(e) => setDonationLastName(e.target.value)}
-                          className="p-4 bg-gray-50 border border-gray-100 rounded-xl" 
-                        />
-                        <input 
-                          type="email" 
-                          placeholder="Email Address *" 
-                          value={donationEmail}
-                          onChange={(e) => setDonationEmail(e.target.value)}
-                          className="p-4 bg-gray-50 border border-gray-100 rounded-xl md:col-span-2" 
-                        />
+                        <div className="p-4 bg-gray-50 border border-gray-100 rounded-xl">
+                          <p className="text-xs font-semibold text-gray-500 uppercase">Donor Name</p>
+                          <p className="mt-1 font-bold text-gray-900">
+                            {donationFirstName || donationLastName
+                              ? `${donationFirstName} ${donationLastName}`.trim()
+                              : 'Unavailable'}
+                          </p>
+                        </div>
+                        <div className="p-4 bg-gray-50 border border-gray-100 rounded-xl md:col-span-1">
+                          <p className="text-xs font-semibold text-gray-500 uppercase">Email Address</p>
+                          <p className="mt-1 font-bold text-gray-900 break-all">{donationEmail || 'Unavailable'}</p>
+                        </div>
                       </div>
+                      <p className="text-xs text-gray-500">Pulled from your logged-in account.</p>
                     </div>
 
                     <div className="space-y-6">
@@ -1301,11 +1744,20 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                             <button key={m} onClick={() => setSelectedPayment(m)} className={`px-6 py-3 border-2 rounded-xl text-sm font-bold transition-all ${selectedPayment === m ? 'bg-[#003087] border-[#003087] text-white' : 'bg-white border-gray-200 text-gray-600'}`}>{m}</button>
                           ))}
                         </div>
-                        <input type="text" placeholder="Card Number *" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl" />
-                        <div className="grid grid-cols-2 gap-4">
-                          <input type="text" placeholder="Expiry Date *" className="p-4 bg-gray-50 border border-gray-100 rounded-xl" />
-                          <input type="text" placeholder="CVV *" className="p-4 bg-gray-50 border border-gray-100 rounded-xl" />
-                        </div>
+                        <input
+                          type="text"
+                          value={donationReferenceNumber}
+                          onChange={(e) => setDonationReferenceNumber(e.target.value)}
+                          placeholder="Reference Number / Transaction ID *"
+                          className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl"
+                        />
+                        <input
+                          type="file"
+                          accept="image/*,.pdf"
+                          onChange={(e) => setDonationReceiptFile(e.target.files?.[0] || null)}
+                          className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl"
+                        />
+                        <p className="text-xs text-gray-500">Upload your receipt or proof of transfer before submitting.</p>
                       </div>
                     </div>
 
@@ -1336,12 +1788,23 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
+      <AcknowledgementModal
+        open={notice !== null}
+        type={notice?.type || 'success'}
+        message={notice?.text || ''}
+        onConfirm={() => setNotice(null)}
+      />
       <main className="flex-1">
         {/* HERO */}
-        <div className="bg-[#003087] text-white py-24 px-8 text-center">
-          <div className="max-w-4xl mx-auto space-y-6">
+        <div
+          className="relative text-white py-24 px-8 text-center bg-cover bg-center"
+          style={{ backgroundImage: "url('https://www.addu.edu.ph/wp-content/uploads/2016/01/Library.jpg')" }}
+        >
+          <div className="absolute inset-0 bg-[#001b4d]/75"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#003087]/85 via-[#003087]/45 to-[#0b264f]/80"></div>
+          <div className="relative z-10 max-w-4xl mx-auto space-y-6">
             <h1 className="text-5xl font-bold leading-tight">Supporting Excellence at ADDU</h1>
-            <p className="text-xl text-blue-100 leading-relaxed max-w-3xl mx-auto">Your generosity empowers students, advances research, and strengthens our Jesuit mission of service and excellence.</p>
+            <p className="text-xl text-blue-50 leading-relaxed max-w-3xl mx-auto">Your generosity empowers students, advances research, and strengthens our Jesuit mission of service and excellence.</p>
             <div className="pt-4 flex flex-col items-center gap-4">
               {userRole === "admin" ? (
                 <div className="flex gap-4">
@@ -1377,12 +1840,32 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
             >
               Make a Gift
             </button>
-            <button 
+            <button
               onClick={() => setActiveTab('needs')}
               className={`pb-4 text-base font-bold transition-all border-b-4 ${activeTab === 'needs' ? 'border-[#003087] text-[#003087]' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
             >
               Areas of Greatest Need
             </button>
+            <button
+              onClick={() => setActiveTab('volunteer')}
+              className={`pb-4 text-base font-bold transition-all border-b-4 ${activeTab === 'volunteer' ? 'border-[#003087] text-[#003087]' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
+            >
+              Community Engagement
+            </button>
+            <button
+              onClick={() => setActiveTab('items')}
+              className={`pb-4 text-base font-bold transition-all border-b-4 ${activeTab === 'items' ? 'border-[#003087] text-[#003087]' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
+            >
+              Donate Items
+            </button>
+            {userRole !== 'admin' && (
+              <button
+                onClick={() => setActiveTab('my-donations')}
+                className={`pb-4 text-base font-bold transition-all border-b-4 ${activeTab === 'my-donations' ? 'border-[#003087] text-[#003087]' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
+              >
+                My Donations
+              </button>
+            )}
           </div>
         </div>
 
@@ -1399,58 +1882,6 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
               </div>
             </div>
 
-            <div className="bg-[#003087] py-24 px-8">
-              <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-                  <div className="lg:col-span-7 space-y-12">
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3 text-orange-400 font-bold uppercase tracking-widest text-sm">
-                        <Award className="w-5 h-5" /> Recognition Tiers
-                      </div>
-                      <h2 className="text-4xl font-bold text-white">Honoring Our Donors</h2>
-                      <p className="text-blue-200 text-lg">We honor our generous supporters who make our mission possible.</p>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {[
-                        { name: "Founder's Circle", price: "₱1,000,000+", perks: ["Named endowment opportunities", "Private events with leadership", "Campus naming rights", "Lifetime recognition on Founder's Wall"] },
-                        { name: "President's Council", price: "₱500,000 - ₱999,999", perks: ["Exclusive event invitations", "Annual donor report recognition", "Personal thank you from President", "Priority access"] },
-                        { name: "Loyola Society", price: "₱100,000 - ₱499,999", perks: ["Recognition event invitations", "Name in publications", "Donor appreciation events", "Semi-annual impact reports"] },
-                        { name: "Blue & Gold Circle", price: "₱25,000 - ₱99,999", perks: ["Donor honor roll", "Annual impact summary", "University invitations", "Official tax receipt"] }
-                      ].map((tier, i) => (
-                        <div key={i} className="bg-white/5 p-8 rounded-[32px] border border-white/10 hover:bg-white/10 transition-all">
-                          <h3 className="text-xl font-bold text-white mb-1">{tier.name}</h3>
-                          <p className="text-orange-400 font-bold mb-6 text-sm">{tier.price}</p>
-                          <ul className="space-y-3">
-                            {tier.perks.map((p, pi) => (
-                              <li key={pi} className="text-[11px] text-blue-100 flex items-start gap-2 leading-relaxed">
-                                <CheckCircle2 className="w-3 h-3 text-orange-500 mt-0.5 shrink-0" /> {p}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="lg:col-span-5">
-                    <div className="bg-white rounded-[40px] p-10 h-full shadow-2xl">
-                      <div className="flex items-center gap-3 text-[#003087] font-bold uppercase tracking-widest text-sm mb-4"><Gift className="w-5 h-5" /> Giving Methods</div>
-                      <h3 className="text-3xl font-bold text-gray-900 mb-8">Ways to Give</h3>
-                      <div className="space-y-10">
-                        {[{ t: "Cash Gifts", d: "Immediate impact via credit card, GCash, or bank transfer." }, { t: "Planned Giving", d: "Create a legacy through bequests or trusts." }].map((way, i) => (
-                          <div key={i} className="group">
-                            <h4 className="text-lg font-bold text-gray-900 group-hover:text-[#003087] transition-colors">{way.t}</h4>
-                            <p className="text-gray-500 text-sm mb-3 leading-relaxed">{way.d}</p>
-                            <button onClick={() => setShowForm(true)} className="text-[#003087] text-sm font-bold flex items-center gap-2 group-hover:gap-4 transition-all">Give Now <ArrowRight className="w-4 h-4" /></button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </>
         )}
 
@@ -1607,24 +2038,451 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
           </>
         )}
 
-        <div className="max-w-7xl mx-auto px-8 py-24">
-          <div className="relative overflow-hidden flex flex-col gap-12 rounded-[48px] p-12 md:p-20 shadow-2xl bg-[#003087]">
-            <div className="relative z-10 text-center space-y-6">
-              <h2 className="text-4xl md:text-5xl font-bold text-white">Ready to Make an Impact?</h2>
-              <p className="text-blue-100 text-lg max-w-2xl mx-auto leading-relaxed">Your gift today will transform lives for generations to come.</p>
-              <div className="pt-4">
-                <button onClick={() => setShowForm(true)} className="bg-orange-600 text-white px-12 py-5 rounded-2xl font-bold text-xl shadow-xl hover:bg-orange-500 transition-all transform hover:-translate-y-1">Give Now</button>
+        {activeTab === 'volunteer' && (
+          <div className="max-w-7xl mx-auto px-8 py-16">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+              <div>
+                <h2 className="text-4xl font-bold text-gray-900 mb-2">Community Engagement Opportunities</h2>
+                <p className="text-gray-500 text-lg">Give your time — sign up for an upcoming event before registration closes.</p>
               </div>
+              {userRole === 'admin' && !isCreatingVolunteerEvent && editingVolunteerEventId === null && (
+                <button
+                  onClick={() => { resetVolunteerEventForm(); setIsCreatingVolunteerEvent(true); }}
+                  className="flex items-center gap-2 px-6 py-3 bg-[#003087] text-white rounded-xl font-bold hover:bg-[#002566] transition-all shadow-lg shrink-0"
+                >
+                  <Plus className="w-5 h-5" /> Create Community Engagement Event
+                </button>
+              )}
             </div>
-            <div className="relative z-10 pt-12 border-t border-white/10 text-center">
-              <h3 className="text-2xl font-bold text-white mb-2">Questions?</h3>
-              <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-                <a href="mailto:development@addu.edu.ph" className="flex items-center gap-3 px-8 py-4 rounded-xl border-2 border-white/10 text-white font-bold hover:bg-white hover:text-[#003087] transition-all"><Mail className="w-5 h-5" /> development@addu.edu.ph</a>
-                <a href="tel:+63822212411" className="flex items-center gap-3 px-8 py-4 rounded-xl border-2 border-white/10 text-white font-bold hover:bg-white hover:text-[#003087] transition-all"><Phone className="w-5 h-5" /> +63 (82) 221-2411</a>
+
+            {(isCreatingVolunteerEvent || editingVolunteerEventId !== null) && (
+              <div className="bg-gray-50 border border-gray-100 rounded-[32px] p-8 mb-12 space-y-6">
+                <h3 className="text-2xl font-bold text-gray-900">{editingVolunteerEventId !== null ? 'Edit Community Engagement Event' : 'New Community Engagement Event'}</h3>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-700">Title *</label>
+                  <input
+                    type="text"
+                    value={volunteerEventForm.title}
+                    onChange={(e) => setVolunteerEventForm({ ...volunteerEventForm, title: e.target.value })}
+                    placeholder="e.g., Beach Cleanup Drive"
+                    className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-700">Description *</label>
+                  <textarea
+                    value={volunteerEventForm.description}
+                    onChange={(e) => setVolunteerEventForm({ ...volunteerEventForm, description: e.target.value })}
+                    rows={3}
+                    placeholder="What will participants be doing?"
+                    className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all resize-none"
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-gray-700">Location</label>
+                    <input
+                      type="text"
+                      value={volunteerEventForm.location}
+                      onChange={(e) => setVolunteerEventForm({ ...volunteerEventForm, location: e.target.value })}
+                      placeholder="e.g., Davao City Campus"
+                      className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-gray-700">Slots (optional)</label>
+                    <input
+                      type="number"
+                      min={1}
+                      value={volunteerEventForm.volunteer_slots}
+                      onChange={(e) => setVolunteerEventForm({ ...volunteerEventForm, volunteer_slots: e.target.value })}
+                      placeholder="Leave blank for unlimited"
+                      className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-gray-700">Event Date</label>
+                    <input
+                      type="datetime-local"
+                      value={volunteerEventForm.event_date}
+                      onChange={(e) => setVolunteerEventForm({ ...volunteerEventForm, event_date: e.target.value })}
+                      className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-gray-700">Registration Deadline *</label>
+                    <input
+                      type="datetime-local"
+                      value={volunteerEventForm.registration_deadline}
+                      onChange={(e) => setVolunteerEventForm({ ...volunteerEventForm, registration_deadline: e.target.value })}
+                      className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-4 pt-2">
+                  <button
+                    onClick={() => { setIsCreatingVolunteerEvent(false); setEditingVolunteerEventId(null); resetVolunteerEventForm(); }}
+                    className="flex-1 py-4 border border-gray-200 rounded-xl font-bold text-gray-600 hover:bg-white transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button onClick={handleSaveVolunteerEvent} className="flex-1 py-4 bg-[#003087] text-white rounded-xl font-bold shadow-lg shadow-blue-900/20 hover:bg-blue-800 transition-all">
+                    {editingVolunteerEventId !== null ? 'Save Changes' : 'Create Event'}
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
+
+            {loadingVolunteerEvents ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500 font-semibold text-lg">Loading community engagement events...</p>
+              </div>
+            ) : volunteerEvents.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500 font-semibold text-lg">No community engagement events available right now.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {volunteerEvents.map((event) => {
+                  const alreadyRegistered = myVolunteerRegistrations.some((r) => r.volunteer_event_id === event.id);
+                  return (
+                    <div key={event.id} className="bg-white p-8 rounded-[32px] border border-gray-100 flex flex-col shadow-sm">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="bg-blue-50 text-[#003087] w-14 h-14 rounded-2xl flex items-center justify-center"><Users className="w-6 h-6" /></div>
+                        {!event.is_active && <span className="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-500">Inactive</span>}
+                      </div>
+                      <h3 className="text-xl font-bold mb-2 text-gray-900">{event.title}</h3>
+                      <p className="text-gray-500 mb-6 flex-1 leading-relaxed text-sm">{event.description}</p>
+                      <div className="space-y-2 mb-6 text-sm text-gray-600">
+                        {event.location && (
+                          <div className="flex items-center gap-2"><Building2 className="w-4 h-4 text-gray-400" /> {event.location}</div>
+                        )}
+                        {event.event_date && (
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4 text-gray-400" />
+                            {new Date(event.event_date).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}
+                          </div>
+                        )}
+                        <div className={`flex items-center gap-2 font-semibold ${event.is_registration_open ? 'text-orange-600' : 'text-red-500'}`}>
+                          <Calendar className="w-4 h-4" /> Register by {new Date(event.registration_deadline).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}
+                        </div>
+                        {event.volunteer_slots !== null && event.volunteer_slots !== undefined && (
+                          <div className="flex items-center gap-2"><Users className="w-4 h-4 text-gray-400" /> {event.slots_remaining} of {event.volunteer_slots} slots left</div>
+                        )}
+                      </div>
+
+                      {userRole === 'admin' ? (
+                        <div className="space-y-3 pt-4 border-t border-gray-100">
+                          <button
+                            onClick={() => toggleVolunteerRegistrants(event.id)}
+                            className="w-full py-3 rounded-xl border-2 border-[#003087] text-[#003087] font-bold text-sm hover:bg-[#003087] hover:text-white transition-all"
+                          >
+                            {event.registrants_count} Registered {expandedVolunteerEventId === event.id ? '▲' : '▼'}
+                          </button>
+                          {expandedVolunteerEventId === event.id && (
+                            <div className="space-y-2 max-h-48 overflow-y-auto bg-gray-50 rounded-xl p-3">
+                              {(volunteerRegistrationsByEvent[event.id] || []).length === 0 ? (
+                                <p className="text-xs text-gray-400 text-center py-2">No registrants yet.</p>
+                              ) : (
+                                volunteerRegistrationsByEvent[event.id].map((r) => (
+                                  <div key={r.id} className="text-xs bg-white rounded-lg p-2 border border-gray-100">
+                                    <p className="font-bold text-gray-700">{r.full_name}</p>
+                                    <p className="text-gray-500">{r.email}{r.phone ? ` · ${r.phone}` : ''}</p>
+                                  </div>
+                                ))
+                              )}
+                            </div>
+                          )}
+                          <div className="flex gap-2">
+                            <button onClick={() => startEditVolunteerEvent(event)} className="flex-1 py-2 rounded-lg border border-gray-200 text-gray-600 font-bold text-xs hover:bg-gray-50 transition-all">Edit</button>
+                            <button onClick={() => handleDeleteVolunteerEvent(event.id)} className="flex-1 py-2 rounded-lg border border-red-200 text-red-500 font-bold text-xs hover:bg-red-50 transition-all flex items-center justify-center gap-1">
+                              <Trash2 className="w-3 h-3" /> Delete
+                            </button>
+                          </div>
+                        </div>
+                      ) : alreadyRegistered ? (
+                        <div className="w-full py-4 rounded-xl bg-emerald-50 text-emerald-600 font-bold text-sm text-center flex items-center justify-center gap-2">
+                          <CheckCircle2 className="w-4 h-4" /> Registered
+                        </div>
+                      ) : !event.is_registration_open ? (
+                        <div className="w-full py-4 rounded-xl bg-gray-100 text-gray-400 font-bold text-sm text-center">Registration Closed</div>
+                      ) : (
+                        <button onClick={() => openVolunteerRegModal(event)} className="w-full py-4 rounded-xl bg-[#003087] text-white font-bold text-sm hover:bg-[#002566] transition-all">
+                          Register for Community Engagement
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
-        </div>
+        )}
+
+        {activeTab === 'items' && (
+          <div className="max-w-7xl mx-auto px-8 py-16">
+            <div className="mb-10">
+              <h2 className="text-4xl font-bold text-gray-900 mb-2">Donate Items</h2>
+              <p className="text-gray-500 text-lg">Give new or gently used items — books, electronics, furniture, and more — to support our community.</p>
+            </div>
+
+            {userRole !== 'admin' && (
+              <div className="bg-gray-50 border border-gray-100 rounded-[32px] p-8 mb-12 space-y-6">
+                <h3 className="text-2xl font-bold text-gray-900">Submit an Item Donation</h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-gray-700">Item Name *</label>
+                    <input
+                      type="text"
+                      value={itemDonationForm.item_name}
+                      onChange={(e) => setItemDonationForm({ ...itemDonationForm, item_name: e.target.value })}
+                      placeholder="e.g., Textbooks (College Algebra)"
+                      className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-gray-700">Category</label>
+                    <select
+                      value={itemDonationForm.category}
+                      onChange={(e) => setItemDonationForm({ ...itemDonationForm, category: e.target.value })}
+                      className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all appearance-none"
+                    >
+                      <option>Books</option>
+                      <option>Electronics</option>
+                      <option>Furniture</option>
+                      <option>Clothing</option>
+                      <option>Appliances</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-700">Description</label>
+                  <textarea
+                    value={itemDonationForm.description}
+                    onChange={(e) => setItemDonationForm({ ...itemDonationForm, description: e.target.value })}
+                    rows={3}
+                    placeholder="Describe the item(s)..."
+                    className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all resize-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-gray-700">Quantity</label>
+                    <input
+                      type="number"
+                      min={1}
+                      value={itemDonationForm.quantity}
+                      onChange={(e) => setItemDonationForm({ ...itemDonationForm, quantity: e.target.value })}
+                      className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-gray-700">Condition</label>
+                    <select
+                      value={itemDonationForm.condition}
+                      onChange={(e) => setItemDonationForm({ ...itemDonationForm, condition: e.target.value })}
+                      className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all appearance-none"
+                    >
+                      <option value="new">New</option>
+                      <option value="like_new">Like New</option>
+                      <option value="good">Good</option>
+                      <option value="fair">Fair</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-gray-700">Delivery Method</label>
+                    <select
+                      value={itemDonationForm.delivery_method}
+                      onChange={(e) => setItemDonationForm({ ...itemDonationForm, delivery_method: e.target.value })}
+                      className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all appearance-none"
+                    >
+                      <option value="drop_off">Drop off at campus</option>
+                      <option value="pickup_request">Request pickup</option>
+                    </select>
+                  </div>
+                  {itemDonationForm.delivery_method === 'pickup_request' && (
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-gray-700">Pickup Address *</label>
+                      <input
+                        type="text"
+                        value={itemDonationForm.pickup_address}
+                        onChange={(e) => setItemDonationForm({ ...itemDonationForm, pickup_address: e.target.value })}
+                        placeholder="Where should we pick this up?"
+                        className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-700">Photo (optional)</label>
+                  {itemDonationPhotoPreview ? (
+                    <div className="relative border-2 border-gray-200 rounded-2xl p-4">
+                      <img src={itemDonationPhotoPreview} alt="Preview" className="w-full h-48 object-cover rounded-xl" />
+                      <button
+                        onClick={() => { setItemDonationPhoto(null); setItemDonationPhotoPreview(null); }}
+                        className="absolute top-6 right-6 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-all"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="border-2 border-dashed border-gray-200 rounded-2xl p-8 flex flex-col items-center justify-center gap-2 hover:bg-white cursor-pointer transition-all">
+                      <input type="file" accept="image/*" onChange={handleItemDonationPhotoChange} className="hidden" />
+                      <Upload className="w-8 h-8 text-gray-400" />
+                      <p className="text-sm font-bold text-gray-500">Click to upload or drag and drop</p>
+                      <p className="text-xs text-gray-400">PNG, JPG or WEBP (max. 5MB)</p>
+                    </label>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-gray-700">Your Name</label>
+                    <input type="text" value={`${donationFirstName} ${donationLastName}`.trim()} readOnly className="w-full p-4 bg-gray-100 border border-gray-200 rounded-xl text-gray-500" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-gray-700">Your Email</label>
+                    <input type="text" value={donationEmail} readOnly className="w-full p-4 bg-gray-100 border border-gray-200 rounded-xl text-gray-500" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-gray-700">Phone (optional)</label>
+                    <input
+                      type="text"
+                      value={donationPhone}
+                      onChange={(e) => setDonationPhone(e.target.value)}
+                      className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleSubmitItemDonation}
+                  disabled={isSubmittingItemDonation}
+                  className="w-full py-4 bg-[#003087] text-white rounded-xl font-bold shadow-lg shadow-blue-900/20 hover:bg-blue-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmittingItemDonation ? 'Submitting...' : 'Submit Item Donation'}
+                </button>
+              </div>
+            )}
+
+            {loadingItemDonations ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500 font-semibold text-lg">Loading item donations...</p>
+              </div>
+            ) : itemDonations.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500 font-semibold text-lg">{userRole === 'admin' ? 'No item donations submitted yet.' : "You haven't submitted any item donations yet."}</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <h3 className="text-2xl font-bold text-gray-900">{userRole === 'admin' ? 'Submitted Item Donations' : 'My Item Donations'}</h3>
+                {itemDonations.map((item) => {
+                  const statusMap: Record<string, { label: string; classes: string }> = {
+                    received: { label: 'Received', classes: 'bg-emerald-100 text-emerald-700' },
+                    pending: { label: 'Pending Review', classes: 'bg-amber-100 text-amber-700' },
+                    rejected: { label: 'Rejected', classes: 'bg-red-100 text-red-700' },
+                  };
+                  const status = statusMap[item.status] ?? statusMap.pending;
+                  return (
+                    <div key={item.id} className="bg-white rounded-[24px] border border-gray-100 shadow-sm p-6 flex flex-col sm:flex-row gap-4">
+                      {item.photo_path && (
+                        <img src={`http://localhost:8000${item.photo_path}`} alt={item.item_name} className="w-full sm:w-32 h-32 object-cover rounded-xl shrink-0" />
+                      )}
+                      <div className="flex-1 space-y-1">
+                        <div className="flex items-center gap-2">
+                          <Package className="w-4 h-4 text-[#003087]" />
+                          <p className="font-bold text-gray-900 text-lg">{item.item_name}</p>
+                        </div>
+                        <p className="text-sm text-gray-500 capitalize">{item.category} · Qty {item.quantity} · {item.condition.replace('_', ' ')}</p>
+                        {item.description && <p className="text-sm text-gray-500">{item.description}</p>}
+                        <p className="text-xs text-gray-400">
+                          {item.delivery_method === 'pickup_request' ? `Pickup: ${item.pickup_address}` : 'Drop-off at campus'}
+                        </p>
+                        {userRole === 'admin' && (
+                          <p className="text-xs text-gray-400">{item.donor_full_name} · {item.donor_email}{item.donor_phone ? ` · ${item.donor_phone}` : ''}</p>
+                        )}
+                      </div>
+                      <div className="shrink-0 flex flex-col items-end gap-2">
+                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${status.classes}`}>{status.label}</span>
+                        {userRole === 'admin' && item.status === 'pending' && (
+                          <div className="flex gap-2">
+                            <button onClick={() => handleUpdateItemDonationStatus(item.id, 'received')} className="px-3 py-2 rounded-lg bg-emerald-500 text-white text-xs font-bold hover:bg-emerald-600 transition-all">Mark Received</button>
+                            <button onClick={() => handleUpdateItemDonationStatus(item.id, 'rejected')} className="px-3 py-2 rounded-lg border border-red-200 text-red-500 text-xs font-bold hover:bg-red-50 transition-all">Reject</button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'my-donations' && (
+          <div className="max-w-7xl mx-auto px-8 py-16">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8">My Donation History</h2>
+
+            {loadingMyDonations ? (
+              <div className="text-center py-16 text-gray-400 font-semibold">Loading your donations...</div>
+            ) : myDonations.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 text-gray-400 gap-4">
+                <Heart className="w-14 h-14 opacity-30" />
+                <p className="text-lg font-semibold">You haven't made any donations yet.</p>
+                <button
+                  onClick={() => setActiveTab('needs')}
+                  className="mt-2 px-6 py-3 bg-[#003087] text-white rounded-xl font-bold hover:bg-[#002066] transition-colors"
+                >
+                  Browse Campaigns
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {myDonations.map((donation: any) => {
+                  const statusMap: Record<string, { label: string; classes: string }> = {
+                    verified: { label: 'Verified',         classes: 'bg-emerald-100 text-emerald-700' },
+                    pending:  { label: 'Pending Approval', classes: 'bg-amber-100 text-amber-700' },
+                    rejected: { label: 'Rejected',         classes: 'bg-red-100 text-red-700' },
+                  };
+                  const status = statusMap[donation.payment_status] ?? { label: 'Pending Approval', classes: 'bg-amber-100 text-amber-700' };
+                  return (
+                    <div key={donation.id} className="bg-white rounded-[24px] border border-gray-100 shadow-sm p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+                      <div className="flex-1 space-y-1">
+                        <p className="font-bold text-gray-900 text-lg">
+                          {donation.campaign ? donation.campaign.title : 'General Donation'}
+                        </p>
+                        <p className="text-sm text-gray-500 capitalize">
+                          {donation.payment_method || 'Credit Card'}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {donation.created_at ? new Date(donation.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '—'}
+                        </p>
+                      </div>
+                      <div className="shrink-0 text-right">
+                        <p className="text-2xl font-extrabold text-[#003087]">
+                          ₱{Number(donation.amount).toLocaleString()}
+                        </p>
+                        <span className={`inline-block mt-1 px-3 py-1 rounded-full text-xs font-semibold ${status.classes}`}>
+                          {status.label}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* DONATION MODAL */}
         {showDonationModal && selectedCampaignForDonation && (
@@ -1668,38 +2526,18 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                   />
                 </div>
 
-                {/* Personal Information */}
+                {/* Account Information */}
                 <div className="space-y-3">
-                  <label className="text-sm font-bold text-gray-700">First Name *</label>
-                  <input
-                    type="text"
-                    value={donationFirstName}
-                    onChange={(e) => setDonationFirstName(e.target.value)}
-                    placeholder="Your first name"
-                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
-                  />
-                </div>
-
-                <div className="space-y-3">
-                  <label className="text-sm font-bold text-gray-700">Last Name *</label>
-                  <input
-                    type="text"
-                    value={donationLastName}
-                    onChange={(e) => setDonationLastName(e.target.value)}
-                    placeholder="Your last name"
-                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
-                  />
-                </div>
-
-                <div className="space-y-3">
-                  <label className="text-sm font-bold text-gray-700">Email Address *</label>
-                  <input
-                    type="email"
-                    value={donationEmail}
-                    onChange={(e) => setDonationEmail(e.target.value)}
-                    placeholder="your@email.com"
-                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
-                  />
+                  <label className="text-sm font-bold text-gray-700">Donating As</label>
+                  <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl">
+                    <p className="font-bold text-gray-900">
+                      {donationFirstName || donationLastName
+                        ? `${donationFirstName} ${donationLastName}`.trim()
+                        : 'Unavailable'}
+                    </p>
+                    <p className="text-sm text-gray-600 break-all">{donationEmail || 'Unavailable'}</p>
+                  </div>
+                  <p className="text-xs text-gray-500">Account details are automatically used for your donation receipt.</p>
                 </div>
 
                 {/* Payment Method */}
@@ -1720,6 +2558,27 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                       </button>
                     ))}
                   </div>
+                </div>
+
+                <div className="space-y-3">
+                  <label className="text-sm font-bold text-gray-700">Reference Number *</label>
+                  <input
+                    type="text"
+                    value={donationReferenceNumber}
+                    onChange={(e) => setDonationReferenceNumber(e.target.value)}
+                    placeholder="Enter transaction or reference number"
+                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                  />
+                </div>
+
+                <div className="space-y-3">
+                  <label className="text-sm font-bold text-gray-700">Upload Receipt *</label>
+                  <input
+                    type="file"
+                    accept="image/*,.pdf"
+                    onChange={(e) => setDonationReceiptFile(e.target.files?.[0] || null)}
+                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl"
+                  />
                 </div>
 
                 {/* Buttons */}
@@ -1743,6 +2602,79 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                 <p className="text-xs text-gray-500 text-center">
                   Your donation is secure and tax-deductible. You will receive a receipt via email.
                 </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* VOLUNTEER REGISTRATION MODAL */}
+        {showVolunteerRegModal && selectedVolunteerEvent && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-[32px] p-10 max-w-lg w-full max-h-[90vh] overflow-y-auto">
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-2xl font-bold text-gray-900">Register for {selectedVolunteerEvent.title}</h2>
+                <button
+                  onClick={() => { setShowVolunteerRegModal(false); setSelectedVolunteerEvent(null); }}
+                  className="p-2 hover:bg-gray-100 rounded-full"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-700">Full Name</label>
+                  <input
+                    type="text"
+                    value={volunteerRegForm.full_name}
+                    onChange={(e) => setVolunteerRegForm({ ...volunteerRegForm, full_name: e.target.value })}
+                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-700">Email</label>
+                  <input
+                    type="email"
+                    value={volunteerRegForm.email}
+                    onChange={(e) => setVolunteerRegForm({ ...volunteerRegForm, email: e.target.value })}
+                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-700">Phone (optional)</label>
+                  <input
+                    type="text"
+                    value={volunteerRegForm.phone}
+                    onChange={(e) => setVolunteerRegForm({ ...volunteerRegForm, phone: e.target.value })}
+                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-700">Notes (optional)</label>
+                  <textarea
+                    value={volunteerRegForm.notes}
+                    onChange={(e) => setVolunteerRegForm({ ...volunteerRegForm, notes: e.target.value })}
+                    rows={3}
+                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all resize-none"
+                  />
+                </div>
+
+                <div className="flex gap-4 pt-4">
+                  <button
+                    onClick={() => { setShowVolunteerRegModal(false); setSelectedVolunteerEvent(null); }}
+                    className="flex-1 py-4 border border-gray-200 rounded-xl font-bold text-gray-600 hover:bg-gray-50 transition-all"
+                    disabled={isSubmittingVolunteerReg}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSubmitVolunteerRegistration}
+                    disabled={isSubmittingVolunteerReg}
+                    className="flex-1 py-4 bg-[#003087] text-white rounded-xl font-bold shadow-lg shadow-blue-900/20 hover:bg-[#002566] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSubmittingVolunteerReg ? 'Submitting...' : 'Confirm Registration'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>

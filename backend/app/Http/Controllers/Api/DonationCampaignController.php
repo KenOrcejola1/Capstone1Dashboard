@@ -28,6 +28,14 @@ class DonationCampaignController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->get();
         }
+
+        $campaigns->each(function (DonationCampaign $campaign) {
+            $verifiedRaised = (float) $campaign->donations()->where('payment_status', 'verified')->sum('amount');
+            $verifiedDonors = $campaign->donations()->where('payment_status', 'verified')->distinct('email')->count('email');
+
+            $campaign->raised_amount = $verifiedRaised;
+            $campaign->setAttribute('donors_count', $verifiedDonors);
+        });
         
         return response()->json($campaigns);
     }
@@ -35,6 +43,10 @@ class DonationCampaignController extends Controller
     public function show($id)
     {
         $campaign = DonationCampaign::findOrFail($id);
+
+        $campaign->raised_amount = (float) $campaign->donations()->where('payment_status', 'verified')->sum('amount');
+        $campaign->setAttribute('donors_count', $campaign->donations()->where('payment_status', 'verified')->distinct('email')->count('email'));
+
         return response()->json($campaign);
     }
 
@@ -121,22 +133,29 @@ class DonationCampaignController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
+            'payment_method' => 'nullable|string|max:255',
+            'reference_number' => 'required|string|max:120|unique:donations,reference_number',
+            'proof_of_payment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:6144',
         ]);
 
+        $proofOfPaymentPath = null;
+        if ($request->hasFile('proof_of_payment')) {
+            $proofOfPaymentPath = '/storage/' . $request->file('proof_of_payment')->store('donation-payment-proofs', 'public');
+        }
+
         $donation = new Donation([
-            'campaign_id' => $campaign->id,
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'email' => $validated['email'],
-            'amount' => $validated['amount'],
-            'payment_method' => 'card',
+            'campaign_id'    => $campaign->id,
+            'first_name'     => $validated['first_name'],
+            'last_name'      => $validated['last_name'],
+            'email'          => $validated['email'],
+            'amount'         => $validated['amount'],
+            'payment_method' => $validated['payment_method'] ?? 'Credit Card',
+            'payment_status' => 'pending',
+            'reference_number' => $validated['reference_number'],
+            'proof_of_payment_path' => $proofOfPaymentPath,
         ]);
         
         $donation->save();
-        
-        // Update campaign raised amount
-        $campaign->raised_amount += $validated['amount'];
-        $campaign->save();
         
         return response()->json([
             'message' => 'Donation recorded successfully',
@@ -149,6 +168,7 @@ class DonationCampaignController extends Controller
     {
         $campaign = DonationCampaign::findOrFail($id);
         $donors = $campaign->donations()
+            ->where('payment_status', 'verified')
             ->orderBy('created_at', 'desc')
             ->get();
         

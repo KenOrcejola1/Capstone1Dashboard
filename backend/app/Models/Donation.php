@@ -13,10 +13,16 @@ class Donation extends Model
         'email',
         'amount',
         'payment_method',
+        'payment_status',
+        'reference_number',
+        'proof_of_payment_path',
+        'verified_by',
+        'verified_at',
     ];
 
     protected $casts = [
-        'amount' => 'decimal:2',
+        'amount'      => 'decimal:2',
+        'verified_at' => 'datetime',
     ];
 
     protected $appends = ['full_name'];

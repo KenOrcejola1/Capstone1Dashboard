@@ -10,16 +10,18 @@ import { DonationsView } from '../components/views/DonationView';
 import { AnalyticsView } from '../components/views/AnalyticsView';
 import { InternshipPostingsView } from '../components/views/InternshipPostingsView';
 import { UserManagementView } from '../components/views/UserManagementView';
+import { PaymentVerificationView } from '../components/views/PaymentVerificationView';
 import { Sidebar } from '../components/Sidebar';
 
 export function Dashboard() {
-  const [activeView, setActiveView] = useState<'home'|'profile'|'directory'|'events'|'surveys'|'careers'|'news'|'give'|'analytics'|'internships'|'users'>('home');
+  const [activeView, setActiveView] = useState<'home'|'profile'|'directory'|'events'|'surveys'|'careers'|'news'|'give'|'analytics'|'internships'|'users'|'payment-verification'>('home');
   
   // Get user role from localStorage
   const userRole = (localStorage.getItem('userRole') as 'alumni' | 'admin') || 'alumni';
+  const safeActiveView = (activeView === 'analytics' || activeView === 'payment-verification') && userRole !== 'admin' ? 'home' : activeView;
 
   const renderView = () => {
-    switch (activeView) {
+    switch (safeActiveView) {
       case 'home': 
         return <HomeView userRole={userRole} onNavigate={setActiveView} />;
       case 'profile': 
@@ -42,6 +44,8 @@ export function Dashboard() {
         return <InternshipPostingsView role={userRole} />;
       case 'users':
         return <UserManagementView userRole={userRole} />;
+      case 'payment-verification':
+        return <PaymentVerificationView userRole={userRole} />;
       default: 
         return <HomeView userRole={userRole} onNavigate={setActiveView} />;
     }

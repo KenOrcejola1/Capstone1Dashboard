@@ -2,44 +2,14 @@ import { useState, useEffect } from 'react';
 import { Calendar, Clock, MapPin, Users, Eye, Award, User, FileText, Plus, X, CheckCircle, XCircle, Trash2, Edit } from 'lucide-react';
 import { Footer } from '../Footer';
 import { EventRegistrationModal } from '../EventRegistrationModal';
+import { CommunityEngagementView } from './CommunityEngagementView';
 
 // Image imports
-import EngageWebDevBG from '../../../assets/EngageWebDevBG.jpg';
-import StocksBG from '../../../assets/StocksBG.jpg';
-import Swim101 from '../../../assets/Swim101.jpg';
-import DigitalMarket from '../../../assets/DigitalMarket.jpg';
-import DesignThinkBG from '../../../assets/DesignThinkBG.jpg';
-import LeadershipBG from '../../../assets/LeadershipBG.jpg';
-import ChristmasReunion from '../../../assets/ChristmasReunion.jpg';
-import DataSciBG from '../../../assets/DataSciBG.jpg';
 import CareerFairBG from '../../../assets/CareerFairBG.jpg';
-import GolfTournaBG from '../../../assets/GolfTournaBG.jpg';
-import LeaderSummitBG from '../../../assets/LeaderSummitBG.jpg';
-import GuestLectureBG from '../../../assets/GuestLectureBG.jpg';
-import WorkshopBG from '../../../assets/WorkshopBG.jpg';
-import MentorCapBG from '../../../assets/MentorCapBG.jpg';
-import FinancialManageBG from '../../../assets/FinancialManageBG.jpg';
-import HealthCareBG from '../../../assets/HealthCareBG.jpg';
-import WorkshopLeadBG from '../../../assets/WorkshopLeadBG.jpg';
-import CareerAdviceBG from '../../../assets/CareerAdviceBG.jpg';
-import LabInstructBG from '../../../assets/LabInstructBG.jpg';
-import SkillWorkshopBG from '../../../assets/SkillWorkshopBG.jpg';
-import AccountingBG from '../../../assets/AccountingBG.jpg';
-import LeaderDigitalBG from '../../../assets/LeaderDigitalBG.jpg';
-import AdvFinanceBG from '../../../assets/AdvFinanceBG.jpg';
-import AIandMachineBG from '../../../assets/AIandMachineBG.jpg';
-import ProjectManagementBG from '../../../assets/ProjectManagementBG.jpg';
-import LegalLawBG from '../../../assets/LegalLawBG.jpg';
-import EntrepBG from '../../../assets/EntrepBG.jpg';
-import MentalHealthBG from '../../../assets/MentalHealthBG.jpg';
-import MarketingBG from '../../../assets/MarketingBG.jpg';
-import CybersecBG from '../../../assets/CybersecBG.jpg';
-import SustainBG from '../../../assets/SustainBG.jpg';
-import ExcelBG from '../../../assets/ExcelBG.jpg';
-import PharmaBG from '../../../assets/PharmaBG.jpg';
 
 interface Event {
   id: string;
+  activityId?: number;
   title: string;
   category: string;
   date: string;
@@ -48,6 +18,7 @@ interface Event {
   participants: number;
   description: string;
   image: string;
+  fee?: string | number;
   tab: 'Upcoming Events' | 'Past Events' | 'Teaching Opportunities' | 'Seminars & Workshops' | 'Alumni Proposals';
   postedBy?: string;
   postedDate?: string;
@@ -56,41 +27,30 @@ interface Event {
   submittedBy?: string;
 }
 
-const INITIAL_EVENTS: Event[] = [
-  { id: '1', title: "Web Development For Beginners", category: "Computer Science", date: "January 26, 2026", time: "6:00 PM - 8:00 PM", location: "Online", participants: 245, description: "Learn the fundamentals of web development in this beginner-friendly workshop.", image: EngageWebDevBG, tab: 'Upcoming Events' },
-  { id: '2', title: "Stocks, Funds & Investment", category: "Finance", date: "January 20, 2026", time: "Tue, Thu & Fri, 6:00 PM - 7:00 PM", location: "Online", participants: 178, description: "10 sessions comprehensive course on stocks, funds, and investment strategies.", image: StocksBG, tab: 'Upcoming Events' },
-  { id: '3', title: "Swimming 101 for Adults", category: "Sports & Wellness", date: "January 20, 2026", time: "Tue & Thu 5:00 PM, Sat 1:30 PM", location: "ADDU Aquatic Center", participants: 89, description: "10 sessions comprehensive swimming program for adults. Learn basic techniques.", image: Swim101, tab: 'Upcoming Events' },
-  { id: '4', title: "Fundamentals of Digital Marketing", category: "Marketing", date: "January 21, 2026", time: "Mon, Wed & Fri, 6:00 PM - 8:00 PM", location: "Online", participants: 156, description: "4 sessions course covering the fundamentals of digital marketing.", image: DigitalMarket, tab: 'Upcoming Events' },
-  { id: '5', title: "Design Thinking Workshop", category: "Innovation & Design", date: "January 24, 2026", time: "Saturday, 9:00 AM - 11:00 AM", location: "Online", participants: 198, description: "8 sessions workshop on design thinking - human-centered innovation.", image: DesignThinkBG, tab: 'Upcoming Events' },
-  { id: '6', title: "Executive Leadership Training", category: "Leadership", date: "January 26, 2026", time: "Mon, Wed & Thu, 6:00 PM - 8:00 PM", location: "Online", participants: 132, description: "12 sessions comprehensive leadership training program.", image: LeadershipBG, tab: 'Upcoming Events' },
-  { id: '7', title: "Christmas Alumni Reunion 2025", category: "Social Event", date: "December 20, 2025", time: "6:00 PM - 10:00 PM", location: "ADDU Gymnasium", participants: 423, description: "A festive celebration bringing together alumni for fellowship, dinner, and holiday cheer.", image: ChristmasReunion, tab: 'Past Events' },
-  { id: '8', title: "Data Science & Analytics Workshop", category: "Professional Dev", date: "November 15, 2025", time: "1:00 PM - 6:00 PM", location: "ADDU Computer Lab", participants: 87, description: "Hands-on workshop covering Python, data visualization, and machine learning basics.", image: DataSciBG, tab: 'Past Events' },
-  { id: '9', title: "Alumni Career Fair 2025", category: "Career", date: "October 28, 2025", time: "9:00 AM - 5:00 PM", location: "ADDU Covered Court", participants: 542, description: "Major job fair featuring 50+ companies actively recruiting ADDU alumni across all levels.", image: CareerFairBG, tab: 'Past Events' },
-  { id: '10', title: "Alumni Golf Tournament", category: "Sports", date: "September 22, 2025", time: "6:00 AM - 2:00 PM", location: "Apo Golf & Country Club", participants: 76, description: "Annual charity golf tournament with proceeds supporting ADDU scholarship programs", image: GolfTournaBG, tab: 'Past Events' },
-  { id: '11', title: "Leadership Summit: Future of Work", category: "Professional Dev", date: "July 20, 2025", time: "2:00 PM - 7:00 PM", location: "Virtual Event", participants: 234, description: "Panel discussions on remote work, digital transformation, and emerging career trends.", image: LeaderSummitBG, tab: 'Past Events' },
-  { id: '12', title: "Guest Lecturer - Digital Marketing", category: "Business", date: "1 Semester", time: "Tue & Thu preferred", location: "School of Business and Governance", participants: 8, compensation: "Honorarium provided", description: "Share your expertise in digital marketing with our business students.", image: GuestLectureBG, tab: 'Teaching Opportunities', postedBy: "Dr. Antonio Reyes", postedDate: "5 days ago" },
-  { id: '13', title: "Workshop Facilitator - Python", category: "Computer Science", date: "2 Days", time: "March 8-9, 2026", location: "Department of Computer Science", participants: 15, compensation: "Php 15,000", description: "Conduct hands-on Python workshop for intermediate students.", image: WorkshopBG, tab: 'Teaching Opportunities', postedBy: "Prof. Maria Santos", postedDate: "2 weeks ago" },
-  { id: '14', title: "Mentor - Engineering Capstone", category: "Engineering", date: "1 Academic Year", time: "4 hours/month", location: "College of Engineering", participants: 12, compensation: "Certificate + Recognition", description: "Guide senior engineering students through their capstone projects.", image: MentorCapBG, tab: 'Teaching Opportunities', postedBy: "Engr. Robert Tan", postedDate: "1 week ago" },
-  { id: '15', title: "Adjunct Professor - Finance", category: "Finance", date: "1 Semester", time: "MWF 2:00 PM - 3:30 PM", location: "School of Business and Governance", participants: 6, compensation: "Competitive academic rate", description: "Teach undergraduate financial management course.", image: FinancialManageBG, tab: 'Teaching Opportunities', postedBy: "Dean Patricia Cruz", postedDate: "3 days ago" },
-  { id: '16', title: "Guest Speaker - Nursing", category: "Nursing", date: "2-hour Session", time: "Feb 25, 2026 at 3:00 PM", location: "School of Nursing", participants: 4, compensation: "Honorarium + Travel", description: "Share insights on healthcare administration with nursing students.", image: HealthCareBG, tab: 'Teaching Opportunities', postedBy: "Dr. Elizabeth Gomez", postedDate: "1 week ago" },
-  { id: '17', title: "Workshop Leader - UX/UI", category: "IT", date: "5 Days Intensive", time: "April 14-18, 9:00 AM", location: "Dept. of Information Technology", participants: 11, compensation: "Php 50,000", description: "Lead intensive UX/UI bootcamp covering research and prototyping.", image: WorkshopLeadBG, tab: 'Teaching Opportunities', postedBy: "Prof. Jennifer Lim", postedDate: "4 days ago" },
-  { id: '18', title: "Career Advisor - Law", category: "Law", date: "Ongoing", time: "2 hours/week", location: "College of Law", participants: 7, compensation: "Volunteer (Recognition)", description: "Provide career guidance to law students preparing for bar exams.", image: CareerAdviceBG, tab: 'Teaching Opportunities', postedBy: "Atty. Marco Gonzales", postedDate: "2 weeks ago" },
-  { id: '19', title: "Lab Instructor - Data Science", category: "Mathematics", date: "1 Semester", time: "Saturdays 10:00 AM", location: "Department of Mathematics", participants: 9, compensation: "Standard adjunct rate", description: "Supervise data science lab sessions using R and Python.", image: LabInstructBG, tab: 'Teaching Opportunities', postedBy: "Dr. Thomas Valdez", postedDate: "6 days ago" },
-  { id: '20', title: "Skills Workshop - Speaking", category: "Communication", date: "3-hour Workshop", time: "March 12, 2026", location: "Department of Communication", participants: 13, compensation: "Php 8,000", description: "Teach students effective public speaking and presentation techniques.", image: SkillWorkshopBG, tab: 'Teaching Opportunities', postedBy: "Prof. Amanda Reyes", postedDate: "1 week ago" },
-  { id: '21', title: "Practicum Supervisor", category: "Accounting", date: "6 months", time: "Monthly check-ins", location: "School of Business", participants: 5, compensation: "Certificate + Recognition", description: "Supervise accounting students during their industry practicum.", image: AccountingBG, tab: 'Teaching Opportunities', postedBy: "CPA Catherine Velasco", postedDate: "3 days ago" },
-  { id: '22', title: "Leadership in the Digital Age", category: "Professional Dev", date: "March 15, 2026", time: "9:00 AM - 4:00 PM", location: "ADDU Finster Hall", participants: 120, description: "Leading teams in a digital-first environment with focus on remote management.", image: LeaderDigitalBG, tab: 'Seminars & Workshops' },
-  { id: '23', title: "Advanced Financial Analytics", category: "Finance", date: "April 05, 2026", time: "1:00 PM - 5:00 PM", location: "Virtual / Zoom", participants: 85, description: "Master financial modeling and data analytics for modern investment strategies.", image: AdvFinanceBG, tab: 'Seminars & Workshops' },
-  { id: '24', title: "AI and Machine Learning", category: "Technology", date: "April 12, 2026", time: "10:00 AM - 12:00 PM", location: "ADDU Community Center", participants: 45, description: "Strategic overview of AI capabilities for business implementations.", image: AIandMachineBG, tab: 'Seminars & Workshops' },
-  { id: '25', title: "Agile Project Management", category: "Management", date: "May 20, 2026", time: "9:00 AM - 3:00 PM", location: "Online", participants: 200, description: "Certification-ready workshop for Agile and Scrum methodologies.", image: ProjectManagementBG, tab: 'Seminars & Workshops' },
-  { id: '26', title: "Legal Issues in E-Commerce", category: "Law", date: "June 10, 2026", time: "2:00 PM - 5:00 PM", location: "ADDU College of Law", participants: 60, description: "Deep dive into digital trade, consumer rights, and data privacy frameworks.", image: LegalLawBG, tab: 'Seminars & Workshops' },
-  { id: '27', title: "Entrepreneurship Mastery", category: "Business", date: "June 15, 2026", time: "9:00 AM - 5:00 PM", location: "Online", participants: 110, description: "Scale your startup with expert insights on operations and funding.", image: EntrepBG, tab: 'Seminars & Workshops' },
-  { id: '28', title: "Workplace Mental Health", category: "Wellness", date: "July 02, 2026", time: "1:30 PM - 4:30 PM", location: "Virtual", participants: 150, description: "Promoting psychological safety and mental well-being in corporate settings.", image: MentalHealthBG, tab: 'Seminars & Workshops' },
-  { id: '29', title: "Modern Content Marketing", category: "Marketing", date: "July 20, 2026", time: "10:00 AM - 3:00 PM", location: "ADDU Arrupe Hall", participants: 95, description: "Storytelling and content strategies for the social media era.", image: MarketingBG, tab: 'Seminars & Workshops' },
-  { id: '30', title: "Cybersecurity Essentials", category: "IT Security", date: "August 05, 2026", time: "9:00 AM - 12:00 PM", location: "Online", participants: 180, description: "Protecting business data from modern threats and social engineering.", image: CybersecBG, tab: 'Seminars & Workshops' },
-  { id: '31', title: "Sustainable Business", category: "Innovation", date: "August 18, 2026", time: "1:00 PM - 4:00 PM", location: "ADDU Community Center", participants: 70, description: "Integrating ESG principles into your business strategy and operations.", image: SustainBG, tab: 'Seminars & Workshops' },
-  { id: '32', title: "Excel for Business Pros", category: "Data", date: "September 03, 2026", time: "9:00 AM - 12:00 PM", location: "Online", participants: 300, description: "Advanced functions, pivot tables, and data visualization techniques.", image: ExcelBG, tab: 'Seminars & Workshops' },
-  { id: '33', title: "Pharmacy Trends 2026", category: "Healthcare", date: "September 15, 2026", time: "2:00 PM - 5:00 PM", location: "ADDU School of Nursing", participants: 55, description: "Updating clinical knowledge on emerging pharmaceuticals and patient care.", image: PharmaBG, tab: 'Seminars & Workshops' },
-];
+const INITIAL_EVENTS: Event[] = [];
+const PLACEHOLDER_EVENT_IDS = new Set(Array.from({ length: 33 }, (_, i) => String(i + 1)));
+const API_BASE = 'http://localhost:8000/api';
+
+const formatEventDate = (isoDateTime?: string | null) => {
+  if (!isoDateTime) return 'TBD';
+  const date = new Date(isoDateTime);
+  if (Number.isNaN(date.getTime())) return 'TBD';
+  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+};
+
+const formatEventTime = (start?: string | null, end?: string | null) => {
+  if (!start) return 'TBD';
+  const startDate = new Date(start);
+  if (Number.isNaN(startDate.getTime())) return 'TBD';
+
+  const startStr = startDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  if (!end) return startStr;
+
+  const endDate = new Date(end);
+  if (Number.isNaN(endDate.getTime())) return startStr;
+  const endStr = endDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  return `${startStr} - ${endStr}`;
+};
 
 function EventCard({ event, userRole, onApprove, onReject, onView, onRemove, onEdit, activeTab }: any) {
   const isPast = event.tab === 'Past Events';
@@ -223,8 +183,57 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
 
   const [events, setEvents] = useState<Event[]>(() => {
     const saved = localStorage.getItem('addu_events');
-    return saved ? JSON.parse(saved) : INITIAL_EVENTS;
+
+    if (!saved) {
+      return INITIAL_EVENTS;
+    }
+
+    try {
+      const parsed = JSON.parse(saved) as Event[];
+      return parsed.filter((event) => !PLACEHOLDER_EVENT_IDS.has(String(event.id)));
+    } catch {
+      return INITIAL_EVENTS;
+    }
   });
+
+  const fetchSharedEvents = async () => {
+    try {
+      const roleParam = userRole === 'admin' ? 'admin' : 'alumni';
+      const response = await fetch(`${API_BASE}/community/activities?role=${roleParam}`);
+      if (!response.ok) return;
+
+      const activities = await response.json();
+      const sharedEvents: Event[] = activities
+        .filter((activity: any) => activity.status !== 'cancelled')
+        .map((activity: any) => {
+          const startRaw = activity.schedule_start || null;
+          const startDate = startRaw ? new Date(startRaw) : null;
+          const isPast = startDate ? startDate.getTime() < Date.now() : false;
+
+          return {
+            id: `shared-${activity.id}`,
+            activityId: activity.id,
+            title: activity.title,
+            category: activity.category || 'General',
+            date: formatEventDate(activity.schedule_start),
+            time: formatEventTime(activity.schedule_start, activity.schedule_end),
+            location: activity.venue || 'TBD',
+            participants: Number(activity.registrants_count || 0),
+            fee: activity.fee_amount,
+            description: activity.description || 'No description provided.',
+            image: activity.poster_image_path ? `http://localhost:8000${activity.poster_image_path}` : CareerFairBG,
+            tab: isPast ? 'Past Events' : 'Upcoming Events',
+          };
+        });
+
+      setEvents((prev) => {
+        const localOnly = prev.filter((event) => !String(event.id).startsWith('shared-'));
+        return [...sharedEvents, ...localOnly];
+      });
+    } catch (error) {
+      console.error('Failed to fetch shared events:', error);
+    }
+  };
 
   const [newEvent, setNewEvent] = useState({
     title: '',
@@ -235,8 +244,10 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
     location: '',
     description: '',
     capacity: '',
+    fee: '',
     image: ''
   });
+  const [newEventImageFile, setNewEventImageFile] = useState<File | null>(null);
 
   const [editEvent, setEditEvent] = useState({
     title: '',
@@ -247,12 +258,19 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
     location: '',
     description: '',
     capacity: '',
+    fee: '',
     image: ''
   });
+  const [editEventImageFile, setEditEventImageFile] = useState<File | null>(null);
 
   useEffect(() => {
     localStorage.setItem('addu_events', JSON.stringify(events));
   }, [events]);
+
+  useEffect(() => {
+    fetchSharedEvents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userRole]);
 
   useEffect(() => {
     const handleRegisterEvent = (event: any) => {
@@ -281,8 +299,24 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
     triggerToast();
   };
 
-  const handleRemove = (id: string) => {
+  const handleRemove = async (id: string) => {
     if (window.confirm("Are you sure you want to permanently remove this event?")) {
+      if (String(id).startsWith('shared-')) {
+        try {
+          const sharedId = id.replace('shared-', '');
+          const response = await fetch(`${API_BASE}/community/activities/${sharedId}`, { method: 'DELETE' });
+          if (!response.ok) {
+            throw new Error('Failed to delete shared event.');
+          }
+          await fetchSharedEvents();
+          triggerToast();
+          return;
+        } catch (error: any) {
+          alert(error?.message || 'Failed to delete shared event.');
+          return;
+        }
+      }
+
       setEvents(prev => prev.filter(ev => ev.id !== id));
       triggerToast();
     }
@@ -290,6 +324,7 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
 
   const handleEdit = (event: Event) => {
     setEditingEvent(event);
+    setEditEventImageFile(null);
     const timeParts = event.time.split(' - ');
     setEditEvent({
       title: event.title,
@@ -300,12 +335,13 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
       location: event.location,
       description: event.description,
       capacity: event.participants.toString(),
+      fee: (event as any).fee?.toString() || '',
       image: event.image
     });
     setActiveTab('Edit Event');
   };
 
-  const handleUpdateEvent = () => {
+  const handleUpdateEvent = async () => {
     if (!editEvent.title || !editEvent.category || !editEvent.date || !editEvent.startTime || !editEvent.endTime || !editEvent.location || !editEvent.description) {
       alert('Please fill in all required fields');
       return;
@@ -325,6 +361,60 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
       image: editEvent.image || editingEvent.image,
     };
 
+    if (String(editingEvent.id).startsWith('shared-')) {
+      try {
+        const sharedId = String(editingEvent.id).replace('shared-', '');
+        const scheduleStart = editEvent.date && editEvent.startTime ? `${editEvent.date} ${editEvent.startTime}:00` : null;
+        const scheduleEnd = editEvent.date && editEvent.endTime ? `${editEvent.date} ${editEvent.endTime}:00` : null;
+
+        const payload = new FormData();
+        payload.append('_method', 'PUT');
+        payload.append('title', editEvent.title);
+        payload.append('category', editEvent.category);
+        payload.append('description', editEvent.description);
+        payload.append('venue', editEvent.location);
+        if (scheduleStart) payload.append('schedule_start', scheduleStart);
+        if (scheduleEnd) payload.append('schedule_end', scheduleEnd);
+        if (editEvent.capacity) payload.append('participant_limit', editEvent.capacity);
+        payload.append('fee_amount', editEvent.fee || '0');
+        payload.append('status', 'active');
+        if (editEventImageFile) {
+          payload.append('poster_image', editEventImageFile);
+        }
+
+        const response = await fetch(`${API_BASE}/community/activities/${sharedId}`, {
+          method: 'POST',
+          body: payload,
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update shared event.');
+        }
+
+        await fetchSharedEvents();
+        setEditingEvent(null);
+        setEditEvent({
+          title: '',
+          category: '',
+          date: '',
+          startTime: '',
+          endTime: '',
+          location: '',
+          description: '',
+          capacity: '',
+          fee: '',
+          image: ''
+        });
+        setEditEventImageFile(null);
+        setActiveTab('Upcoming Events');
+        triggerToast();
+        return;
+      } catch (error: any) {
+        alert(error?.message || 'Failed to update shared event.');
+        return;
+      }
+    }
+
     setEvents(prev => prev.map(ev => ev.id === editingEvent.id ? updatedEvent : ev));
     setEditingEvent(null);
     setEditEvent({
@@ -336,8 +426,68 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
       location: '',
       description: '',
       capacity: '',
+      fee: '',
       image: ''
     });
+    setActiveTab('Upcoming Events');
+    triggerToast();
+  };
+
+  const handleCreateEvent = async () => {
+    if (!newEvent.title || !newEvent.category || !newEvent.date || !newEvent.startTime || !newEvent.endTime || !newEvent.location || !newEvent.description) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    try {
+      const scheduleStart = `${newEvent.date} ${newEvent.startTime}:00`;
+      const scheduleEnd = `${newEvent.date} ${newEvent.endTime}:00`;
+
+      const payload = new FormData();
+      payload.append('title', newEvent.title);
+      payload.append('category', newEvent.category);
+      payload.append('description', newEvent.description);
+      payload.append('venue', newEvent.location);
+      payload.append('schedule_start', scheduleStart);
+      payload.append('schedule_end', scheduleEnd);
+      if (newEvent.capacity) payload.append('participant_limit', newEvent.capacity);
+      payload.append('status', 'active');
+      payload.append('registration_open', '1');
+      payload.append('fee_amount', newEvent.fee || '0');
+      payload.append('created_by_email', localStorage.getItem('userEmail') || '');
+      if (newEventImageFile) {
+        payload.append('poster_image', newEventImageFile);
+      }
+
+      const response = await fetch(`${API_BASE}/community/activities`, {
+        method: 'POST',
+        body: payload,
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({}));
+        throw new Error(errorBody?.message || 'Failed to publish shared event.');
+      }
+
+      await fetchSharedEvents();
+    } catch (error: any) {
+      alert(error?.message || 'Unable to create event right now. Please try again.');
+      return;
+    }
+
+    setNewEvent({
+      title: '',
+      category: '',
+      date: '',
+      startTime: '',
+      endTime: '',
+      location: '',
+      description: '',
+      capacity: '',
+      fee: '',
+      image: ''
+    });
+    setNewEventImageFile(null);
     setActiveTab('Upcoming Events');
     triggerToast();
   };
@@ -353,55 +503,23 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
       location: '',
       description: '',
       capacity: '',
+      fee: '',
       image: ''
     });
     setActiveTab('Upcoming Events');
   };
 
-  const handleCreateEvent = () => {
-    if (!newEvent.title || !newEvent.category || !newEvent.date || !newEvent.startTime || !newEvent.endTime || !newEvent.location || !newEvent.description) {
-      alert('Please fill in all required fields');
-      return;
-    }
-
-    const createdEvent: Event = {
-      id: Date.now().toString(),
-      title: newEvent.title,
-      category: newEvent.category,
-      date: newEvent.date,
-      time: `${newEvent.startTime} - ${newEvent.endTime}`,
-      location: newEvent.location,
-      participants: parseInt(newEvent.capacity) || 0,
-      description: newEvent.description,
-      image: newEvent.image || CareerFairBG,
-      tab: 'Upcoming Events',
-    };
-
-    setEvents(prev => [createdEvent, ...prev]);
-    setNewEvent({
-      title: '',
-      category: '',
-      date: '',
-      startTime: '',
-      endTime: '',
-      location: '',
-      description: '',
-      capacity: '',
-      image: ''
-    });
-    setActiveTab('Upcoming Events');
-    triggerToast();
-  };
-
-  const baseTabs = ['Upcoming Events', 'Past Events', 'Teaching Opportunities', 'Seminars & Workshops'];
-  let tabs = userRole === 'admin' ? [...baseTabs, 'Alumni Proposals', 'Create Event'] : [...baseTabs, 'My Submissions'];
+  const baseTabs = ['Upcoming Events', 'Past Events', 'Teaching Opportunities', 'Seminars & Workshops', 'Community Engagement'];
+  const alumniExtraTabs = ['My Events'];
+  let tabs = userRole === 'admin'
+    ? [...baseTabs, 'Alumni Proposals', 'Create Event']
+    : [...baseTabs, ...alumniExtraTabs];
   if (editingEvent && activeTab === 'Edit Event') {
     tabs = [...tabs, 'Edit Event'];
   }
 
   const filteredEvents = events.filter(event => {
-    if (activeTab === 'My Submissions') return event.status !== undefined && event.submittedBy === userName;
-    if (activeTab === 'Create Event' || activeTab === 'Submit Proposal' || activeTab === 'Edit Event') return false;
+    if (activeTab === 'Create Event' || activeTab === 'Edit Event' || activeTab === 'Community Engagement' || activeTab === 'My Events') return false;
     return event.tab === activeTab;
   });
 
@@ -420,21 +538,13 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
             <h1 className="text-3xl font-bold text-gray-900">Engagement</h1>
             <p className="text-gray-500 text-sm mt-1">Manage events and alumni contributions</p>
           </div>
-          {userRole === 'admin' ? (
+          {userRole === 'admin' && (
             <button
               onClick={() => setActiveTab('Create Event')}
               className="flex items-center gap-2 px-4 py-2 bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold shadow-md"
             >
               <Plus className="w-5 h-5" />
               Create Event
-            </button>
-          ) : (
-            <button
-              onClick={() => setActiveTab('Submit Proposal')}
-              className="flex items-center gap-2 px-4 py-2 bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold shadow-md"
-            >
-              <Plus className="w-5 h-5" />
-              Submit Proposal
             </button>
           )}
         </div>
@@ -487,7 +597,15 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
           </div>
         )}
 
-        {activeTab !== 'Create Event' && activeTab !== 'Submit Proposal' && activeTab !== 'Edit Event' && (
+        {activeTab === 'Community Engagement' && (
+          <CommunityEngagementView userRole={userRole} view="browse" />
+        )}
+
+        {activeTab === 'My Events' && (
+          <CommunityEngagementView userRole={userRole} view="my-events" />
+        )}
+
+        {activeTab !== 'Create Event' && activeTab !== 'Edit Event' && activeTab !== 'Community Engagement' && activeTab !== 'My Events' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredEvents.map((event) => (
               <EventCard 
@@ -548,6 +666,7 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
                     <option value="Sports">Sports</option>
                     <option value="Technology">Technology</option>
                     <option value="Leadership">Leadership</option>
+                    <option value="Community Engagement">Community Engagement</option>
                   </select>
                 </div>
               </div>
@@ -608,6 +727,19 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
               </div>
               
               <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Registration Fee (PHP)</label>
+                <input 
+                  type="number" 
+                  min="0"
+                  step="0.01"
+                  placeholder="0.00 for free events"
+                  value={newEvent.fee}
+                  onChange={(e) => setNewEvent({ ...newEvent, fee: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
+                />
+              </div>
+              
+              <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Event Banner Image</label>
                 <input 
                   type="file" 
@@ -616,6 +748,7 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
                     const file = e.target.files?.[0];
                     if (file) {
                       const imageUrl = URL.createObjectURL(file);
+                      setNewEventImageFile(file);
                       setNewEvent({ ...newEvent, image: imageUrl });
                     }
                   }}
@@ -641,8 +774,10 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
                       location: '',
                       description: '',
                       capacity: '',
+                      fee: '',
                       image: ''
                     });
+                    setNewEventImageFile(null);
                     setActiveTab('Upcoming Events');
                   }}
                   className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold"
@@ -698,6 +833,7 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
                     <option value="Sports">Sports</option>
                     <option value="Technology">Technology</option>
                     <option value="Leadership">Leadership</option>
+                    <option value="Community Engagement">Community Engagement</option>
                   </select>
                 </div>
               </div>
@@ -758,6 +894,19 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
               </div>
               
               <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Registration Fee (PHP)</label>
+                <input 
+                  type="number" 
+                  min="0"
+                  step="0.01"
+                  placeholder="0.00 for free events"
+                  value={editEvent.fee}
+                  onChange={(e) => setEditEvent({ ...editEvent, fee: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
+                />
+              </div>
+              
+              <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Event Banner Image</label>
                 <input 
                   type="file" 
@@ -766,6 +915,7 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
                     const file = e.target.files?.[0];
                     if (file) {
                       const imageUrl = URL.createObjectURL(file);
+                      setEditEventImageFile(file);
                       setEditEvent({ ...editEvent, image: imageUrl });
                     }
                   }}
@@ -835,6 +985,7 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
                     <option value="Sports">Sports</option>
                     <option value="Technology">Technology</option>
                     <option value="Leadership">Leadership</option>
+                    <option value="Community Engagement">Community Engagement</option>
                   </select>
                 </div>
               </div>
@@ -895,6 +1046,19 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
               </div>
               
               <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Registration Fee (PHP)</label>
+                <input 
+                  type="number" 
+                  min="0"
+                  step="0.01"
+                  placeholder="0.00 for free events"
+                  value={newEvent.fee}
+                  onChange={(e) => setNewEvent({ ...newEvent, fee: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
+                />
+              </div>
+              
+              <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Event Banner Image</label>
                 <input 
                   type="file" 
@@ -903,6 +1067,7 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
                     const file = e.target.files?.[0];
                     if (file) {
                       const imageUrl = URL.createObjectURL(file);
+                      setNewEventImageFile(file);
                       setNewEvent({ ...newEvent, image: imageUrl });
                     }
                   }}
@@ -947,6 +1112,7 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
                       capacity: '',
                       image: ''
                     });
+                    setNewEventImageFile(null);
                     setActiveTab('My Submissions');
                     alert('Event proposal submitted successfully! The admin will review and approve your event before it goes live.');
                     triggerToast();
@@ -968,6 +1134,7 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
                       capacity: '',
                       image: ''
                     });
+                    setNewEventImageFile(null);
                     setActiveTab('Upcoming Events');
                   }}
                   className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold"
@@ -1020,14 +1187,15 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
       {registrationEvent && (
         <EventRegistrationModal 
           event={{
+            activityId: registrationEvent.activityId,
             title: registrationEvent.title,
             date: registrationEvent.date,
             time: registrationEvent.time,
             location: registrationEvent.location,
-            image: registrationEvent.image
+            image: registrationEvent.image,
+            fee: registrationEvent.fee,
           }}
           onClose={() => setRegistrationEvent(null)}
-          pricePerGuest={1000}
         />
       )}
 

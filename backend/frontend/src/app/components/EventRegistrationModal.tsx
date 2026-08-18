@@ -1,28 +1,46 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { X, Users, CreditCard, Smartphone, Wallet } from 'lucide-react';
+import { AcknowledgementModal } from './AcknowledgementModal';
 
 interface EventRegistrationModalProps {
   event: {
+    activityId?: number;
     title: string;
     date: string;
     time: string;
     location: string;
     image: string;
+    fee?: number | string;
   };
   onClose: () => void;
   pricePerGuest?: number;
 }
 
-export function EventRegistrationModal({ event, onClose, pricePerGuest = 1000 }: EventRegistrationModalProps) {
+export function EventRegistrationModal({ event, onClose, pricePerGuest }: EventRegistrationModalProps) {
   const [step, setStep] = useState<'form' | 'payment'>('form');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
   const [guestCount, setGuestCount] = useState(0);
   const [guests, setGuests] = useState<Array<{ firstName: string; lastName: string; relationship: string }>>([]);
   const [paymentMethod, setPaymentMethod] = useState<'gcash' | 'maya' | 'card'>('gcash');
+  const [referenceNumber, setReferenceNumber] = useState('');
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string; onConfirm?: () => void } | null>(null);
 
-  const totalPrice = (1 + guestCount) * pricePerGuest;
+  const perPersonAmount = Number(event.fee ?? pricePerGuest ?? 0);
+  const totalPrice = (1 + guestCount) * perPersonAmount;
+
+  useEffect(() => {
+    const storedName = (localStorage.getItem('userName') || '').trim();
+    const storedEmail = (localStorage.getItem('userEmail') || '').trim();
+
+    const nameParts = storedName.split(/\s+/).filter(Boolean);
+    setFirstName(nameParts[0] || '');
+    setLastName(nameParts.length > 1 ? nameParts.slice(1).join(' ') : '');
+    setEmail(storedEmail);
+  }, []);
 
   // Update guests array when guest count changes
   const handleGuestCountChange = (newCount: number) => {
@@ -51,9 +69,9 @@ export function EventRegistrationModal({ event, onClose, pricePerGuest = 1000 }:
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!firstName.trim() || !lastName.trim()) {
-      alert('Please enter your first and last name');
+
+    if (!firstName.trim() || !email.trim()) {
+      setMessage({ type: 'error', text: 'Missing account information. Please sign out and sign in again before registering.' });
       return;
     }
 
@@ -61,14 +79,54 @@ export function EventRegistrationModal({ event, onClose, pricePerGuest = 1000 }:
     setStep('payment');
   };
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
+    if (!event.activityId) {
+      setMessage({ type: 'error', text: 'This event is not available for registration yet.' });
+      return;
+    }
+
+    if (!referenceNumber.trim()) {
+      setMessage({ type: 'error', text: 'Please enter a payment reference number.' });
+      return;
+    }
+
+    if (!receiptFile) {
+      setMessage({ type: 'error', text: 'Please upload a receipt before joining the event.' });
+      return;
+    }
+
     setIsProcessing(true);
-    
-    // Simulate payment processing
-    setTimeout(() => {
+
+    try {
+      const payload = new FormData();
+      payload.append('activity_id', String(event.activityId));
+      payload.append('full_name', [firstName, lastName].filter(Boolean).join(' ').trim());
+      payload.append('email', email);
+      payload.append('payment_method', paymentMethod === 'maya' ? 'bank_transfer' : paymentMethod === 'card' ? 'bank_transfer' : 'gcash');
+      payload.append('reference_number', referenceNumber);
+      payload.append('proof_of_payment', receiptFile);
+      payload.append('notes', `Main attendee with ${guestCount} guest(s).`);
+
+      const response = await fetch('http://localhost:8000/api/community/registrations', {
+        method: 'POST',
+        body: payload,
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data?.message || 'Registration failed.');
+      }
+
+      setMessage({
+        type: 'success',
+        text: 'Registration submitted. Please wait for the admin to approve your payment.',
+        onConfirm: onClose,
+      });
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error?.message || 'Registration failed.' });
+    } finally {
       setIsProcessing(false);
-      onClose();
-    }, 2000);
+    }
   };
 
   const incrementGuests = () => {
@@ -105,6 +163,16 @@ export function EventRegistrationModal({ event, onClose, pricePerGuest = 1000 }:
 
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <AcknowledgementModal
+          open={message !== null}
+          type={message?.type || 'success'}
+          message={message?.text || ''}
+          onConfirm={() => {
+            const callback = message?.onConfirm;
+            setMessage(null);
+            callback?.();
+          }}
+        />
         <div className="bg-white rounded-2xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
           {/* Header */}
           <div className="p-6 border-b border-gray-200 flex items-center justify-between">
@@ -142,6 +210,28 @@ export function EventRegistrationModal({ event, onClose, pricePerGuest = 1000 }:
                 </label>
               );
             })}
+
+            <div className="pt-2 space-y-3">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Reference Number *</label>
+                <input
+                  type="text"
+                  value={referenceNumber}
+                  onChange={(e) => setReferenceNumber(e.target.value)}
+                  placeholder="Enter payment reference number"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Upload Receipt *</label>
+                <input
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={(e) => setReceiptFile(e.target.files?.[0] || null)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Amount Summary */}
@@ -152,7 +242,7 @@ export function EventRegistrationModal({ event, onClose, pricePerGuest = 1000 }:
             </div>
             <div className="flex items-center justify-between mb-6">
               <span className="text-gray-600">Price per Person:</span>
-              <span className="font-semibold text-gray-900">₱{pricePerGuest.toLocaleString()}</span>
+              <span className="font-semibold text-gray-900">₱{perPersonAmount.toLocaleString()}</span>
             </div>
             <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
               <span className="font-bold text-gray-900">Total Amount:</span>
@@ -204,28 +294,12 @@ export function EventRegistrationModal({ event, onClose, pricePerGuest = 1000 }:
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          {/* First Name */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">First Name *</label>
-            <input
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              placeholder="Enter your first name"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
-            />
-          </div>
-
-          {/* Last Name */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Last Name *</label>
-            <input
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              placeholder="Enter your last name"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
-            />
+          {/* Logged-in Account Information */}
+          <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <p className="text-xs uppercase tracking-wide font-semibold text-gray-500 mb-1">Registering As</p>
+            <p className="text-sm font-bold text-gray-900">{[firstName, lastName].filter(Boolean).join(' ') || 'Unavailable'}</p>
+            <p className="text-sm text-gray-600 break-all">{email || 'Unavailable'}</p>
+            <p className="text-xs text-gray-500 mt-2">Your name and email are automatically taken from your logged-in account.</p>
           </div>
 
           {/* Guest Count */}
@@ -253,7 +327,7 @@ export function EventRegistrationModal({ event, onClose, pricePerGuest = 1000 }:
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Users className="w-4 h-4" />
-                <span>₱{pricePerGuest.toLocaleString()} per person</span>
+                <span>₱{perPersonAmount.toLocaleString()} per person</span>
               </div>
             </div>
           </div>

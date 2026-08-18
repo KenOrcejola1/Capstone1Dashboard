@@ -96,9 +96,10 @@ export function Sidebar({ activeView, onNavigate, userRole }: SidebarProps) {
     { id: 'internships', icon: ClipboardList, label: 'Hiring Requests' }, 
     { id: 'give', icon: Heart, label: 'Give Back' },
   ];
-  
+
   // Admin-only menu items
   const adminMenuItems = [
+    { id: 'payment-verification', icon: FileText, label: 'Payment Verification' },
     { id: 'analytics', icon: Settings, label: 'Analytics' },
   ];
   

@@ -93,7 +93,7 @@ class DonationCampaign extends Model
 
     public function getDonorsCountAttribute()
     {
-        return $this->donations()->distinct('email')->count('email');
+        return $this->donations()->where('payment_status', 'verified')->distinct('email')->count('email');
     }
 
     public function getRemainingAmountAttribute()

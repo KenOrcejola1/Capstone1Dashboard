@@ -5,6 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\DonationCampaignController;
 use App\Http\Controllers\Api\DonationController;
+use App\Http\Controllers\Api\CommunityEngagementActivityController;
+use App\Http\Controllers\Api\CommunityEngagementRegistrationController;
+use App\Http\Controllers\Api\CommunityEngagementAnalyticsController;
+use App\Http\Controllers\Api\VolunteerEventController;
+use App\Http\Controllers\Api\VolunteerRegistrationController;
+use App\Http\Controllers\Api\ItemDonationController;
 
 Route::get('/test', function () {
     return response()->json([
@@ -46,3 +52,38 @@ Route::get('/donations', [DonationController::class, 'index']); // Get all donat
 Route::get('/donations/email/{email}', [DonationController::class, 'getByEmail']); // Get donations by email
 Route::get('/donations/statistics', [DonationController::class, 'getStatistics']); // Get donation statistics
 Route::get('/donations/analytics', [DonationController::class, 'getAnalytics']); // Get detailed analytics (admin)
+Route::patch('/donations/{id}/status', [DonationController::class, 'updateStatus']); // Update payment status (admin)
+
+// Community Engagement API
+Route::get('/community/activities', [CommunityEngagementActivityController::class, 'index']);
+Route::post('/community/activities', [CommunityEngagementActivityController::class, 'store']);
+Route::get('/community/activities/{id}', [CommunityEngagementActivityController::class, 'show']);
+Route::put('/community/activities/{id}', [CommunityEngagementActivityController::class, 'update']);
+Route::post('/community/activities/{id}', [CommunityEngagementActivityController::class, 'update']);
+Route::delete('/community/activities/{id}', [CommunityEngagementActivityController::class, 'destroy']);
+Route::patch('/community/activities/{id}/registration', [CommunityEngagementActivityController::class, 'setRegistrationOpen']);
+Route::patch('/community/activities/{id}/participant-limit', [CommunityEngagementActivityController::class, 'setParticipantLimit']);
+
+Route::get('/community/registrations', [CommunityEngagementRegistrationController::class, 'index']);
+Route::post('/community/registrations', [CommunityEngagementRegistrationController::class, 'store']);
+Route::patch('/community/registrations/{id}/payment-status', [CommunityEngagementRegistrationController::class, 'updatePaymentStatus']);
+
+Route::get('/community/analytics/overview', [CommunityEngagementAnalyticsController::class, 'overview']);
+Route::get('/community/analytics/activity/{activityId}', [CommunityEngagementAnalyticsController::class, 'activity']);
+Route::get('/community/analytics/export', [CommunityEngagementAnalyticsController::class, 'export']);
+
+// Volunteer Events API
+Route::get('/volunteer/events', [VolunteerEventController::class, 'index']);
+Route::post('/volunteer/events', [VolunteerEventController::class, 'store']);
+Route::get('/volunteer/events/{id}', [VolunteerEventController::class, 'show']);
+Route::put('/volunteer/events/{id}', [VolunteerEventController::class, 'update']);
+Route::delete('/volunteer/events/{id}', [VolunteerEventController::class, 'destroy']);
+
+Route::get('/volunteer/registrations', [VolunteerRegistrationController::class, 'index']);
+Route::post('/volunteer/registrations', [VolunteerRegistrationController::class, 'store']);
+Route::delete('/volunteer/registrations/{id}', [VolunteerRegistrationController::class, 'destroy']);
+
+// Item (In-Kind) Donations API
+Route::get('/item-donations', [ItemDonationController::class, 'index']);
+Route::post('/item-donations', [ItemDonationController::class, 'store']);
+Route::patch('/item-donations/{id}/status', [ItemDonationController::class, 'updateStatus']);

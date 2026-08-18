@@ -406,8 +406,12 @@ class UserController extends Controller
     }
 
     // Get alumni counts by course (registered vs approved)
-    public function getCourseAnalytics()
+    public function getCourseAnalytics(Request $request)
     {
+        if ($request->query('role') !== 'admin') {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
         $rows = User::withTrashed()
             ->select(
                 'course',

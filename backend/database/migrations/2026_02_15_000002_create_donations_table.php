@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('email');
             $table->decimal('amount', 10, 2);
             $table->string('payment_method')->default('card');
+            $table->string('reference_number')->nullable()->unique();
+            $table->string('proof_of_payment_path')->nullable();
             $table->timestamps();
         });
     }
