@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowLeft, Eye, EyeOff, User, Phone, Calendar, MapPin, Upload } from 'lucide-react';
 import ADDULogo from '../../assets/ADDULogo.jpg';
 import campusNight from '../../assets/Roxas-Colored.jpg';
+import { WORLD_COUNTRIES, COUNTRY_ISO_CODES } from '../utils/countries';
+import { formatTelephoneNumber, formatMobileNumber, getDialCode } from '../utils/phoneFormat';
+import type { CountryCode } from 'libphonenumber-js';
+
+const COUNTRY_OPTIONS = ['Philippines', ...WORLD_COUNTRIES];
 
 const C = {
   navy:   '#001F5B',
@@ -13,59 +18,81 @@ const C = {
 } as const;
 
 const PROGRAM_OPTIONS = [
-  'BS Computer Science',
-  'BS Information Systems',
-  'BS Information Technology',
-  'BS Data Science',
-  'BS Information Management',
-  'AB Communication',
-  'AB English Language',
-  'AB Interdisciplinary Studies Minor In Language and Literature',
-  'AB Interdisciplinary Studies Minor In Media and Business',
-  'AB Interdisciplinary Studies Minor In Media and Technology',
-  'AB Interdisciplinary Studies Minor In Philosophy and Theology',
-  'AB Philosophy',
-  'AB Anthropology',
-  'AB Development Studies',
-  'AB Economics',
-  'AB International Studies Major in American Studies',
-  'AB International Studies Major in Asian Studies',
-  'AB Islamic Studies',
-  'AB Political Science',
-  'AB Psychology',
+  // AB programs
+  'AB in Anthropology',
+  'AB in Anthropology - Academic Research',
+  'AB in Anthropology - Community Development/Social Enterprise',
+  'AB in Anthropology - Leadership/Pre-Law',
+  'AB in Communication',
+  'AB in Development Studies',
+  'AB in English Language',
+  'AB in Interdisciplinary Studies Minor in Language and Literature',
+  'AB in Interdisciplinary Studies Minor in Media and Business',
+  'AB in Interdisciplinary Studies Minor in Media and Philosophy',
+  'AB in Interdisciplinary Studies Minor in Media and Technology',
+  'AB in Interdisciplinary Studies Minor in Philosophy and Theology',
+  'AB in International Studies Major in American Studies',
+  'AB in International Studies Major in Asian Studies',
+  'AB in Islamic Studies',
+  'AB in Islamic Studies Major in Political Economy',
+  'AB in Islamic Studies Minor in Education',
+  'AB in Mass Communication',
+  'AB in Philosophy',
+  'AB in Psychology',
   'AB Sociology',
-  'BS Social Work',
-  'BS Biology Major in General Biology',
-  'BS Biology Major in Medical Biology',
-  'BS Chemistry',
-  'BS Environmental Science',
-  'BS Mathematics',
-  'BS Accountancy',
-  'BS Management Accounting',
-  'BS Business Management',
-  'BS Entrepreneurship',
-  'BS Entrepreneurship Major in Agri-Business',
-  'BS Finance',
-  'BS Human Resource Development and Management',
-  'BS Marketing',
-  'Bachelor of Public Administration',
-  'BS Architecture',
-  'BS Aerospace Engineering',
-  'BS Civil Engineering',
-  'BS Chemical Engineering',
-  'BS Computer Engineering',
-  'BS Electrical Engineering',
-  'BS Electronics Engineering',
-  'BS Industrial Engineering',
-  'BS Mechanical Engineering',
-  'BS Robotics Engineering',
+  'AB Major in Economics',
+  'AB Major in Political Science',
+  // Bachelor programs
   'Bachelor of Early Childhood Education',
+  'Bachelor of Early Childhood Education Major in Preschool',
   'Bachelor of Elementary Education',
-  'Bachelor of Secondary Education Major In English',
-  'Bachelor of Secondary Education Major In Mathematics',
-  'Bachelor of Secondary Education Major In Social Studies',
-  'Bachelor of Secondary Education Major In Science',
-  'BS Nursing',
+  'Bachelor of Public Administration',
+  'Bachelor of Public Management',
+  'Bachelor of Secondary Education Major in Biological Sciences',
+  'Bachelor of Secondary Education Major in English',
+  'Bachelor of Secondary Education Major in Mathematics',
+  'Bachelor of Secondary Education Major in Physical Sciences',
+  'Bachelor of Secondary Education Major in Science',
+  'Bachelor of Secondary Education Major in Social Studies',
+  // BS programs
+  'BS in Accountancy',
+  'BS in Accounting Technology',
+  'BS in Aerospace Engineering',
+  'BS in Aerospace Engineering (Academic Research)',
+  'BS in Aerospace Engineering (Industry and Technopreneurship)',
+  'BS in Architecture',
+  'BS in Biology Major in General Biology',
+  'BS in Biology Major in Medical Biology',
+  'BS in Business Management',
+  'BS in Chemical Engineering',
+  'BS in Chemistry',
+  'BS in Civil Engineering',
+  'BS in Civil Engineering (Construction Engineering and Management)',
+  'BS in Civil Engineering (Structural)',
+  'BS in Civil Engineering (Transportation)',
+  'BS in Computer Engineering',
+  'BS in Computer Science',
+  'BS in Data Science',
+  'BS in Electrical Engineering',
+  'BS in Electronics Engineering',
+  'BS in Entrepreneurship',
+  'BS in Entrepreneurship Major in Agri-Business',
+  'BS in Environmental Science',
+  'BS in Finance',
+  'BS in HR Management',
+  'BS in Human Resource Development and Management',
+  'BS in Industrial Engineering',
+  'BS Information Management',
+  'BS in Information Systems',
+  'BS in Information Technology',
+  'BS in Management Accounting',
+  'BS in Marketing',
+  'BS in Mathematics',
+  'BS in Mechanical Engineering',
+  'BS in Nursing',
+  'BS in Psychology',
+  'BS in Robotics Engineering',
+  'BS in Social Work',
 ];
 
 const PSGC_API = 'https://psgc.cloud/api';
@@ -96,6 +123,7 @@ export function RegisterPage() {
     firstName: '',
     middleName: '',
     lastName: '',
+    maidenName: '',
     email: '',
     password: '',
     currentAddress: '',
@@ -111,6 +139,7 @@ export function RegisterPage() {
     region: '',
     province: '',
     city: '',
+    barangay: '',
     course: '',
     batchYear: '',
     hasDiploma: 'no',
@@ -123,11 +152,12 @@ export function RegisterPage() {
   const [validIdFile, setValidIdFile] = useState<File | null>(null);
   const [photo2x2File, setPhoto2x2File] = useState<File | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [countries, setCountries] = useState<string[]>([]);
   const [provinces, setProvinces] = useState<{ code: string; name: string }[]>([]);
-  const [cities, setCities] = useState<string[]>([]);
+  const [cities, setCities] = useState<{ code: string; name: string }[]>([]);
+  const [barangays, setBarangays] = useState<string[]>([]);
   const [loadingProvinces, setLoadingProvinces] = useState(false);
   const [loadingCities, setLoadingCities] = useState(false);
+  const [loadingBarangays, setLoadingBarangays] = useState(false);
   const [phoneError, setPhoneError] = useState('');
   const [telephoneError, setTelephoneError] = useState('');
   const [passwordMismatch, setPasswordMismatch] = useState(false);
@@ -140,33 +170,21 @@ export function RegisterPage() {
   }, []);
 
   useEffect(() => {
-    fetch('https://restcountries.com/v3.1/all?fields=name')
-      .then(res => res.json())
-      .then((data: { name: { common: string } }[]) => {
-        const sorted = data
-          .map(c => c.name.common)
-          .filter(name => name !== 'Philippines')
-          .sort((a, b) => a.localeCompare(b));
-        setCountries(['Philippines', ...sorted]);
-      })
-      .catch(() => setCountries(['Philippines']));
-  }, []);
-
-  useEffect(() => {
     if (!formData.region) return;
     const regionCode = REGION_PSGC_CODES[formData.region];
     if (!regionCode) return;
 
-    setFormData(prev => ({ ...prev, province: '', city: '' }));
+    setFormData(prev => ({ ...prev, province: '', city: '', barangay: '' }));
     setProvinces([]);
     setCities([]);
+    setBarangays([]);
 
     if (formData.region === 'ncr') {
       setLoadingCities(true);
       fetch(`${PSGC_API}/regions/${regionCode}/cities-municipalities`)
         .then(res => res.json())
-        .then((data: { name: string }[]) =>
-          setCities(data.map(c => c.name).sort((a, b) => a.localeCompare(b)))
+        .then((data: { code: string; name: string }[]) =>
+          setCities(data.sort((a, b) => a.name.localeCompare(b.name)))
         )
         .catch(() => setCities([]))
         .finally(() => setLoadingCities(false));
@@ -187,18 +205,37 @@ export function RegisterPage() {
     const province = provinces.find(p => p.name === formData.province);
     if (!province) return;
 
-    setFormData(prev => ({ ...prev, city: '' }));
+    setFormData(prev => ({ ...prev, city: '', barangay: '' }));
     setCities([]);
+    setBarangays([]);
     setLoadingCities(true);
 
     fetch(`${PSGC_API}/provinces/${province.code}/cities-municipalities`)
       .then(res => res.json())
-      .then((data: { name: string }[]) =>
-        setCities(data.map(c => c.name).sort((a, b) => a.localeCompare(b)))
+      .then((data: { code: string; name: string }[]) =>
+        setCities(data.sort((a, b) => a.name.localeCompare(b.name)))
       )
       .catch(() => setCities([]))
       .finally(() => setLoadingCities(false));
   }, [formData.province, provinces]);
+
+  useEffect(() => {
+    if (!formData.city) return;
+    const city = cities.find(c => c.name === formData.city);
+    if (!city) return;
+
+    setFormData(prev => ({ ...prev, barangay: '' }));
+    setBarangays([]);
+    setLoadingBarangays(true);
+
+    fetch(`${PSGC_API}/cities-municipalities/${city.code}/barangays`)
+      .then(res => res.json())
+      .then((data: { name: string }[]) =>
+        setBarangays(data.map(b => b.name.trim()).sort((a, b) => a.localeCompare(b)))
+      )
+      .catch(() => setBarangays([]))
+      .finally(() => setLoadingBarangays(false));
+  }, [formData.city, cities]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -270,10 +307,8 @@ export function RegisterPage() {
       // Clean and prepare middle name - ensure empty string becomes null
       const cleanMiddleName = formData.middleName && formData.middleName.trim() !== '' ? formData.middleName.trim() : null;
       
-      // Construct full name - only include middle name if it exists
-      const fullName = cleanMiddleName 
-        ? `${formData.firstName} ${cleanMiddleName} ${formData.lastName}`.trim()
-        : `${formData.firstName} ${formData.lastName}`.trim();
+      // Construct display name (middle name intentionally excluded from display name)
+      const fullName = `${formData.firstName} ${formData.lastName}`.trim();
       
       // Create FormData to handle file uploads
       const formDataToSend = new FormData();
@@ -282,6 +317,7 @@ export function RegisterPage() {
       formDataToSend.append('first_name', formData.firstName.trim());
       formDataToSend.append('middle_name', cleanMiddleName || '');
       formDataToSend.append('last_name', formData.lastName.trim());
+      formDataToSend.append('maiden_name', formData.maidenName.trim());
       formDataToSend.append('email', formData.email.trim());
       formDataToSend.append('password', formData.password);
       formDataToSend.append('role', 'alumni');
@@ -298,6 +334,7 @@ export function RegisterPage() {
       formDataToSend.append('region', formData.country === 'Philippines' ? formData.region : '');
       formDataToSend.append('province', formData.country === 'Philippines' ? formData.province.trim() : '');
       formDataToSend.append('city', formData.country === 'Philippines' ? formData.city.trim() : '');
+      formDataToSend.append('barangay', formData.country === 'Philippines' ? formData.barangay.trim() : '');
       formDataToSend.append('course', formData.course);
       formDataToSend.append('batch_year', formData.batchYear);
       formDataToSend.append('name', fullName);
@@ -335,22 +372,51 @@ export function RegisterPage() {
   };
 
   const validatePhone = (value: string): string => {
-    if (!value) return '';
-    if (!/^\d+$/.test(value)) return 'Only digits are allowed';
-    if (value.startsWith('09') && value.length !== 11) return 'Philippine mobile numbers must be 11 digits (09XXXXXXXXX)';
-    if (!value.startsWith('09') && (value.length < 7 || value.length > 15)) return 'Enter a valid number with 7–15 digits';
+    const digits = value.replace(/\D/g, '');
+    if (!digits) return '';
+    if (digits.startsWith('09') && digits.length !== 11) return 'Philippine mobile numbers must be 11 digits (09XXXXXXXXX)';
+    if (!digits.startsWith('09') && (digits.length < 7 || digits.length > 15)) return 'Enter a valid number with 7–15 digits';
     return '';
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    const digitsOnly = ['phoneNumber', 'telephoneNumber', 'zipcode'];
-    const sanitized = digitsOnly.includes(name) ? value.replace(/\D/g, '') : value;
 
-    setFormData({ ...formData, [name]: sanitized });
+    if (name === 'phoneNumber') {
+      const iso = COUNTRY_ISO_CODES[formData.country] as CountryCode | undefined;
+      const formatted = formatMobileNumber(value, iso);
+      setFormData(prev => ({ ...prev, phoneNumber: formatted }));
+      setPhoneError(validatePhone(formatted));
+      return;
+    }
 
-    if (name === 'phoneNumber') setPhoneError(validatePhone(sanitized));
-    if (name === 'telephoneNumber') setTelephoneError(sanitized ? validatePhone(sanitized) : '');
+    if (name === 'telephoneNumber') {
+      const sanitized = formatTelephoneNumber(value);
+      setFormData(prev => ({ ...prev, telephoneNumber: sanitized }));
+      setTelephoneError(sanitized ? validatePhone(sanitized) : '');
+      return;
+    }
+
+    if (name === 'zipcode') {
+      setFormData(prev => ({ ...prev, zipcode: value.replace(/\D/g, '') }));
+      return;
+    }
+
+    if (name === 'country') {
+      // Prefill the mobile number with the selected country's dial code, but
+      // only if the field is still empty - never overwrite a number the
+      // alumnus already typed (they may keep a number from another country).
+      const iso = COUNTRY_ISO_CODES[value] as CountryCode | undefined;
+      const callingCode = getDialCode(iso);
+      setFormData(prev => ({
+        ...prev,
+        country: value,
+        phoneNumber: !prev.phoneNumber.trim() && callingCode ? callingCode : prev.phoneNumber,
+      }));
+      return;
+    }
+
+    setFormData(prev => ({ ...prev, [name]: value }));
 
     if (name === 'password') {
       setPasswordMismatch(formData.confirmPassword !== '' && formData.confirmPassword !== value);
@@ -701,7 +767,7 @@ export function RegisterPage() {
                     required
                   >
                     <option value="">Select your country</option>
-                    {countries.map(country => (
+                    {COUNTRY_OPTIONS.map(country => (
                       <option key={country} value={country}>{country}</option>
                     ))}
                   </select>
@@ -799,11 +865,38 @@ export function RegisterPage() {
                       <option disabled>Loading cities...</option>
                     ) : (
                       cities.map(city => (
-                        <option key={city} value={city}>{city}</option>
+                        <option key={city.code} value={city.name}>{city.name}</option>
                       ))
                     )}
                   </select>
                 </div>
+
+                {/* Barangay - hidden if the selected city/municipality has no barangays on record */}
+                {!(formData.city && !loadingBarangays && barangays.length === 0) && (
+                  <div>
+                    <label htmlFor="barangay" className="block text-gray-700 font-medium mb-2">Barangay</label>
+                    <select
+                      id="barangay"
+                      name="barangay"
+                      value={formData.barangay}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003D7A] focus:border-transparent transition"
+                      required
+                      disabled={!formData.city || loadingBarangays}
+                    >
+                      <option value="" disabled hidden>
+                        {!formData.city ? 'Select a city/municipality first' : 'Select your barangay'}
+                      </option>
+                      {loadingBarangays ? (
+                        <option disabled>Loading barangays...</option>
+                      ) : (
+                        barangays.map(barangay => (
+                          <option key={barangay} value={barangay}>{barangay}</option>
+                        ))
+                      )}
+                    </select>
+                  </div>
+                )}
               </div>
             )}
 
@@ -821,7 +914,7 @@ export function RegisterPage() {
                     value={formData.phoneNumber}
                     onChange={handleChange}
                     placeholder="09XXXXXXXXX"
-                    maxLength={15}
+                    maxLength={16}
                     className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition ${
                       phoneError
                         ? 'border-red-500 focus:ring-red-400 bg-red-50'
@@ -844,8 +937,8 @@ export function RegisterPage() {
                     name="telephoneNumber"
                     value={formData.telephoneNumber}
                     onChange={handleChange}
-                    placeholder="09XXXXXXXXX"
-                    maxLength={15}
+                    placeholder="(0XX) XXX-XXXX"
+                    maxLength={14}
                     className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition ${
                       telephoneError
                         ? 'border-red-500 focus:ring-red-400 bg-red-50'
@@ -927,14 +1020,13 @@ export function RegisterPage() {
                 required
               >
                 <option value="" disabled hidden>Select your religion</option>
+                <option value="none">None</option>
                 <option value="roman_catholic">Roman Catholic</option>
                 <option value="protestant">Protestant</option>
                 <option value="iglesia_ni_cristo">Iglesia ni Cristo</option>
                 <option value="islam">Islam</option>
-                <option value="born_again_christian">Born Again Christian</option>
-                <option value="buddhist">Buddhist</option>
-                <option value="other">Other (please specify)</option>
-                <option value="prefer_not_to_say">Prefer not to say</option>
+                <option value="born_again">Born Again</option>
+                <option value="other">Others (Please Specify)</option>
               </select>
 
               {/* Conditional: Show text input if "Other" is selected */}
@@ -973,7 +1065,30 @@ export function RegisterPage() {
               </select>
             </div>
 
-
+            {/* Maiden Name - only relevant if marital status implies a past or current marriage */}
+            {['married', 'separated', 'annulled', 'divorced', 'widowed'].includes(formData.maritalStatus) && (
+              <div className="mb-6">
+                <label htmlFor="maidenName" className="block text-gray-700 font-medium mb-2">
+                  Maiden Name <span className="text-gray-400 font-normal text-sm">(if your surname is different from when you studied at Ateneo)</span>
+                </label>
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    id="maidenName"
+                    type="text"
+                    name="maidenName"
+                    value={formData.maidenName}
+                    onChange={handleChange}
+                    placeholder="Last name used during your studies at Ateneo"
+                    autoComplete="off"
+                    className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003D7A] focus:border-transparent transition"
+                  />
+                </div>
+                <p className="text-gray-500 text-xs mt-2">
+                  This helps us match your alumni and diploma records, which may be under your maiden name.
+                </p>
+              </div>
+            )}
 
             {/* Course & Batch Year */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">

@@ -528,7 +528,7 @@ export function LoginPage() {
               Don't have an account?{' '}
               <button
                 type="button"
-                onClick={() => navigate('/register')}
+                onClick={() => navigate('/terms')}
                 style={{
                   background: 'none', border: 'none', cursor: 'pointer',
                   fontFamily: 'inherit', fontSize: 14, fontWeight: 500,

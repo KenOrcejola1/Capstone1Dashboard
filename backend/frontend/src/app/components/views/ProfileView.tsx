@@ -1,32 +1,85 @@
 import { useState, useEffect, useRef, type ChangeEvent } from 'react';
 import { Mail, Phone, MapPin, Briefcase, GraduationCap, Edit3, Save, X, Trash2, Camera } from 'lucide-react';
 import { Footer } from '../Footer';
+import { WORLD_COUNTRIES } from '../../utils/countries';
+import { formatTelephoneNumber } from '../../utils/phoneFormat';
 
 const PROGRAM_OPTIONS = [
-  'BS Computer Science', 'BS Information Systems', 'BS Information Technology',
-  'BS Data Science', 'BS Information Management', 'AB Communication',
-  'AB English Language', 'AB Interdisciplinary Studies Minor In Language and Literature',
-  'AB Interdisciplinary Studies Minor In Media and Business',
-  'AB Interdisciplinary Studies Minor In Media and Technology',
-  'AB Interdisciplinary Studies Minor In Philosophy and Theology',
-  'AB Philosophy', 'AB Anthropology', 'AB Development Studies', 'AB Economics',
-  'AB International Studies Major in American Studies',
-  'AB International Studies Major in Asian Studies', 'AB Islamic Studies',
-  'AB Political Science', 'AB Psychology', 'AB Sociology', 'BS Social Work',
-  'BS Biology Major in General Biology', 'BS Biology Major in Medical Biology',
-  'BS Chemistry', 'BS Environmental Science', 'BS Mathematics', 'BS Accountancy',
-  'BS Management Accounting', 'BS Business Management', 'BS Entrepreneurship',
-  'BS Entrepreneurship Major in Agri-Business', 'BS Finance',
-  'BS Human Resource Development and Management', 'BS Marketing',
-  'Bachelor of Public Administration', 'BS Architecture', 'BS Aerospace Engineering',
-  'BS Civil Engineering', 'BS Chemical Engineering', 'BS Computer Engineering',
-  'BS Electrical Engineering', 'BS Electronics Engineering', 'BS Industrial Engineering',
-  'BS Mechanical Engineering', 'BS Robotics Engineering',
-  'Bachelor of Early Childhood Education', 'Bachelor of Elementary Education',
-  'Bachelor of Secondary Education Major In English',
-  'Bachelor of Secondary Education Major In Mathematics',
-  'Bachelor of Secondary Education Major In Social Studies',
-  'Bachelor of Secondary Education Major In Science', 'BS Nursing',
+  // AB programs
+  'AB in Anthropology',
+  'AB in Anthropology - Academic Research',
+  'AB in Anthropology - Community Development/Social Enterprise',
+  'AB in Anthropology - Leadership/Pre-Law',
+  'AB in Communication',
+  'AB in Development Studies',
+  'AB in English Language',
+  'AB in Interdisciplinary Studies Minor in Language and Literature',
+  'AB in Interdisciplinary Studies Minor in Media and Business',
+  'AB in Interdisciplinary Studies Minor in Media and Philosophy',
+  'AB in Interdisciplinary Studies Minor in Media and Technology',
+  'AB in Interdisciplinary Studies Minor in Philosophy and Theology',
+  'AB in International Studies Major in American Studies',
+  'AB in International Studies Major in Asian Studies',
+  'AB in Islamic Studies',
+  'AB in Islamic Studies Major in Political Economy',
+  'AB in Islamic Studies Minor in Education',
+  'AB in Mass Communication',
+  'AB in Philosophy',
+  'AB in Psychology',
+  'AB Sociology',
+  'AB Major in Economics',
+  'AB Major in Political Science',
+  // Bachelor programs
+  'Bachelor of Early Childhood Education',
+  'Bachelor of Early Childhood Education Major in Preschool',
+  'Bachelor of Elementary Education',
+  'Bachelor of Public Administration',
+  'Bachelor of Public Management',
+  'Bachelor of Secondary Education Major in Biological Sciences',
+  'Bachelor of Secondary Education Major in English',
+  'Bachelor of Secondary Education Major in Mathematics',
+  'Bachelor of Secondary Education Major in Physical Sciences',
+  'Bachelor of Secondary Education Major in Science',
+  'Bachelor of Secondary Education Major in Social Studies',
+  // BS programs
+  'BS in Accountancy',
+  'BS in Accounting Technology',
+  'BS in Aerospace Engineering',
+  'BS in Aerospace Engineering (Academic Research)',
+  'BS in Aerospace Engineering (Industry and Technopreneurship)',
+  'BS in Architecture',
+  'BS in Biology Major in General Biology',
+  'BS in Biology Major in Medical Biology',
+  'BS in Business Management',
+  'BS in Chemical Engineering',
+  'BS in Chemistry',
+  'BS in Civil Engineering',
+  'BS in Civil Engineering (Construction Engineering and Management)',
+  'BS in Civil Engineering (Structural)',
+  'BS in Civil Engineering (Transportation)',
+  'BS in Computer Engineering',
+  'BS in Computer Science',
+  'BS in Data Science',
+  'BS in Electrical Engineering',
+  'BS in Electronics Engineering',
+  'BS in Entrepreneurship',
+  'BS in Entrepreneurship Major in Agri-Business',
+  'BS in Environmental Science',
+  'BS in Finance',
+  'BS in HR Management',
+  'BS in Human Resource Development and Management',
+  'BS in Industrial Engineering',
+  'BS Information Management',
+  'BS in Information Systems',
+  'BS in Information Technology',
+  'BS in Management Accounting',
+  'BS in Marketing',
+  'BS in Mathematics',
+  'BS in Mechanical Engineering',
+  'BS in Nursing',
+  'BS in Psychology',
+  'BS in Robotics Engineering',
+  'BS in Social Work',
 ];
 
 const PSGC_API = 'https://psgc.cloud/api';
@@ -50,11 +103,12 @@ export function ProfileView({ userRole }: ProfileViewProps) {
   const [profileImageUrl, setProfileImageUrl] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [countries, setCountries] = useState<string[]>([]);
   const [provinces, setProvinces] = useState<{ code: string; name: string }[]>([]);
   const [cities, setCities] = useState<{ code: string; name: string }[]>([]);
+  const [barangays, setBarangays] = useState<string[]>([]);
   const [loadingProvinces, setLoadingProvinces] = useState(false);
   const [loadingCities, setLoadingCities] = useState(false);
+  const [loadingBarangays, setLoadingBarangays] = useState(false);
   const [phoneError, setPhoneError] = useState('');
   const [telephoneError, setTelephoneError] = useState('');
   const [passwordData, setPasswordData] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
@@ -67,6 +121,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
     firstName: "",
     middleName: "",
     lastName: "",
+    maidenName: "",
     email: "",
     phone: "",
     telephone: "",
@@ -81,6 +136,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
     region: "",
     province: "",
     city: "",
+    barangay: "",
     course: "",
     batchYear: "",
     jobTitle: "",
@@ -93,24 +149,16 @@ export function ProfileView({ userRole }: ProfileViewProps) {
   }, []);
 
   useEffect(() => {
-    fetch('https://restcountries.com/v3.1/all?fields=name')
-      .then(r => r.json())
-      .then((data: { name: { common: string } }[]) => {
-        const names = data.map(c => c.name.common).sort();
-        setCountries(names.filter(n => n !== 'Philippines'));
-      })
-      .catch(() => {});
-  }, []);
-
-  useEffect(() => {
     if (!formData.region || !REGION_PSGC_CODES[formData.region]) {
       setProvinces([]);
       setCities([]);
+      setBarangays([]);
       return;
     }
     setLoadingProvinces(true);
     setProvinces([]);
     setCities([]);
+    setBarangays([]);
     const code = REGION_PSGC_CODES[formData.region];
     const endpoint = formData.region === 'ncr'
       ? `${PSGC_API}/regions/${code}/cities-municipalities/`
@@ -130,6 +178,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
     if (!prov) return;
     setLoadingCities(true);
     setCities([]);
+    setBarangays([]);
     fetch(`${PSGC_API}/provinces/${prov.code}/cities-municipalities/`)
       .then(r => r.json())
       .then((data: { code: string; name: string }[]) => {
@@ -138,6 +187,30 @@ export function ProfileView({ userRole }: ProfileViewProps) {
       .catch(() => {})
       .finally(() => setLoadingCities(false));
   }, [formData.province, provinces]);
+
+  // For NCR, the "province" field actually holds the selected city/municipality
+  // (NCR has no provinces), so the barangay lookup has to key off whichever
+  // field is currently acting as the city.
+  useEffect(() => {
+    const cityName = formData.region === 'ncr' ? formData.province : formData.city;
+    const cityList = formData.region === 'ncr' ? provinces : cities;
+    if (!cityName) {
+      setBarangays([]);
+      return;
+    }
+    const city = cityList.find(c => c.name === cityName);
+    if (!city) return;
+
+    setBarangays([]);
+    setLoadingBarangays(true);
+    fetch(`${PSGC_API}/cities-municipalities/${city.code}/barangays`)
+      .then(r => r.json())
+      .then((data: { name: string }[]) => {
+        setBarangays(data.map(b => b.name.trim()).sort((a, b) => a.localeCompare(b)));
+      })
+      .catch(() => {})
+      .finally(() => setLoadingBarangays(false));
+  }, [formData.region, formData.province, formData.city, provinces, cities]);
 
   const fetchUserData = async () => {
     try {
@@ -154,6 +227,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
         firstName: userData.first_name || '',
         middleName: userData.middle_name || '',
         lastName: userData.last_name || '',
+        maidenName: userData.maiden_name || '',
         email: userData.email || '',
         phone: userData.phone_number || '',
         telephone: userData.telephone_number || '',
@@ -168,6 +242,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
         region: userData.region || '',
         province: userData.province || '',
         city: userData.city || '',
+        barangay: userData.barangay || '',
         course: userData.course || '',
         batchYear: userData.batch_year || '',
         jobTitle: '',
@@ -184,7 +259,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
       }
       
       // Update localStorage with the current name from database
-      const fullName = `${userData.first_name || ''}${userData.middle_name ? ' ' + userData.middle_name : ''} ${userData.last_name || ''}`.trim();
+      const fullName = `${userData.first_name || ''} ${userData.last_name || ''}`.trim();
       if (fullName) {
         localStorage.setItem('userName', fullName);
         // Trigger events to update sidebar
@@ -216,15 +291,16 @@ export function ProfileView({ userRole }: ProfileViewProps) {
   const years = Array.from({ length: currentYear - 1949 }, (_, i) => currentYear - i);
 
   const validatePhone = (value: string, field: 'phone' | 'telephone') => {
-    if (!value) {
+    const digits = value.replace(/\D/g, '');
+    if (!digits) {
       if (field === 'phone') setPhoneError('');
       else setTelephoneError('');
       return;
     }
-    const isValid = value.startsWith('09')
-      ? value.length === 11
-      : value.length >= 7 && value.length <= 15;
-    const msg = isValid ? '' : value.startsWith('09')
+    const isValid = digits.startsWith('09')
+      ? digits.length === 11
+      : digits.length >= 7 && digits.length <= 15;
+    const msg = isValid ? '' : digits.startsWith('09')
       ? 'Philippine mobile numbers must be 11 digits (e.g. 09171234567)'
       : 'Enter a valid phone number (7–15 digits)';
     if (field === 'phone') setPhoneError(msg);
@@ -232,24 +308,28 @@ export function ProfileView({ userRole }: ProfileViewProps) {
   };
 
   const handleFieldChange = (field: string, value: string) => {
-    if (['phone', 'telephone', 'zipcode'].includes(field)) {
+    if (field === 'phone' || field === 'zipcode') {
       value = value.replace(/\D/g, '');
+    }
+    if (field === 'telephone') {
+      value = formatTelephoneNumber(value);
     }
     if (field === 'phone') { validatePhone(value, 'phone'); setFormData(prev => ({ ...prev, phone: value })); return; }
     if (field === 'telephone') { validatePhone(value, 'telephone'); setFormData(prev => ({ ...prev, telephone: value })); return; }
     if (field === 'zipcode') { setFormData(prev => ({ ...prev, zipcode: value })); return; }
     if (field === 'country') {
-      setFormData(prev => ({ ...prev, country: value, region: '', province: '', city: '' }));
+      setFormData(prev => ({ ...prev, country: value, region: '', province: '', city: '', barangay: '' }));
       setProvinces([]);
       setCities([]);
+      setBarangays([]);
       return;
     }
     if (field === 'region') {
-      setFormData(prev => ({ ...prev, region: value, province: '', city: '' }));
+      setFormData(prev => ({ ...prev, region: value, province: '', city: '', barangay: '' }));
       return;
     }
     if (field === 'province') {
-      setFormData(prev => ({ ...prev, province: value, city: '' }));
+      setFormData(prev => ({ ...prev, province: value, city: '', barangay: '' }));
       return;
     }
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -317,6 +397,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
       // Clean other optional fields
       const cleanTelephone = formData.telephone && formData.telephone.trim() !== '' ? formData.telephone.trim() : null;
       const cleanReligionOther = formData.religionOther && formData.religionOther.trim() !== '' ? formData.religionOther.trim() : null;
+      const cleanMaidenName = formData.maidenName && formData.maidenName.trim() !== '' ? formData.maidenName.trim() : null;
 
       const response = await fetch(`http://localhost:8000/api/users/${encodeURIComponent(userEmail)}`, {
         method: 'PUT',
@@ -327,6 +408,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
           first_name: formData.firstName,
           middle_name: cleanMiddleName,
           last_name: formData.lastName,
+          maiden_name: cleanMaidenName,
           email: formData.email,
           phone_number: formData.phone,
           telephone_number: cleanTelephone,
@@ -341,6 +423,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
           region: formData.country === 'Philippines' ? formData.region : null,
           province: formData.country === 'Philippines' ? formData.province : null,
           city: formData.country === 'Philippines' ? formData.city : null,
+          barangay: formData.country === 'Philippines' ? formData.barangay : null,
           course: formData.course,
           batch_year: formData.batchYear,
         }),
@@ -348,7 +431,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
 
       if (response.ok) {
         // Update localStorage with the new full name (only include middle name if not empty)
-        const fullName = `${formData.firstName}${cleanMiddleName ? ' ' + cleanMiddleName : ''} ${formData.lastName}`.trim();
+        const fullName = `${formData.firstName} ${formData.lastName}`.trim();
         localStorage.setItem('userName', fullName);
         // Update stored email if it changed
         if (formData.email && formData.email !== userEmail) {
@@ -536,7 +619,12 @@ export function ProfileView({ userRole }: ProfileViewProps) {
             </div>
             <div className="flex-1 space-y-4">
               <div>
-                <h2 className="text-3xl font-bold text-gray-900">{formData.firstName} {formData.middleName} {formData.lastName}</h2>
+                <h2 className="text-3xl font-bold text-gray-900">
+                  {formData.firstName} {formData.lastName}
+                  {formData.maidenName && (
+                    <span className="text-xl font-medium text-gray-400"> (née {formData.maidenName})</span>
+                  )}
+                </h2>
                 <p className="text-gray-500 font-medium">Class of {formData.batchYear || 'N/A'} • {formData.course || 'Course Not Set'}</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-12">
@@ -622,6 +710,8 @@ export function ProfileView({ userRole }: ProfileViewProps) {
                 onChange={(e) => handleFieldChange('telephone', e.target.value)}
                 disabled={!isEditing}
                 inputMode="numeric"
+                placeholder="(0XX) XXX-XXXX"
+                maxLength={14}
                 className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${
                   !isEditing ? 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'
                   : telephoneError ? 'bg-red-50 border-red-500 text-gray-900'
@@ -680,14 +770,13 @@ export function ProfileView({ userRole }: ProfileViewProps) {
                 className="w-full px-3 py-2 border rounded-lg transition-all text-sm bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed"
               >
                 <option value="">Select your religion</option>
+                <option value="none">None</option>
                 <option value="roman_catholic">Roman Catholic</option>
                 <option value="protestant">Protestant</option>
                 <option value="iglesia_ni_cristo">Iglesia ni Cristo</option>
                 <option value="islam">Islam</option>
-                <option value="born_again_christian">Born Again Christian</option>
-                <option value="buddhist">Buddhist</option>
-                <option value="other">Other</option>
-                <option value="prefer_not_to_say">Prefer not to say</option>
+                <option value="born_again">Born Again</option>
+                <option value="other">Others (Please Specify)</option>
               </select>
             </div>
 
@@ -725,6 +814,21 @@ export function ProfileView({ userRole }: ProfileViewProps) {
               </select>
             </div>
 
+            {/* Maiden Name - only relevant if marital status implies a past or current marriage */}
+            {['married', 'separated', 'annulled', 'divorced', 'widowed'].includes(formData.maritalStatus || '') && (
+              <div className="space-y-1">
+                <label className="text-sm font-semibold text-gray-700">Maiden Name</label>
+                <input
+                  type="text"
+                  value={formData.maidenName || ''}
+                  onChange={(e) => setFormData({ ...formData, maidenName: e.target.value })}
+                  disabled={!isEditing}
+                  placeholder="Last name used during your studies at Ateneo"
+                  className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${isEditing ? 'bg-white border-blue-400 text-gray-900' : 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'}`}
+                />
+              </div>
+            )}
+
             {/* Country/Location */}
             <div className="space-y-1">
               <label className="text-sm font-semibold text-gray-700">Country/Location</label>
@@ -736,7 +840,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
               >
                 <option value="">Select your country</option>
                 <option value="Philippines">Philippines</option>
-                {countries.map(c => <option key={c} value={c}>{c}</option>)}
+                {WORLD_COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
 
@@ -796,7 +900,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
                     <label className="text-sm font-semibold text-gray-700">City / Municipality</label>
                     <select
                       value={formData.city || ''}
-                      onChange={(e) => setFormData(prev => ({ ...prev, city: e.target.value }))}
+                      onChange={(e) => setFormData(prev => ({ ...prev, city: e.target.value, barangay: '' }))}
                       disabled={!isEditing || loadingCities || cities.length === 0}
                       className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${isEditing && !loadingCities ? 'bg-white border-blue-400 text-gray-900' : 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'}`}
                     >
@@ -804,6 +908,24 @@ export function ProfileView({ userRole }: ProfileViewProps) {
                         {loadingCities ? 'Loading...' : 'Select city/municipality'}
                       </option>
                       {cities.map(c => <option key={c.code} value={c.name}>{c.name}</option>)}
+                    </select>
+                  </div>
+                )}
+
+                {/* Barangay - hidden if the selected city/municipality has no barangays on record */}
+                {!((formData.region === 'ncr' ? formData.province : formData.city) && !loadingBarangays && barangays.length === 0) && (
+                  <div className="space-y-1">
+                    <label className="text-sm font-semibold text-gray-700">Barangay</label>
+                    <select
+                      value={formData.barangay || ''}
+                      onChange={(e) => handleFieldChange('barangay', e.target.value)}
+                      disabled={!isEditing || loadingBarangays || barangays.length === 0}
+                      className={`w-full px-3 py-2 border rounded-lg transition-all text-sm ${isEditing && !loadingBarangays ? 'bg-white border-blue-400 text-gray-900' : 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed'}`}
+                    >
+                      <option value="">
+                        {loadingBarangays ? 'Loading...' : 'Select barangay'}
+                      </option>
+                      {barangays.map(b => <option key={b} value={b}>{b}</option>)}
                     </select>
                   </div>
                 )}

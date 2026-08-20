@@ -67,6 +67,7 @@ class UserController extends Controller
         $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
+            'maiden_name' => 'nullable|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
             'phone_number' => 'nullable|string',
@@ -80,6 +81,7 @@ class UserController extends Controller
             'region' => 'nullable|string',
             'province' => 'nullable|string',
             'city' => 'nullable|string',
+            'barangay' => 'nullable|string',
             'course' => 'nullable|string',
             'batch_year' => 'nullable|string',
             'has_diploma' => 'nullable|string|in:yes,no',
@@ -96,8 +98,8 @@ class UserController extends Controller
             $middleName = null;
         }
 
-        // Construct full name properly
-        $fullName = trim($request->first_name . ($middleName ? ' ' . $middleName : '') . ' ' . $request->last_name);
+        // Construct full name properly (middle name intentionally excluded from display name)
+        $fullName = trim($request->first_name . ' ' . $request->last_name);
 
         // Handle diploma file upload
         $diplomaFilePath = null;
@@ -136,6 +138,7 @@ class UserController extends Controller
             'first_name' => $request->first_name,
             'middle_name' => $middleName,
             'last_name' => $request->last_name,
+            'maiden_name' => $request->maiden_name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'role' => $request->role ?? 'alumni',
@@ -156,6 +159,7 @@ class UserController extends Controller
             'region' => $request->region,
             'province' => $request->province,
             'city' => $request->city,
+            'barangay' => $request->barangay,
             'course' => $request->course,
             'batch_year' => $request->batch_year,
             'has_diploma' => $request->has_diploma ?? 'no',
@@ -206,17 +210,12 @@ class UserController extends Controller
         }
         
         // Reconstruct full name if first_name or last_name is being updated
-        if (isset($updateData['first_name']) || isset($updateData['last_name']) || isset($updateData['middle_name'])) {
+        // (middle name intentionally excluded from display name)
+        if (isset($updateData['first_name']) || isset($updateData['last_name'])) {
             $firstName = $updateData['first_name'] ?? $user->first_name;
-            $middleName = isset($updateData['middle_name']) ? $updateData['middle_name'] : $user->middle_name;
             $lastName = $updateData['last_name'] ?? $user->last_name;
-            
-            // Clean middle name again for name construction
-            if (empty($middleName) || trim($middleName) === '') {
-                $middleName = null;
-            }
-            
-            $updateData['name'] = trim($firstName . ($middleName ? ' ' . $middleName : '') . ' ' . $lastName);
+
+            $updateData['name'] = trim($firstName . ' ' . $lastName);
         }
         
         $user->update($updateData);
@@ -303,17 +302,12 @@ class UserController extends Controller
         }
         
         // Reconstruct full name if first_name or last_name is being updated
-        if (isset($updateData['first_name']) || isset($updateData['last_name']) || isset($updateData['middle_name'])) {
+        // (middle name intentionally excluded from display name)
+        if (isset($updateData['first_name']) || isset($updateData['last_name'])) {
             $firstName = $updateData['first_name'] ?? $user->first_name;
-            $middleName = isset($updateData['middle_name']) ? $updateData['middle_name'] : $user->middle_name;
             $lastName = $updateData['last_name'] ?? $user->last_name;
-            
-            // Clean middle name again for name construction
-            if (empty($middleName) || trim($middleName) === '') {
-                $middleName = null;
-            }
-            
-            $updateData['name'] = trim($firstName . ($middleName ? ' ' . $middleName : '') . ' ' . $lastName);
+
+            $updateData['name'] = trim($firstName . ' ' . $lastName);
         }
         
         $user->update($updateData);

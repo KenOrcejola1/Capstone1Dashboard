@@ -2,59 +2,81 @@ import { useState, useEffect } from 'react';
 import { Users, Search, Edit, Trash2, Plus, X, Mail, Phone, MapPin, GraduationCap, Calendar, Shield, Lock, Unlock, Check, XCircle, Eye } from 'lucide-react';
 
 const PROGRAM_OPTIONS = [
-  'BS Computer Science',
-  'BS Information Systems',
-  'BS Information Technology',
-  'BS Data Science',
-  'BS Information Management',
-  'AB Communication',
-  'AB English Language',
-  'AB Interdisciplinary Studies Minor In Language and Literature',
-  'AB Interdisciplinary Studies Minor In Media and Business',
-  'AB Interdisciplinary Studies Minor In Media and Technology',
-  'AB Interdisciplinary Studies Minor In Philosophy and Theology',
-  'AB Philosophy',
-  'AB Anthropology',
-  'AB Development Studies',
-  'AB Economics',
-  'AB International Studies Major in American Studies',
-  'AB International Studies Major in Asian Studies',
-  'AB Islamic Studies',
-  'AB Political Science',
-  'AB Psychology',
+  // AB programs
+  'AB in Anthropology',
+  'AB in Anthropology - Academic Research',
+  'AB in Anthropology - Community Development/Social Enterprise',
+  'AB in Anthropology - Leadership/Pre-Law',
+  'AB in Communication',
+  'AB in Development Studies',
+  'AB in English Language',
+  'AB in Interdisciplinary Studies Minor in Language and Literature',
+  'AB in Interdisciplinary Studies Minor in Media and Business',
+  'AB in Interdisciplinary Studies Minor in Media and Philosophy',
+  'AB in Interdisciplinary Studies Minor in Media and Technology',
+  'AB in Interdisciplinary Studies Minor in Philosophy and Theology',
+  'AB in International Studies Major in American Studies',
+  'AB in International Studies Major in Asian Studies',
+  'AB in Islamic Studies',
+  'AB in Islamic Studies Major in Political Economy',
+  'AB in Islamic Studies Minor in Education',
+  'AB in Mass Communication',
+  'AB in Philosophy',
+  'AB in Psychology',
   'AB Sociology',
-  'BS Social Work',
-  'BS Biology Major in General Biology',
-  'BS Biology Major in Medical Biology',
-  'BS Chemistry',
-  'BS Environmental Science',
-  'BS Mathematics',
-  'BS Accountancy',
-  'BS Management Accounting',
-  'BS Business Management',
-  'BS Entrepreneurship',
-  'BS Entrepreneurship Major in Agri-Business',
-  'BS Finance',
-  'BS Human Resource Development and Management',
-  'BS Marketing',
-  'Bachelor of Public Administration',
-  'BS Architecture',
-  'BS Aerospace Engineering',
-  'BS Civil Engineering',
-  'BS Chemical Engineering',
-  'BS Computer Engineering',
-  'BS Electrical Engineering',
-  'BS Electronics Engineering',
-  'BS Industrial Engineering',
-  'BS Mechanical Engineering',
-  'BS Robotics Engineering',
+  'AB Major in Economics',
+  'AB Major in Political Science',
+  // Bachelor programs
   'Bachelor of Early Childhood Education',
+  'Bachelor of Early Childhood Education Major in Preschool',
   'Bachelor of Elementary Education',
-  'Bachelor of Secondary Education Major In English',
-  'Bachelor of Secondary Education Major In Mathematics',
-  'Bachelor of Secondary Education Major In Social Studies',
-  'Bachelor of Secondary Education Major In Science',
-  'BS Nursing',
+  'Bachelor of Public Administration',
+  'Bachelor of Public Management',
+  'Bachelor of Secondary Education Major in Biological Sciences',
+  'Bachelor of Secondary Education Major in English',
+  'Bachelor of Secondary Education Major in Mathematics',
+  'Bachelor of Secondary Education Major in Physical Sciences',
+  'Bachelor of Secondary Education Major in Science',
+  'Bachelor of Secondary Education Major in Social Studies',
+  // BS programs
+  'BS in Accountancy',
+  'BS in Accounting Technology',
+  'BS in Aerospace Engineering',
+  'BS in Aerospace Engineering (Academic Research)',
+  'BS in Aerospace Engineering (Industry and Technopreneurship)',
+  'BS in Architecture',
+  'BS in Biology Major in General Biology',
+  'BS in Biology Major in Medical Biology',
+  'BS in Business Management',
+  'BS in Chemical Engineering',
+  'BS in Chemistry',
+  'BS in Civil Engineering',
+  'BS in Civil Engineering (Construction Engineering and Management)',
+  'BS in Civil Engineering (Structural)',
+  'BS in Civil Engineering (Transportation)',
+  'BS in Computer Engineering',
+  'BS in Computer Science',
+  'BS in Data Science',
+  'BS in Electrical Engineering',
+  'BS in Electronics Engineering',
+  'BS in Entrepreneurship',
+  'BS in Entrepreneurship Major in Agri-Business',
+  'BS in Environmental Science',
+  'BS in Finance',
+  'BS in HR Management',
+  'BS in Human Resource Development and Management',
+  'BS in Industrial Engineering',
+  'BS Information Management',
+  'BS in Information Systems',
+  'BS in Information Technology',
+  'BS in Management Accounting',
+  'BS in Marketing',
+  'BS in Mathematics',
+  'BS in Mechanical Engineering',
+  'BS in Nursing',
+  'BS in Psychology',
+  'BS in Robotics Engineering',
+  'BS in Social Work',
 ];
 
 interface User {
@@ -84,6 +106,7 @@ interface User {
   region?: string;
   province?: string;
   city?: string;
+  barangay?: string;
   course?: string;
   batch_year?: string;
   has_diploma?: string;
@@ -114,7 +137,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
   // Helper function to get display name
   const getDisplayName = (user: User) => {
     if (user.first_name && user.last_name) {
-      return `${user.first_name}${user.middle_name ? ' ' + user.middle_name : ''} ${user.last_name}`.trim();
+      return `${user.first_name} ${user.last_name}`.trim();
     }
     return user.name;
   };
@@ -376,7 +399,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
       const cleanBatchYear = newUser.batch_year && newUser.batch_year.trim() !== '' ? newUser.batch_year.trim() : null;
       
       const userData = {
-        name: `${newUser.first_name}${cleanMiddleName ? ' ' + cleanMiddleName : ''} ${newUser.last_name}`.trim(),
+        name: `${newUser.first_name} ${newUser.last_name}`.trim(),
         first_name: newUser.first_name,
         middle_name: cleanMiddleName,
         last_name: newUser.last_name,
@@ -870,6 +893,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                     <div><span className="font-medium text-gray-500">Region:</span><p className="text-gray-900 mt-0.5">{selectedPendingUser.region || '—'}</p></div>
                     <div><span className="font-medium text-gray-500">Province:</span><p className="text-gray-900 mt-0.5">{selectedPendingUser.province || '—'}</p></div>
                     <div><span className="font-medium text-gray-500">City:</span><p className="text-gray-900 mt-0.5">{selectedPendingUser.city || '—'}</p></div>
+                    <div><span className="font-medium text-gray-500">Barangay:</span><p className="text-gray-900 mt-0.5">{selectedPendingUser.barangay || '—'}</p></div>
                   </>}
                 </div>
               </div>

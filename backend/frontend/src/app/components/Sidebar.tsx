@@ -42,7 +42,7 @@ export function Sidebar({ activeView, onNavigate, userRole }: SidebarProps) {
       const response = await fetch(`http://localhost:8000/api/users/${encodeURIComponent(userEmail)}`);
       if (response.ok) {
         const userData = await response.json();
-        const fullName = `${userData.first_name || ''}${userData.middle_name ? ' ' + userData.middle_name : ''} ${userData.last_name || ''}`.trim();
+        const fullName = `${userData.first_name || ''} ${userData.last_name || ''}`.trim();
         if (fullName) {
           localStorage.setItem('userName', fullName);
           setUserName(fullName);

@@ -48,7 +48,7 @@ export function TermsAndConditionsPage() {
           <div>
             <p className="text-[#C5A96A] text-xs font-medium tracking-widest uppercase">Ateneo de Davao University</p>
             <h1 className="text-white text-xl font-bold" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-              Terms &amp; Conditions
+              Data Privacy Act &amp; Terms and Conditions
             </h1>
           </div>
         </div>
@@ -68,101 +68,147 @@ export function TermsAndConditionsPage() {
         <div className="px-8 py-6 space-y-6 text-gray-700 text-sm leading-relaxed">
           <div className="flex items-center gap-3 mb-2">
             <ScrollText className="w-5 h-5 text-[#003087] flex-shrink-0" />
-            <h2 className="text-lg font-semibold text-[#003087]">Alumni Information System – Terms of Use</h2>
+            <h2 className="text-lg font-semibold text-[#003087]">Data Privacy Act &amp; Terms of Use</h2>
           </div>
 
           <p>
-            Welcome to the Ateneo de Davao University Alumni Information System. By registering and using this
-            platform, you agree to be bound by the following Terms and Conditions. Please read them carefully
-            before completing your registration. If you do not agree to these terms, you may not proceed with
-            registration or use the platform.
+            Welcome to the Ateneo de Davao University Alumni Portal. By registering and using this
+            platform — including its alumni directory, engagement and giveback programs, and the Graduate Tracer
+            Study — you agree to be bound by the following Terms and Conditions and Data Privacy Notice. Please
+            read them carefully before completing your registration. If you do not agree to these terms, you may
+            not proceed with registration or use the platform.
           </p>
 
           <div>
             <h3 className="font-semibold text-gray-800 mb-2">1. Eligibility</h3>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore
-              et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-              aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-              culpa qui officia deserunt mollit anim id est laborum.
+              This platform is intended for graduates and alumni of Ateneo de Davao University, as well as
+              authorized university administrators. By registering, you confirm that the information you provide
+              is your own and that you are a legitimate alumnus/alumna or authorized user of the system.
             </p>
           </div>
 
           <div>
-            <h3 className="font-semibold text-gray-800 mb-2">2. Collection and Use of Personal Information</h3>
+            <h3 className="font-semibold text-gray-800 mb-2">2. Data Privacy Notice and Legal Basis</h3>
             <p>
-              Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-              Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit
-              amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit
-              amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae,
-              ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci,
-              sagittis tempus lacus enim ac dui.
+              Ateneo de Davao University is committed to protecting your personal data in accordance with the
+              Data Privacy Act of 2012 (R.A. 10173). By registering for and using the Alumni Portal —
+              including participation in the Graduate Tracer Study — you agree to the collection and processing
+              of your information as described in this notice.
             </p>
           </div>
 
           <div>
-            <h3 className="font-semibold text-gray-800 mb-2">3. Accuracy of Information</h3>
+            <h3 className="font-semibold text-gray-800 mb-2">3. What Information We Collect</h3>
             <p>
-              Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus,
-              tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi,
-              tincidunt quis, accumsan porttitor, facilisis luctus, metus. Phasellus ultrices nulla quis nibh.
-              Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. Nam nulla quam, gravida
-              non, commodo a, sodales sit amet, nisi.
+              We collect personal and professional information necessary for your registration and continued use
+              of the platform, including your contact details, educational background, employment status, and,
+              where applicable, your feedback and responses submitted through the Graduate Tracer Study and other
+              alumni engagement features.
             </p>
           </div>
 
           <div>
-            <h3 className="font-semibold text-gray-800 mb-2">4. Privacy and Data Security</h3>
+            <h3 className="font-semibold text-gray-800 mb-2">4. How Your Information Is Collected</h3>
             <p>
-              Nullam eu ante vel est convallis dignissim. Fusce suscipit, wisi nec facilisis facilisis, est dui
-              fermentum leo, quis tempor ligula erat quis odio. Nunc porta vulputate tellus. Nunc rutrum turpis
-              sed pede. Sed bibendum. Aliquam posuere. Nunc aliquet, augue nec adipiscing interdum, lacus tellus
-              malesuada massa, quis varius mi purus non odio. Pellentesque condimentum, magna ut suscipit
-              hendrerit, ipsum augue ornare nulla, non luctus diam neque sit amet urna.
+              Your information is collected only through this official Alumni Portal — during
+              registration, profile updates, and your voluntary participation in surveys, events, and giveback
+              programs — solely for academic quality assurance, institutional planning, accreditation, curriculum
+              enhancement, graduate outcome assessment, and other legitimate educational purposes.
             </p>
           </div>
 
           <div>
-            <h3 className="font-semibold text-gray-800 mb-2">5. Prohibited Conduct</h3>
+            <h3 className="font-semibold text-gray-800 mb-2">5. How Your Information Is Processed</h3>
             <p>
-              Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. Integer
-              lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi.
-              Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales
-              libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac,
-              ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo.
+              Information provided by alumni is processed by the respective academic units as authorized by the
+              Office of Strategic Management and Quality Assurance (OSMQA). Designated system administrators from
+              the CS cluster who maintain this platform are bound by the University's data privacy and
+              confidentiality policies.
             </p>
           </div>
 
           <div>
-            <h3 className="font-semibold text-gray-800 mb-2">6. Account Verification and Approval</h3>
+            <h3 className="font-semibold text-gray-800 mb-2">6. How Your Information Is Used</h3>
             <p>
-              Sed pretium blandit orci. Ut eu diam at pede suscipit sodales. Aenean lectus elit, fermentum non,
-              convallis id, sagittis at, neque. Nullam mauris orci, aliquet et, iaculis et, viverra vitae, ligula.
-              Nulla ut felis in purus aliquam imperdiet. Maecenas aliquet mollis lectus. Vivamus consectetuer
-              risus et tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet, tortor sed
-              accumsan bibendum, erat ligula aliquet magna, vitae ornare odio metus a mi.
+              Your information and responses are used exclusively for institutional research and reporting, to
+              assess program quality, improve academic offerings, support alumni engagement, and fulfill
+              government reporting requirements (e.g., CHED). Your information will not be used for commercial
+              purposes or disclosed to unauthorized third parties unless required by law.
             </p>
           </div>
 
           <div>
-            <h3 className="font-semibold text-gray-800 mb-2">7. Amendments to Terms</h3>
+            <h3 className="font-semibold text-gray-800 mb-2">7. Confidentiality and Anonymization of Reports</h3>
             <p>
-              Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, pharetra a, ultricies in,
-              diam. Sed arcu. Cras consequat. Praesent dapibus, neque id cursus faucibus, tortor neque egestas
-              augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan
-              porttitor, facilisis luctus, metus. Ateneo de Davao University reserves the right to amend these
-              Terms and Conditions at any time without prior notice.
+              All responses are kept confidential. Reports, dashboards, statistical summaries, and research
+              outputs generated from platform data — including the Graduate Tracer Study — will present only
+              aggregated and anonymized data. Personally identifiable information, such as names and contact
+              details, will not be disclosed in published reports and will not be publicly attributed to you.
             </p>
           </div>
 
           <div>
-            <h3 className="font-semibold text-gray-800 mb-2">8. Governing Law</h3>
+            <h3 className="font-semibold text-gray-800 mb-2">8. Data Protection Measures</h3>
+            <p>
+              Appropriate administrative, organizational, technical, and physical safeguards are implemented to
+              protect the confidentiality, integrity, and security of all information collected through this
+              platform.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-gray-800 mb-2">9. Your Rights Under the Data Privacy Act</h3>
+            <p>
+              As a data subject, you retain your rights under the Data Privacy Act of 2012, including the right
+              to be informed, to access your personal information, to request correction of inaccurate data, and
+              to exercise other applicable rights in accordance with existing laws and University policies.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-gray-800 mb-2">10. Accuracy of Information</h3>
+            <p>
+              You are responsible for ensuring that the information you submit during registration and while
+              using the platform is true, accurate, and up to date. The University may request supporting
+              documents to verify your identity and alumni status.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-gray-800 mb-2">11. Prohibited Conduct</h3>
+            <p>
+              You agree not to misuse the platform, including submitting false information, impersonating
+              another person, attempting to access accounts or data that do not belong to you, or using the
+              platform for any unlawful or unauthorized purpose.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-gray-800 mb-2">12. Account Verification and Approval</h3>
+            <p>
+              New alumni accounts are subject to review and approval by University administrators before full
+              access is granted. The University reserves the right to request additional verification and to
+              suspend or deny accounts that do not meet eligibility requirements.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-gray-800 mb-2">13. Amendments to Terms</h3>
+            <p>
+              Ateneo de Davao University reserves the right to amend these Terms and Conditions and this Data
+              Privacy Notice at any time. Continued use of the platform after such changes constitutes your
+              acceptance of the updated terms.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-gray-800 mb-2">14. Governing Law</h3>
             <p>
               These Terms and Conditions shall be governed by and construed in accordance with the laws of the
-              Republic of the Philippines. Any dispute arising out of or relating to these terms shall be subject
-              to the exclusive jurisdiction of the courts of Davao City. By registering, you confirm that you have
-              read, understood, and agree to be bound by all the provisions set forth herein.
+              Republic of the Philippines, including the Data Privacy Act of 2012 (R.A. 10173). By registering,
+              you confirm that you have read, understood, and agree to be bound by all the provisions set forth
+              herein.
             </p>
           </div>
 
@@ -190,7 +236,7 @@ export function TermsAndConditionsPage() {
             </div>
             <span className="text-gray-700 text-sm leading-relaxed select-none">
               I have read and fully understood the Terms &amp; Conditions stated above. I agree to abide by all
-              provisions set forth by the Ateneo de Davao University Alumni Information System.
+              provisions set forth by the Ateneo de Davao University Alumni Portal.
             </span>
           </label>
 
