@@ -9,7 +9,7 @@ export function Footer() {
   const quickLinks: { label: string; to?: string; view?: any }[] = [
     { label: 'About Us', to: '/about' },
     { label: 'Events Calendar', view: 'events' },
-    { label: 'Alumni Careers', view: 'directory' },
+    { label: 'Alumni Chapters', view: 'directory' },
     { label: 'Career Services', view: 'careers' },
     { label: 'Mentorship Program', view: 'careers' },
   ];

@@ -12,6 +12,8 @@ use App\Http\Controllers\Api\EngagementActivityController;
 use App\Http\Controllers\Api\EngagementRegistrationController;
 use App\Http\Controllers\Api\GivebackPostController;
 use App\Http\Controllers\Api\GivebackAnalyticsController;
+use App\Http\Controllers\Api\ChapterController;
+use App\Http\Controllers\Api\ChapterOfficerController;
 
 Route::get('/test', function () {
     return response()->json([
@@ -90,6 +92,21 @@ Route::delete('/giveback/activities/{id}', [EngagementActivityController::class,
 Route::patch('/giveback/activities/{id}/toggle-registration', [EngagementActivityController::class, 'toggleRegistration']);
 Route::patch('/giveback/activities/{id}/archive', [EngagementActivityController::class, 'archive']);
 Route::patch('/giveback/activities/{id}/restore', [EngagementActivityController::class, 'restore']);
+
+// Chapters
+Route::get('/chapters', [ChapterController::class, 'index']);
+Route::get('/chapters/{id}', [ChapterController::class, 'show']);
+Route::post('/chapters', [ChapterController::class, 'store']);
+Route::put('/chapters/{id}', [ChapterController::class, 'update']);
+Route::delete('/chapters/{id}', [ChapterController::class, 'destroy']);
+
+// Chapter Officers
+Route::get('/chapter-officers', [ChapterOfficerController::class, 'index']);
+Route::post('/chapter-officers', [ChapterOfficerController::class, 'store']);
+Route::patch('/chapter-officers/{id}/approve', [ChapterOfficerController::class, 'approve']);
+Route::patch('/chapter-officers/{id}/reject', [ChapterOfficerController::class, 'reject']);
+Route::patch('/chapter-officers/{id}/deactivate', [ChapterOfficerController::class, 'deactivate']);
+Route::patch('/chapter-officers/{id}/reactivate', [ChapterOfficerController::class, 'reactivate']);
 
 // Community Engagement Registrations + Payments
 Route::get('/giveback/registrations', [EngagementRegistrationController::class, 'index']);

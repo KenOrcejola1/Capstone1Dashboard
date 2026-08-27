@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, Search, Edit, Trash2, Plus, X, Mail, Phone, MapPin, GraduationCap, Calendar, Shield, Lock, Unlock, Check, XCircle, Eye } from 'lucide-react';
+import { Users, Search, Edit, Trash2, Plus, X, Mail, Phone, MapPin, GraduationCap, Calendar, Shield, Lock, Unlock, Check, XCircle, Eye, Award, CheckCircle, UserMinus, RotateCcw } from 'lucide-react';
 
 const PROGRAM_OPTIONS = [
   // AB programs
@@ -118,15 +118,145 @@ interface User {
   created_at?: string;
 }
 
-interface UserManagementViewProps {
-  userRole: 'alumni' | 'admin';
+interface Chapter {
+  id: number;
+  name: string;
 }
 
-export function UserManagementView({ userRole }: UserManagementViewProps) {
+const CHAPTER_OFFICER_POSITIONS = [
+  'Chapter President',
+  'Vice President',
+  'VP External / Vice President for External Affairs',
+  'Secretary',
+  'Treasurer',
+  'Board Member',
+  'Events Coordinator',
+  'Communications/Public Relations Officer',
+  'Other',
+] as const;
+
+interface ChapterOfficerRow {
+  id: number;
+  position: string;
+  school_year: string;
+  status: 'pending' | 'approved' | 'rejected';
+  is_active: boolean;
+  chapter: Chapter;
+  user: {
+    id: number;
+    name?: string;
+    first_name?: string;
+    last_name?: string;
+    email: string;
+  };
+}
+
+function officerName(user: ChapterOfficerRow['user']) {
+  return user.name?.trim() || [user.first_name, user.last_name].filter(Boolean).join(' ').trim() || user.email;
+}
+
+function OfficerStatusBadge({ status, isActive }: { status: string; isActive: boolean }) {
+  if (status === 'approved' && !isActive) {
+    return <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-gray-100 text-gray-500">Deactivated</span>;
+  }
+  const styles: Record<string, string> = {
+    pending: 'bg-amber-100 text-amber-700',
+    approved: 'bg-green-100 text-green-700',
+    rejected: 'bg-red-100 text-red-700',
+  };
+  return <span className={`px-3 py-1 rounded-full text-[11px] font-bold capitalize ${styles[status] || 'bg-gray-100 text-gray-600'}`}>{status}</span>;
+}
+
+interface UserManagementViewProps {
+  userRole: 'alumni' | 'admin';
+  userEmail?: string;
+}
+
+export function UserManagementView({ userRole, userEmail = '' }: UserManagementViewProps) {
   const apiBaseUrl = 'http://localhost:8000';
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'all' | 'approval'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'approval' | 'officers'>('all');
+
+  // Officer assignments (merged in from the standalone Officer Management page)
+  const [officers, setOfficers] = useState<ChapterOfficerRow[]>([]);
+  const [chapters, setChapters] = useState<Chapter[]>([]);
+  const [loadingOfficers, setLoadingOfficers] = useState(false);
+  const [officerFilter, setOfficerFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('pending');
+  const [showAssignForm, setShowAssignForm] = useState(false);
+  const [assignFormError, setAssignFormError] = useState<string | null>(null);
+  const [submittingAssign, setSubmittingAssign] = useState(false);
+  const [assignForm, setAssignForm] = useState({ chapter_id: '', email: '', position: '', school_year: '' });
+  const [positionChoice, setPositionChoice] = useState('');
+
+  const fetchOfficers = async () => {
+    setLoadingOfficers(true);
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/chapter-officers`);
+      if (response.ok) setOfficers(await response.json());
+    } catch (error) {
+      console.error('Error fetching chapter officers:', error);
+    } finally {
+      setLoadingOfficers(false);
+    }
+  };
+
+  const fetchChapters = async () => {
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/chapters`);
+      if (response.ok) setChapters(await response.json());
+    } catch (error) {
+      console.error('Error fetching chapters:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'officers') {
+      fetchOfficers();
+      fetchChapters();
+    }
+  }, [activeTab]);
+
+  const handleAssignOfficer = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAssignFormError(null);
+    setSubmittingAssign(true);
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/chapter-officers`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...assignForm, admin_email: userEmail }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setAssignFormError(data.message || 'Failed to assign officer.');
+        return;
+      }
+      setAssignForm({ chapter_id: '', email: '', position: '', school_year: '' });
+      setPositionChoice('');
+      setShowAssignForm(false);
+      fetchOfficers();
+    } catch (error) {
+      setAssignFormError('Connection error. Make sure the server is running.');
+    } finally {
+      setSubmittingAssign(false);
+    }
+  };
+
+  const updateOfficerStatus = async (id: number, action: 'approve' | 'reject' | 'deactivate' | 'reactivate') => {
+    try {
+      await fetch(`${apiBaseUrl}/api/chapter-officers/${id}/${action}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ admin_email: userEmail }),
+      });
+      fetchOfficers();
+    } catch (error) {
+      console.error(`Error performing ${action}:`, error);
+    }
+  };
+
+  const filteredOfficers = officers.filter((o) => officerFilter === 'all' || o.status === officerFilter);
   const [pendingUsers, setPendingUsers] = useState<User[]>([]);
   const [loadingPending, setLoadingPending] = useState(false);
   const [selectedPendingUser, setSelectedPendingUser] = useState<User | null>(null);
@@ -543,6 +673,16 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
               </span>
             )}
           </button>
+          <button
+            onClick={() => setActiveTab('officers')}
+            className={`flex-1 px-4 py-2.5 text-sm font-semibold transition-colors flex items-center justify-center gap-2 ${
+              activeTab === 'officers'
+                ? 'bg-[#1a24d2] text-white'
+                : 'bg-white text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            <Award className="w-4 h-4" /> Officer Assignments
+          </button>
         </div>
       </div>
 
@@ -842,6 +982,180 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
               </table>
             </div>
           )}
+        </div>
+      )}
+
+      {activeTab === 'officers' && (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-gray-500">Assign alumni as chapter officers and verify their assignments. Only active, approved officers appear on the public Alumni Chapters page.</p>
+            <button
+              onClick={() => setShowAssignForm((v) => !v)}
+              className="flex items-center gap-2 px-5 py-2.5 bg-[#1a24d2] text-white rounded-lg font-bold text-sm hover:bg-[#141c9e] transition-colors shrink-0 ml-4"
+            >
+              <Plus className="w-4 h-4" /> Assign Officer
+            </button>
+          </div>
+
+          {showAssignForm && (
+            <form onSubmit={handleAssignOfficer} className="bg-white rounded-xl border-2 border-[#1a24d2]/20 p-6 space-y-4 text-left shadow-sm">
+              {assignFormError && <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm">{assignFormError}</div>}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">Chapter</label>
+                  <select
+                    required
+                    value={assignForm.chapter_id}
+                    onChange={(e) => setAssignForm({ ...assignForm, chapter_id: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
+                  >
+                    <option value="">Select chapter</option>
+                    {chapters.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">Alumni Email</label>
+                  <input
+                    required
+                    type="email"
+                    placeholder="alumnus@email.com"
+                    value={assignForm.email}
+                    onChange={(e) => setAssignForm({ ...assignForm, email: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">Position</label>
+                  <select
+                    required
+                    value={positionChoice}
+                    onChange={(e) => {
+                      const choice = e.target.value;
+                      setPositionChoice(choice);
+                      setAssignForm({ ...assignForm, position: choice === 'Other' ? '' : choice });
+                    }}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
+                  >
+                    <option value="" disabled>Select position</option>
+                    {CHAPTER_OFFICER_POSITIONS.map((position) => (
+                      <option key={position} value={position}>{position}</option>
+                    ))}
+                  </select>
+                  {positionChoice === 'Other' && (
+                    <input
+                      required
+                      type="text"
+                      placeholder="Specify position"
+                      value={assignForm.position}
+                      onChange={(e) => setAssignForm({ ...assignForm, position: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] mt-2"
+                    />
+                  )}
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">School Year</label>
+                  <input
+                    required
+                    type="text"
+                    placeholder="e.g. 2026-2027"
+                    value={assignForm.school_year}
+                    onChange={(e) => setAssignForm({ ...assignForm, school_year: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <button type="submit" disabled={submittingAssign} className="px-6 py-2.5 bg-[#1a24d2] text-white rounded-lg font-bold text-sm disabled:opacity-50">
+                  {submittingAssign ? 'Assigning...' : 'Submit for Verification'}
+                </button>
+                <button type="button" onClick={() => setShowAssignForm(false)} className="px-6 py-2.5 border border-gray-200 rounded-lg font-bold text-sm text-gray-600">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          )}
+
+          <div className="flex gap-2">
+            {(['pending', 'approved', 'rejected', 'all'] as const).map((f) => (
+              <button
+                key={f}
+                onClick={() => setOfficerFilter(f)}
+                className={`px-4 py-2 rounded-lg text-xs font-bold capitalize transition-colors ${officerFilter === f ? 'bg-[#1a24d2] text-white' : 'bg-white border border-gray-200 text-gray-500'}`}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+
+          <div className="bg-white rounded-xl border-2 border-[#1a24d2]/20 shadow-sm overflow-hidden">
+            {loadingOfficers && <div className="p-6 text-sm text-gray-500 text-left">Loading officer assignments...</div>}
+            {!loadingOfficers && filteredOfficers.length === 0 && (
+              <div className="p-12 text-center text-gray-500">
+                <Award className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+                <h3 className="text-xl font-semibold text-gray-700 mb-2">No Officer Assignments</h3>
+                <p className="text-gray-500">No officer assignments found for this filter.</p>
+              </div>
+            )}
+            {!loadingOfficers && filteredOfficers.length > 0 && (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-[#1a24d2] text-white">
+                    <tr>
+                      <th className="px-6 py-4 text-left font-semibold">Alumnus</th>
+                      <th className="px-6 py-4 text-left font-semibold">Chapter</th>
+                      <th className="px-6 py-4 text-left font-semibold">Position</th>
+                      <th className="px-6 py-4 text-left font-semibold">School Year</th>
+                      <th className="px-6 py-4 text-left font-semibold">Status</th>
+                      <th className="px-6 py-4 text-center font-semibold">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {filteredOfficers.map((officer) => (
+                      <tr key={officer.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4">
+                          <div className="font-bold text-sm text-gray-900">{officerName(officer.user)}</div>
+                          <div className="text-xs text-gray-400">{officer.user.email}</div>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">{officer.chapter?.name}</td>
+                        <td className="px-6 py-4 text-sm text-gray-600">{officer.position}</td>
+                        <td className="px-6 py-4 text-sm text-gray-600">{officer.school_year}</td>
+                        <td className="px-6 py-4"><OfficerStatusBadge status={officer.status} isActive={officer.is_active} /></td>
+                        <td className="px-6 py-4">
+                          <div className="flex gap-2 justify-center">
+                            {officer.status === 'pending' && (
+                              <>
+                                <button onClick={() => updateOfficerStatus(officer.id, 'approve')} title="Approve" className="p-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                                  <CheckCircle className="w-4 h-4" />
+                                </button>
+                                <button onClick={() => updateOfficerStatus(officer.id, 'reject')} title="Reject" className="p-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                                  <XCircle className="w-4 h-4" />
+                                </button>
+                              </>
+                            )}
+                            {officer.status === 'approved' && officer.is_active && (
+                              <button onClick={() => updateOfficerStatus(officer.id, 'deactivate')} title="Deactivate / expire this assignment" className="p-1.5 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                                <UserMinus className="w-4 h-4" />
+                              </button>
+                            )}
+                            {officer.status === 'approved' && !officer.is_active && (
+                              <button onClick={() => updateOfficerStatus(officer.id, 'reactivate')} title="Reactivate this assignment" className="p-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                <RotateCcw className="w-4 h-4" />
+                              </button>
+                            )}
+                            {officer.status === 'rejected' && (
+                              <button onClick={() => updateOfficerStatus(officer.id, 'approve')} title="Reapprove" className="p-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                                <CheckCircle className="w-4 h-4" />
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
       )}
 

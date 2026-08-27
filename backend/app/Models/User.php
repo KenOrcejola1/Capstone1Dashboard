@@ -80,4 +80,24 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function chapterOfficerAssignments()
+    {
+        return $this->hasMany(ChapterOfficer::class);
+    }
+
+    /**
+     * Whether this user currently has at least one approved, active officer
+     * assignment. This is the check event-proposal features should use to
+     * gate reunion proposals — an assignment that's pending, rejected, or
+     * deactivated (e.g. a past school year the admin has since expired)
+     * does not count.
+     */
+    public function hasActiveOfficerAssignment(): bool
+    {
+        return $this->chapterOfficerAssignments()
+            ->where('status', 'approved')
+            ->where('is_active', true)
+            ->exists();
+    }
 }

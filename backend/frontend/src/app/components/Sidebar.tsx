@@ -34,7 +34,7 @@ export function Sidebar({ activeView, onNavigate, userRole, open }: SidebarProps
   const baseMenuItems = [
     { id: 'home',        label: 'Home',                 icon: Home },
     { id: 'news',        label: 'News & Updates',       icon: Newspaper },
-    { id: 'directory',   label: 'Alumni Careers',       icon: Users },
+    { id: 'directory',   label: 'Alumni Chapters',       icon: Users },
     { id: 'events',      label: 'Engagement',           icon: Calendar },
     { id: 'surveys',     label: 'Tracer & Surveys',     icon: ClipboardList },
     { id: 'careers',     label: 'Careers',              icon: Briefcase },
