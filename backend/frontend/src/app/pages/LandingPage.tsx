@@ -129,7 +129,7 @@ export function LandingPage(): React.ReactElement {
 
   const quickLinks: { label: string; to?: string }[] = [
     { label: 'About Us', to: '/about' },
-    { label: 'Alumni Careers' },
+    { label: 'Alumni Chapters' },
     { label: 'Benefits' },
     { label: 'Donate' },
   ];

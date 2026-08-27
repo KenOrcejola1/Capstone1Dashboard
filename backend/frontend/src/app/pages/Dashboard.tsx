@@ -27,6 +27,7 @@ export function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const userRole = (localStorage.getItem('userRole') as 'alumni' | 'admin') || 'alumni';
+  const userEmail = localStorage.getItem('userEmail') || '';
 
   const renderView = () => {
     switch (activeView) {
@@ -59,7 +60,7 @@ export function Dashboard() {
       case 'internships':
         return <InternshipPostingsView role={userRole} />;
       case 'users':
-        return <UserManagementView userRole={userRole} />;
+        return <UserManagementView userRole={userRole} userEmail={userEmail} />;
       default: 
         return <HomeView userRole={userRole} onNavigate={setActiveView} />;
     }
