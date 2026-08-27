@@ -180,14 +180,14 @@ export function RegistrationManagement({ userRole }: RegistrationManagementProps
                   placeholder="Search registrants..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] w-64"
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] w-64"
                 />
               </div>
 
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
               >
                 <option value="all">All Status</option>
                 <option value="pending">Pending</option>
@@ -198,7 +198,7 @@ export function RegistrationManagement({ userRole }: RegistrationManagementProps
               <select
                 value={eventFilter}
                 onChange={(e) => setEventFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
               >
                 <option value="all">All Events</option>
                 {events.map((event) => (
@@ -211,7 +211,7 @@ export function RegistrationManagement({ userRole }: RegistrationManagementProps
 
             <button
               onClick={exportToCSV}
-              className="flex items-center gap-2 px-4 py-2 bg-[#003087] text-white rounded-lg hover:bg-[#002566] transition-colors font-semibold"
+              className="flex items-center gap-2 px-4 py-2 bg-[#1a24d2] text-white rounded-lg hover:bg-[#002566] transition-colors font-semibold"
             >
               <Download className="w-4 h-4" /> Export CSV
             </button>
@@ -312,7 +312,7 @@ export function RegistrationManagement({ userRole }: RegistrationManagementProps
                             href={`http://localhost:8000/api/giveback/registrations/${reg.id}/receipt`}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-[#003087] hover:text-blue-700 font-medium text-sm"
+                            className="text-[#1a24d2] hover:text-blue-700 font-medium text-sm"
                             title="Download Receipt"
                           >
                             <Download className="w-5 h-5" />

@@ -5,11 +5,11 @@ import ADDULogo from '../../assets/ADDULogo.jpg';
 import campusNight from '../../assets/Roxas-Colored.jpg';
 
 const C = {
-  navy:   '#001F5B',
-  navyDk: '#00153D',
-  blue:   '#003087',
-  gold:   '#C5A96A',
-  goldLt: '#D4BC86',
+  navy:   '#0d1b3e',
+  navyDk: '#09107a',
+  blue:   '#1a24d2',
+  gold:   '#c9a227',
+  goldLt: '#f5b800',
   slate:  '#2C3E50',
   muted:  '#6B7280',
   white:  '#FFFFFF',
@@ -345,7 +345,7 @@ export function RegisterPage() {
     <div className="min-h-screen flex bg-gray-100" style={{ fontFamily: "'DM Sans', sans-serif" }}>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap');
       `}</style>
 
       {/* Left Side */}
@@ -400,19 +400,19 @@ export function RegisterPage() {
           </div>
 
           {/* Eyebrow */}
-          <span style={{
-            display: 'inline-block',
-            padding: '3px 14px',
-            borderRadius: 100,
-            border: `1px solid ${C.gold}`,
-            color: C.gold,
-            fontSize: 10,
-            fontWeight: 500,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            marginBottom: 20,
-          }}>
-            Ad Majorem Dei Gloriam
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+            <span style={{ width: 24, height: 2, background: C.gold, flexShrink: 0 }} />
+            <span style={{
+              fontFamily: "'Cinzel', serif",
+              color: C.gold,
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+            }}>
+              Ad Majorem Dei Gloriam
+            </span>
+            <span style={{ width: 24, height: 2, background: C.gold, flexShrink: 0 }} />
           </span>
 
           {/* Headline */}
@@ -489,7 +489,7 @@ export function RegisterPage() {
             </div>
           </div>
 
-          <h2 className="text-3xl font-bold text-[#003087] mb-2">Register</h2>
+          <h2 className="text-3xl font-bold text-[#1a24d2] mb-2">Register</h2>
           <p className="text-gray-600 mb-8">Create your alumni account</p>
 
           <form onSubmit={handleSubmit}>
@@ -974,9 +974,9 @@ export function RegisterPage() {
             <h2 className="text-2xl font-bold text-gray-900 mb-3">Registration Submitted Successfully!</h2>
             <p className="text-gray-600 leading-relaxed mb-8">
               Your registered account will be verified by an administrator within{' '}
-              <span className="font-semibold text-[#003087]">24 to 48 hours</span>. You will be able to log in once your account has been approved.
+              <span className="font-semibold text-[#1a24d2]">24 to 48 hours</span>. You will be able to log in once your account has been approved.
             </p>
-            <button onClick={() => navigate('/login')} className="w-full py-3 bg-[#003087] text-white rounded-xl font-semibold text-base hover:bg-[#002066] transition-colors shadow-md">
+            <button onClick={() => navigate('/login')} className="w-full py-3 bg-[#1a24d2] text-white rounded-xl font-semibold text-base hover:bg-[#002066] transition-colors shadow-md">
               Go to Login
             </button>
           </div>

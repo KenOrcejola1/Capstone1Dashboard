@@ -7,13 +7,13 @@ import webDevEventImage from '../../../assets/WebDevBG.jpg';
 import careerDevImage from '../../../assets/CareerDevBG.jpg';
 
 const C = {
-  navy:   '#001F5B',
-  navyDk: '#00153D',
-  blue:   '#003087',
-  gold:   '#C5A96A',
-  goldLt: '#D4BC86',
+  navy:   '#0d1b3e',
+  navyDk: '#09107a',
+  blue:   '#1a24d2',
+  gold:   '#c9a227',
+  goldLt: '#f5b800',
   slate:  '#2C3E50',
-  muted:  '#6B7280',
+  muted:  '#475569',
 } as const;
 
 interface HomeViewProps {
@@ -28,17 +28,17 @@ function EventCard({ title, date, time, location, type, image }: any) {
       <div className="relative h-56 overflow-hidden">
         <img src={image} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
         <div className="absolute top-4 right-4">
-          <span className="px-4 py-1 bg-[#003087] text-white text-[10px] rounded-full font-bold uppercase tracking-wider">{type}</span>
+          <span className="px-4 py-1.5 bg-[#1a24d2] text-white text-[11px] rounded-full font-bold uppercase tracking-wider">{type}</span>
         </div>
       </div>
       <div className="p-6 flex flex-col flex-grow text-left">
-        <h3 className="text-lg font-bold mb-4 text-[#003087] leading-tight whitespace-pre-line line-clamp-2">{title}</h3>
-        <div className="space-y-2.5 mb-6 text-xs text-gray-500 font-medium">
-          <div className="flex items-center gap-3"><Calendar className="w-4 h-4 text-[#003087]" /><span>{date}</span></div>
-          <div className="flex items-center gap-3"><Clock className="w-4 h-4 text-[#003087]" /><span>{time}</span></div>
-          <div className="flex items-center gap-3"><MapPin className="w-4 h-4 text-[#003087]" /><span>{location}</span></div>
+        <h3 className="text-xl font-bold mb-4 text-[#1a24d2] leading-tight whitespace-pre-line line-clamp-2">{title}</h3>
+        <div className="space-y-3 mb-6 text-sm text-gray-600 font-medium">
+          <div className="flex items-center gap-3"><Calendar className="w-4 h-4 text-[#1a24d2] flex-shrink-0" /><span>{date}</span></div>
+          <div className="flex items-center gap-3"><Clock className="w-4 h-4 text-[#1a24d2] flex-shrink-0" /><span>{time}</span></div>
+          <div className="flex items-center gap-3"><MapPin className="w-4 h-4 text-[#1a24d2] flex-shrink-0" /><span>{location}</span></div>
         </div>
-        <button className="mt-auto w-full py-3 border-2 border-[#003087] text-[#003087] rounded-xl hover:bg-[#003087] hover:text-white transition-all font-bold text-sm">
+        <button className="mt-auto w-full py-3.5 border-2 border-[#1a24d2] text-[#1a24d2] rounded-xl hover:bg-[#1a24d2] hover:text-white transition-all font-bold text-base">
           Learn More
         </button>
       </div>
@@ -78,10 +78,10 @@ function SpotlightCard({ name, classYear, title, excerpt, category }: any) {
           <Icon size={18} color={C.blue} />
         </div>
         <span style={{
-          fontSize: 10, fontWeight: 700, letterSpacing: '0.12em',
+          fontSize: 12, fontWeight: 700, letterSpacing: '0.1em',
           textTransform: 'uppercase', color: C.blue,
           background: 'rgba(0,48,135,0.07)',
-          padding: '3px 12px', borderRadius: 100,
+          padding: '4px 12px', borderRadius: 100,
         }}>
           {category}
         </span>
@@ -91,25 +91,25 @@ function SpotlightCard({ name, classYear, title, excerpt, category }: any) {
 
       <h3 style={{
         fontFamily: "'Cormorant Garamond', serif",
-        fontSize: '1.6rem', fontWeight: 600,
+        fontSize: '1.7rem', fontWeight: 600,
         color: C.navy, lineHeight: 1.2, margin: 0,
       }}>
         {name}
       </h3>
 
-      <p style={{ fontSize: 12, color: C.muted, fontWeight: 400, margin: 0 }}>
+      <p style={{ fontSize: 13.5, color: C.muted, fontWeight: 400, margin: 0 }}>
         Class of {classYear}
       </p>
 
       <p style={{
-        fontSize: 11, fontWeight: 700, letterSpacing: '0.08em',
+        fontSize: 12.5, fontWeight: 700, letterSpacing: '0.06em',
         textTransform: 'uppercase', color: C.blue, margin: 0,
       }}>
         {title}
       </p>
 
       <p style={{
-        fontSize: 13, color: '#6B7280', lineHeight: 1.7,
+        fontSize: 14.5, color: C.muted, lineHeight: 1.75,
         margin: 0, flexGrow: 1,
       }}>
         {excerpt}
@@ -119,7 +119,7 @@ function SpotlightCard({ name, classYear, title, excerpt, category }: any) {
         style={{
           background: 'none', border: 'none', cursor: 'pointer',
           fontFamily: "'DM Sans', sans-serif",
-          fontSize: 13, fontWeight: 700, color: C.blue,
+          fontSize: 14, fontWeight: 700, color: C.blue,
           padding: 0, display: 'flex', alignItems: 'center', gap: 4,
           transition: 'transform 0.2s',
           alignSelf: 'flex-start',
@@ -149,13 +149,11 @@ export function HomeView({ userRole, onNavigate, onLogout }: HomeViewProps) {
     { title: "Career Development\nWorkshop",   date: "Coming Soon", time: "TBA", location: "Virtual",                   type: "Professional", image: careerDevImage },
   ];
 
-  const contactEmail = "mailto:alumni@addu.edu.ph";
-
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8FAFC]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+    <div className="flex flex-col min-h-screen bg-[#f0f2f9]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;700&display=swap');
       `}</style>
 
       <div className="p-8 space-y-24 flex-1">
@@ -184,14 +182,17 @@ export function HomeView({ userRole, onNavigate, onLogout }: HomeViewProps) {
           }} />
 
           <div style={{ position: 'relative', zIndex: 2, maxWidth: 680, padding: '0 2rem' }}>
-            <span style={{
-              display: 'inline-block', marginBottom: 20,
-              padding: '3px 16px', borderRadius: 100,
-              border: `1px solid ${C.gold}`, color: C.gold,
-              fontSize: 10, fontWeight: 500, letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-            }}>
-              Ad Majorem Dei Gloriam
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+              <span style={{ width: 26, height: 2, background: C.gold, flexShrink: 0 }} />
+              <span style={{
+                fontFamily: "'Cinzel', serif",
+                color: C.gold,
+                fontSize: 12, fontWeight: 700, letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+              }}>
+                Ad Majorem Dei Gloriam
+              </span>
+              <span style={{ width: 26, height: 2, background: C.gold, flexShrink: 0 }} />
             </span>
 
             <h1 style={{
@@ -205,9 +206,9 @@ export function HomeView({ userRole, onNavigate, onLogout }: HomeViewProps) {
             </h1>
 
             <p style={{
-              fontSize: 15, fontWeight: 300,
-              color: 'rgba(255,255,255,0.7)',
-              lineHeight: 1.8, maxWidth: 480, margin: '0 auto 40px',
+              fontSize: 17, fontWeight: 300,
+              color: 'rgba(255,255,255,0.82)',
+              lineHeight: 1.75, maxWidth: 500, margin: '0 auto 40px',
             }}>
               Connecting generations of excellence. Join our community of 50,000+ alumni making a difference worldwide.
             </p>
@@ -216,10 +217,10 @@ export function HomeView({ userRole, onNavigate, onLogout }: HomeViewProps) {
               <button
                 onClick={() => onNavigate('profile')}
                 style={{
-                  padding: '14px 32px', background: C.blue,
+                  padding: '15px 34px', background: C.blue,
                   color: '#fff', border: 'none', borderRadius: 100,
                   fontFamily: "'DM Sans', sans-serif",
-                  fontSize: 14, fontWeight: 500, cursor: 'pointer',
+                  fontSize: 16, fontWeight: 500, cursor: 'pointer',
                   transition: 'background 0.2s, transform 0.15s',
                 }}
                 onMouseOver={(e) => { e.currentTarget.style.background = C.navyDk; e.currentTarget.style.transform = 'translateY(-1px)'; }}
@@ -230,13 +231,13 @@ export function HomeView({ userRole, onNavigate, onLogout }: HomeViewProps) {
               <button
                 onClick={() => onNavigate('events')}
                 style={{
-                  padding: '14px 32px',
+                  padding: '15px 34px',
                   background: 'transparent',
                   color: '#fff',
                   border: '1.5px solid rgba(255,255,255,0.6)',
                   borderRadius: 100,
                   fontFamily: "'DM Sans', sans-serif",
-                  fontSize: 14, fontWeight: 500, cursor: 'pointer',
+                  fontSize: 16, fontWeight: 500, cursor: 'pointer',
                   transition: 'background 0.2s',
                 }}
                 onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
@@ -258,7 +259,7 @@ export function HomeView({ userRole, onNavigate, onLogout }: HomeViewProps) {
           ].map((stat, i) => (
             <div key={i} className="flex flex-col items-center">
               <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mb-6">
-                <stat.icon className="w-8 h-8 text-[#003087]" />
+                <stat.icon className="w-8 h-8 text-[#1a24d2]" />
               </div>
               <div style={{
                 fontFamily: "'Cormorant Garamond', serif",
@@ -267,7 +268,7 @@ export function HomeView({ userRole, onNavigate, onLogout }: HomeViewProps) {
               }}>
                 {stat.value}
               </div>
-              <div className="text-gray-400 font-bold text-[10px] uppercase tracking-[0.2em]">{stat.label}</div>
+              <div className="text-gray-600 font-bold text-[12px] uppercase tracking-[0.15em]">{stat.label}</div>
             </div>
           ))}
         </section>
@@ -286,7 +287,7 @@ export function HomeView({ userRole, onNavigate, onLogout }: HomeViewProps) {
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: 13, fontWeight: 500, color: C.blue,
+                fontSize: 15, fontWeight: 600, color: C.blue,
               }}
             >
               View All
@@ -309,7 +310,7 @@ export function HomeView({ userRole, onNavigate, onLogout }: HomeViewProps) {
               Alumni Spotlights
             </h2>
             <div style={{ width: 48, height: 2, background: C.gold, borderRadius: 2, margin: '12px auto 12px' }} />
-            <p style={{ fontSize: 14, color: C.muted, fontWeight: 300 }}>
+            <p style={{ fontSize: 15.5, color: C.muted, fontWeight: 400 }}>
               Inspiring stories of Ateneans making an impact
             </p>
           </div>
@@ -320,46 +321,6 @@ export function HomeView({ userRole, onNavigate, onLogout }: HomeViewProps) {
           </div>
         </section>
 
-      </div>
-
-      {/* Help/Support Strip */}
-      <div style={{
-        background: 'rgba(0,48,135,0.04)',
-        borderTop: '1px solid rgba(0,48,135,0.08)',
-        padding: '20px 40px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: 12,
-        fontFamily: "'DM Sans', sans-serif",
-      }}>
-        <div>
-          <p style={{ fontSize: 13, fontWeight: 500, color: C.navy, margin: 0 }}>Need help or have questions?</p>
-          <p style={{ fontSize: 12, color: C.muted, margin: 0 }}>
-            Reach us at{' '}
-            <a href={contactEmail} style={{ color: C.blue, fontWeight: 500 }}>alumni@addu.edu.ph</a>
-            {' '}&middot; (082) 221-2411
-          </p>
-        </div>
-        <a
-          href={contactEmail}
-          style={{
-            display: 'inline-block',
-            padding: '10px 24px',
-            background: C.blue,
-            color: '#fff',
-            borderRadius: 100,
-            fontSize: 13,
-            fontWeight: 500,
-            textDecoration: 'none',
-            transition: 'background 0.2s',
-          }}
-          onMouseOver={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.background = C.navyDk)}
-          onMouseOut={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.background = C.blue)}
-        >
-          Contact Us
-        </a>
       </div>
 
       <Footer />

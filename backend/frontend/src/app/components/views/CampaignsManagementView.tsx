@@ -198,7 +198,7 @@ export function CampaignsManagementView({ userRole }: CampaignsManagementViewPro
           </div>
           <button
             onClick={() => setShowForm(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-[#003087] text-white rounded-xl font-semibold hover:bg-[#002566] transition-all shadow-lg"
+            className="flex items-center gap-2 px-6 py-3 bg-[#1a24d2] text-white rounded-xl font-semibold hover:bg-[#002566] transition-all shadow-lg"
           >
             <Plus className="w-5 h-5" />
             New Campaign
@@ -228,7 +228,7 @@ export function CampaignsManagementView({ userRole }: CampaignsManagementViewPro
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     required
-                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                     placeholder="e.g., Scholarship Fund 2026"
                   />
                 </div>
@@ -242,7 +242,7 @@ export function CampaignsManagementView({ userRole }: CampaignsManagementViewPro
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     required
                     rows={4}
-                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                     placeholder="Describe the campaign and its purpose..."
                   />
                 </div>
@@ -256,7 +256,7 @@ export function CampaignsManagementView({ userRole }: CampaignsManagementViewPro
                       type="text"
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                       placeholder="e.g., Scholarships, Infrastructure"
                     />
                   </div>
@@ -269,7 +269,7 @@ export function CampaignsManagementView({ userRole }: CampaignsManagementViewPro
                       type="text"
                       value={formData.image_url}
                       onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                       placeholder="https://example.com/image.jpg"
                       disabled={!!selectedImage}
                     />
@@ -285,7 +285,7 @@ export function CampaignsManagementView({ userRole }: CampaignsManagementViewPro
                       type="file"
                       accept="image/jpeg,image/png,image/jpg,image/gif,image/webp"
                       onChange={handleImageChange}
-                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#003087] file:text-white hover:file:bg-[#002566] file:cursor-pointer"
+                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#1a24d2] file:text-white hover:file:bg-[#002566] file:cursor-pointer"
                     />
                     {imagePreview && (
                       <div className="relative w-full h-48 rounded-xl overflow-hidden border-2 border-gray-200">
@@ -325,7 +325,7 @@ export function CampaignsManagementView({ userRole }: CampaignsManagementViewPro
                       required
                       min="1"
                       step="0.01"
-                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                       placeholder="50000"
                     />
                   </div>
@@ -339,7 +339,7 @@ export function CampaignsManagementView({ userRole }: CampaignsManagementViewPro
                       value={formData.end_date}
                       onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
                       required
-                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                     />
                   </div>
                 </div>
@@ -354,7 +354,7 @@ export function CampaignsManagementView({ userRole }: CampaignsManagementViewPro
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 py-3 bg-[#003087] text-white rounded-xl font-semibold hover:bg-[#002566] transition-all"
+                    className="flex-1 py-3 bg-[#1a24d2] text-white rounded-xl font-semibold hover:bg-[#002566] transition-all"
                   >
                     {editingCampaign ? 'Update Campaign' : 'Create Campaign'}
                   </button>
@@ -400,7 +400,7 @@ export function CampaignsManagementView({ userRole }: CampaignsManagementViewPro
                         <tr key={donor.id} className="border-b border-gray-100 hover:bg-gray-50">
                           <td className="py-3 px-4">{donor.full_name}</td>
                           <td className="py-3 px-4 text-gray-600">{donor.email}</td>
-                          <td className="py-3 px-4 text-right font-semibold text-[#003087]">
+                          <td className="py-3 px-4 text-right font-semibold text-[#1a24d2]">
                             ₱{donor.amount.toLocaleString()}
                           </td>
                           <td className="py-3 px-4 text-gray-600">
@@ -414,7 +414,7 @@ export function CampaignsManagementView({ userRole }: CampaignsManagementViewPro
                         <td colSpan={2} className="py-3 px-4 font-semibold text-gray-700">
                           Total Donations: {selectedCampaignDonors.length}
                         </td>
-                        <td className="py-3 px-4 text-right font-bold text-[#003087]">
+                        <td className="py-3 px-4 text-right font-bold text-[#1a24d2]">
                           ₱{selectedCampaignDonors.reduce((sum, d) => sum + d.amount, 0).toLocaleString()}
                         </td>
                         <td></td>
@@ -470,7 +470,7 @@ export function CampaignsManagementView({ userRole }: CampaignsManagementViewPro
               {/* Stats */}
               <div className="space-y-3 mb-4">
                 <div className="flex items-center gap-2 text-sm">
-                  <Target className="w-4 h-4 text-[#003087]" />
+                  <Target className="w-4 h-4 text-[#1a24d2]" />
                   <span className="text-gray-700">
                     Goal: <span className="font-semibold">₱{campaign.goal_amount.toLocaleString()}</span>
                   </span>
@@ -493,13 +493,13 @@ export function CampaignsManagementView({ userRole }: CampaignsManagementViewPro
               <div className="mb-4">
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-600">Progress</span>
-                  <span className="font-semibold text-[#003087]">
+                  <span className="font-semibold text-[#1a24d2]">
                     {campaign.progress_percentage}%
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
-                    className="bg-[#003087] h-2 rounded-full transition-all"
+                    className="bg-[#1a24d2] h-2 rounded-full transition-all"
                     style={{ width: `${Math.min(campaign.progress_percentage, 100)}%` }}
                   />
                 </div>

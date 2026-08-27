@@ -201,7 +201,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                   status: 'upcoming',
                 });
               }}
-              className="flex items-center gap-2 text-gray-500 font-bold mb-8 hover:text-[#003087] transition-all"
+              className="flex items-center gap-2 text-gray-500 font-bold mb-8 hover:text-[#1a24d2] transition-all"
             >
               <ChevronLeft className="w-5 h-5" /> Back to Projects
             </button>
@@ -220,7 +220,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     placeholder="e.g., Community Water Project"
-                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all"
+                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                   />
                 </div>
 
@@ -231,7 +231,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     placeholder="Describe the project goals and impact..."
                     rows={4}
-                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all resize-none"
+                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all resize-none"
                   />
                 </div>
 
@@ -241,7 +241,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                     <select
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all appearance-none"
+                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all appearance-none"
                     >
                       <option value="">Select Category</option>
                       <option>Infrastructure</option>
@@ -259,7 +259,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                       value={formData.collaboration_partner}
                       onChange={(e) => setFormData({ ...formData, collaboration_partner: e.target.value })}
                       placeholder="e.g., OSMQA Organization"
-                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all"
+                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                     />
                   </div>
                 </div>
@@ -272,7 +272,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                       value={formData.budget_goal}
                       onChange={(e) => setFormData({ ...formData, budget_goal: e.target.value })}
                       placeholder="0.00"
-                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all"
+                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                     />
                   </div>
 
@@ -282,7 +282,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                       type="date"
                       value={formData.target_date}
                       onChange={(e) => setFormData({ ...formData, target_date: e.target.value })}
-                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all"
+                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                     />
                   </div>
                 </div>
@@ -296,7 +296,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                   </button>
                   <button
                     onClick={handleCreateProject}
-                    className="flex-1 py-4 bg-[#003087] text-white rounded-xl font-bold shadow-lg hover:bg-blue-800 transition-all"
+                    className="flex-1 py-4 bg-[#1a24d2] text-white rounded-xl font-bold shadow-lg hover:bg-blue-800 transition-all"
                   >
                     Create Project
                   </button>
@@ -314,7 +314,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
     <div className="flex flex-col min-h-screen bg-white">
       <main className="flex-1">
         {/* HERO */}
-        <div className="bg-[#003087] text-white py-24 px-8 text-center">
+        <div className="bg-[#1a24d2] text-white py-24 px-8 text-center">
           <div className="max-w-4xl mx-auto space-y-6">
             <h1 className="text-5xl font-bold leading-tight">Give Back Projects</h1>
             <p className="text-xl text-blue-100 leading-relaxed max-w-3xl mx-auto">
@@ -345,7 +345,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                 onClick={() => setActiveTab(tab)}
                 className={`pb-4 text-base font-bold transition-all border-b-4 capitalize ${
                   activeTab === tab
-                    ? 'border-[#003087] text-[#003087]'
+                    ? 'border-[#1a24d2] text-[#1a24d2]'
                     : 'border-transparent text-gray-400 hover:text-gray-600'
                 }`}
               >
@@ -372,20 +372,20 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                   <div className="flex flex-col md:flex-row gap-8">
                     {/* Left: Image/Icon */}
                     <div className="md:w-2/5 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl h-64 flex items-center justify-center shrink-0">
-                      <Target className="w-20 h-20 text-[#003087] opacity-30" />
+                      <Target className="w-20 h-20 text-[#1a24d2] opacity-30" />
                     </div>
 
                     {/* Right: Content */}
                     <div className="md:w-3/5 flex flex-col">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex-1">
-                          <span className="inline-block bg-blue-100 text-[#003087] text-xs font-bold px-3 py-1 rounded-full mb-3">
+                          <span className="inline-block bg-blue-100 text-[#1a24d2] text-xs font-bold px-3 py-1 rounded-full mb-3">
                             {project.category}
                           </span>
                           <h3 className="text-2xl font-bold text-gray-900 mb-2">{project.title}</h3>
                           <p className="text-gray-600 text-sm leading-relaxed">{project.description.substring(0, 150)}...</p>
                           {project.collaboration_partner && (
-                            <p className="text-sm text-[#003087] font-semibold mt-2 flex items-center gap-2">
+                            <p className="text-sm text-[#1a24d2] font-semibold mt-2 flex items-center gap-2">
                               <Heart className="w-4 h-4" /> Partnership: {project.collaboration_partner}
                             </p>
                           )}
@@ -403,11 +403,11 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                       <div className="mt-6">
                         <div className="flex justify-between items-center mb-2">
                           <span className="text-sm font-semibold text-gray-600">Progress</span>
-                          <span className="text-sm font-bold text-[#003087]">{project.progress_percentage || 0}%</span>
+                          <span className="text-sm font-bold text-[#1a24d2]">{project.progress_percentage || 0}%</span>
                         </div>
                         <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden mb-4">
                           <div
-                            className="h-full bg-[#003087] rounded-full transition-all"
+                            className="h-full bg-[#1a24d2] rounded-full transition-all"
                             style={{ width: `${Math.min(100, project.progress_percentage || 0)}%` }}
                           ></div>
                         </div>
@@ -417,7 +417,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
                         <div className="bg-blue-50 rounded-xl p-4">
                           <span className="text-xs font-semibold text-gray-600">Goal</span>
-                          <p className="text-lg font-bold text-[#003087]">₱{parseFloat(project.budget_goal).toLocaleString()}</p>
+                          <p className="text-lg font-bold text-[#1a24d2]">₱{parseFloat(project.budget_goal).toLocaleString()}</p>
                         </div>
                         <div className="bg-green-50 rounded-xl p-4">
                           <span className="text-xs font-semibold text-gray-600">Raised</span>
@@ -436,7 +436,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                       {/* Bottom */}
                       <div className="mt-6 pt-6 border-t border-gray-100 flex items-center justify-between">
                         <p className="text-sm text-gray-600">
-                          <span className="font-bold text-[#003087]">
+                          <span className="font-bold text-[#1a24d2]">
                             ₱{(project.remaining_amount || 0).toLocaleString()}
                           </span>
                           {' '}remaining
@@ -447,7 +447,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                               setSelectedProject(project);
                               setShowDonationModal(true);
                             }}
-                            className="px-8 py-3 bg-[#003087] text-white rounded-xl font-bold hover:bg-[#002566] transition-all shadow-lg"
+                            className="px-8 py-3 bg-[#1a24d2] text-white rounded-xl font-bold hover:bg-[#002566] transition-all shadow-lg"
                           >
                             Support Project
                           </button>
@@ -479,11 +479,11 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                 <div className="bg-gray-50 p-6 rounded-2xl">
                   <div className="flex justify-between mb-3">
                     <span className="text-gray-600 font-medium">Progress</span>
-                    <span className="font-bold text-[#003087]">₱{parseFloat(selectedProject.raised_amount).toLocaleString()} / ₱{parseFloat(selectedProject.budget_goal).toLocaleString()}</span>
+                    <span className="font-bold text-[#1a24d2]">₱{parseFloat(selectedProject.raised_amount).toLocaleString()} / ₱{parseFloat(selectedProject.budget_goal).toLocaleString()}</span>
                   </div>
                   <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-[#003087] rounded-full"
+                      className="h-full bg-[#1a24d2] rounded-full"
                       style={{ width: `${Math.min(100, selectedProject.progress_percentage || 0)}%` }}
                     ></div>
                   </div>
@@ -498,8 +498,8 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                         onClick={() => setDonationData({ ...donationData, amount: amt })}
                         className={`p-3 border-2 rounded-lg font-bold transition-all ${
                           donationData.amount === amt
-                            ? 'bg-[#003087] border-[#003087] text-white'
-                            : 'bg-white border-gray-200 text-gray-600 hover:border-[#003087]'
+                            ? 'bg-[#1a24d2] border-[#1a24d2] text-white'
+                            : 'bg-white border-gray-200 text-gray-600 hover:border-[#1a24d2]'
                         }`}
                       >
                         ₱{amt}
@@ -511,7 +511,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                     value={donationData.amount}
                     onChange={(e) => setDonationData({ ...donationData, amount: e.target.value })}
                     placeholder="Custom amount"
-                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                   />
                 </div>
 
@@ -522,7 +522,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                       type="text"
                       value={donationData.firstName}
                       onChange={(e) => setDonationData({ ...donationData, firstName: e.target.value })}
-                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                     />
                   </div>
                   <div className="space-y-2">
@@ -531,7 +531,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                       type="text"
                       value={donationData.lastName}
                       onChange={(e) => setDonationData({ ...donationData, lastName: e.target.value })}
-                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                     />
                   </div>
                 </div>
@@ -542,7 +542,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                     type="email"
                     value={donationData.email}
                     onChange={(e) => setDonationData({ ...donationData, email: e.target.value })}
-                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                   />
                 </div>
 
@@ -555,7 +555,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                         onClick={() => setDonationData({ ...donationData, paymentMethod: m })}
                         className={`p-3 border-2 rounded-xl font-bold text-sm transition-all ${
                           donationData.paymentMethod === m
-                            ? 'bg-[#003087] border-[#003087] text-white'
+                            ? 'bg-[#1a24d2] border-[#1a24d2] text-white'
                             : 'bg-white border-gray-200 text-gray-600'
                         }`}
                       >
@@ -576,7 +576,7 @@ export function ProjectsView({ userRole = 'alumni', onNavigate }: ProjectsViewPr
                   <button
                     onClick={handleDonateToProject}
                     disabled={isDonating}
-                    className="flex-1 py-4 bg-[#003087] text-white rounded-xl font-bold shadow-lg hover:bg-[#002566] transition-all disabled:opacity-50"
+                    className="flex-1 py-4 bg-[#1a24d2] text-white rounded-xl font-bold shadow-lg hover:bg-[#002566] transition-all disabled:opacity-50"
                   >
                     {isDonating ? 'Processing...' : `Support with ₱${donationData.amount || '0'}`}
                   </button>

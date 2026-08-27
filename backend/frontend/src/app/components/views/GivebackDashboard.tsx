@@ -172,7 +172,7 @@ export function GivebackDashboard({ userRole = 'admin' }: GivebackDashboardProps
     <div className="flex flex-col min-h-screen bg-white">
       <main className="flex-1">
         {/* HERO */}
-        <div className="bg-[#003087] text-white py-20 px-8">
+        <div className="bg-[#1a24d2] text-white py-20 px-8">
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center gap-4 mb-6">
               <BarChart3 className="w-10 h-10" />
@@ -193,7 +193,7 @@ export function GivebackDashboard({ userRole = 'admin' }: GivebackDashboardProps
                 onClick={() => setSelectedMetric(metric.id as any)}
                 className={`p-6 rounded-2xl border-2 transition-all ${
                   selectedMetric === metric.id
-                    ? `${metric.bgColor} border-[#003087] shadow-lg`
+                    ? `${metric.bgColor} border-[#1a24d2] shadow-lg`
                     : 'bg-white border-gray-100 hover:border-gray-200'
                 }`}
               >
@@ -248,7 +248,7 @@ export function GivebackDashboard({ userRole = 'admin' }: GivebackDashboardProps
                   title: 'Donor Retention',
                   value: '92%',
                   description: 'Alumni continue supporting initiatives year-over-year',
-                  icon: <Users className="w-12 h-12 text-[#003087]" />,
+                  icon: <Users className="w-12 h-12 text-[#1a24d2]" />,
                 },
                 {
                   title: 'Project Success',
@@ -324,7 +324,7 @@ export function GivebackDashboard({ userRole = 'admin' }: GivebackDashboardProps
                   <h3 className="text-lg font-bold text-gray-900 mb-2">{rec.title}</h3>
                   <p className="text-gray-600">{rec.description}</p>
                 </div>
-                <span className="ml-4 px-4 py-2 bg-blue-100 text-[#003087] text-xs font-bold rounded-full whitespace-nowrap">
+                <span className="ml-4 px-4 py-2 bg-blue-100 text-[#1a24d2] text-xs font-bold rounded-full whitespace-nowrap">
                   {rec.type}
                 </span>
               </div>

@@ -14,7 +14,9 @@ import { InternshipPostingsView } from '../components/views/InternshipPostingsVi
 import { UserManagementView } from '../components/views/UserManagementView';
 import { PaymentVerificationPanel } from '../components/PaymentVerificationPanel';
 import { RegistrationManagement } from '../components/RegistrationManagement';
-import { Sidebar } from '../components/Sidebar';
+import { Sidebar, SIDEBAR_WIDTH } from '../components/Sidebar';
+import { TopBar, TOPBAR_HEIGHT } from '../components/TopBar';
+import { DashboardNavContext } from '../DashboardNavContext';
 
 export function Dashboard() {
   const [activeView, setActiveView] = useState<
@@ -22,7 +24,8 @@ export function Dashboard() {
     'give'|'projects'|'alumni'|'payments'|'registrations'|'analytics'|
     'internships'|'users'
   >('home');
-  
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
   const userRole = (localStorage.getItem('userRole') as 'alumni' | 'admin') || 'alumni';
 
   const renderView = () => {
@@ -63,11 +66,27 @@ export function Dashboard() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC]">
-      <Sidebar activeView={activeView} onNavigate={setActiveView} userRole={userRole} />
-      <main className="flex-1 min-w-0">
-        {renderView()}
-      </main>
-    </div>
+    <DashboardNavContext.Provider value={setActiveView}>
+      <div className="flex min-h-screen bg-[#f0f2f9]">
+        <TopBar
+          sidebarOpen={sidebarOpen}
+          onToggleSidebar={() => setSidebarOpen((v) => !v)}
+          activeView={activeView}
+          onNavigate={setActiveView}
+          userRole={userRole}
+        />
+        <Sidebar activeView={activeView} onNavigate={setActiveView} userRole={userRole} open={sidebarOpen} />
+        <main
+          className="flex-1 min-w-0"
+          style={{
+            marginLeft: sidebarOpen ? SIDEBAR_WIDTH : 0,
+            marginTop: TOPBAR_HEIGHT,
+            transition: 'margin-left 0.22s ease',
+          }}
+        >
+          {renderView()}
+        </main>
+      </div>
+    </DashboardNavContext.Provider>
   );
 }

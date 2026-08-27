@@ -178,13 +178,13 @@ export function CareersView({ userRole }: { userRole: string }) {
           <div className="max-w-4xl mx-auto text-left">
             <button 
               onClick={() => setSelectedOpportunity(null)} 
-              className="flex items-center gap-2 text-gray-500 font-bold mb-8 hover:text-[#003087] transition-all"
+              className="flex items-center gap-2 text-gray-500 font-bold mb-8 hover:text-[#1a24d2] transition-all"
             >
               <ChevronLeft className="w-5 h-5" /> Back to Career Opportunities
             </button>
             
             <div className="bg-white rounded-[40px] shadow-xl overflow-hidden border border-gray-100">
-              <div className="bg-[#003087] p-12 text-white">
+              <div className="bg-[#1a24d2] p-12 text-white">
                 <div className="flex justify-between items-start">
                   <div className="space-y-4">
                     <span className="px-4 py-1 bg-white/20 rounded-full text-sm font-bold backdrop-blur-md">
@@ -214,7 +214,7 @@ export function CareersView({ userRole }: { userRole: string }) {
                       {selectedOpportunity.salary && (
                         <div className="space-y-1">
                           <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">Salary Range</p>
-                          <p className="text-xl font-bold text-[#003087]">{selectedOpportunity.salary}</p>
+                          <p className="text-xl font-bold text-[#1a24d2]">{selectedOpportunity.salary}</p>
                         </div>
                       )}
                       <div className="space-y-1">
@@ -225,7 +225,7 @@ export function CareersView({ userRole }: { userRole: string }) {
                         <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">Modality</p>
                         <p className="text-xl font-bold text-gray-900">{selectedOpportunity.modality}</p>
                       </div>
-                      <button className="w-full py-4 bg-[#003087] text-white rounded-2xl font-bold shadow-lg shadow-blue-200 hover:bg-[#002566] transition-all">
+                      <button className="w-full py-4 bg-[#1a24d2] text-white rounded-2xl font-bold shadow-lg shadow-blue-200 hover:bg-[#002566] transition-all">
                         Apply Now
                       </button>
                     </div>
@@ -259,14 +259,14 @@ export function CareersView({ userRole }: { userRole: string }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <button
                         onClick={() => handleToggleOpportunity('job')}
-                        className={`flex flex-col items-center justify-center p-8 rounded-2xl border-2 transition-all ${opportunityType === 'job' ? 'border-[#003087] bg-blue-50/50 text-[#003087]' : 'border-gray-100 bg-gray-50/50 text-gray-400'}`}
+                        className={`flex flex-col items-center justify-center p-8 rounded-2xl border-2 transition-all ${opportunityType === 'job' ? 'border-[#1a24d2] bg-blue-50/50 text-[#1a24d2]' : 'border-gray-100 bg-gray-50/50 text-gray-400'}`}
                       >
                         <Briefcase className="w-8 h-8 mb-3" />
                         <span className="font-bold text-lg">Full-time Job</span>
                       </button>
                       <button
                         onClick={() => handleToggleOpportunity('internship')}
-                        className={`flex flex-col items-center justify-center p-8 rounded-2xl border-2 transition-all ${opportunityType === 'internship' ? 'border-[#003087] bg-blue-50/50 text-[#003087]' : 'border-gray-100 bg-gray-50/50 text-gray-400'}`}
+                        className={`flex flex-col items-center justify-center p-8 rounded-2xl border-2 transition-all ${opportunityType === 'internship' ? 'border-[#1a24d2] bg-blue-50/50 text-[#1a24d2]' : 'border-gray-100 bg-gray-50/50 text-gray-400'}`}
                       >
                         <GraduationCap className="w-8 h-8 mb-3 text-orange-500" />
                         <span className="font-bold text-lg">Internship</span>
@@ -276,15 +276,15 @@ export function CareersView({ userRole }: { userRole: string }) {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="block text-sm font-bold text-gray-700">Job Title *</label>
-                      <input type="text" placeholder="e.g., Senior Software Engineer" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-[#003087]/10 transition-all" />
+                      <input type="text" placeholder="e.g., Senior Software Engineer" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-[#1a24d2]/10 transition-all" />
                     </div>
                     <div className="space-y-2">
                       <label className="block text-sm font-bold text-gray-700">Company Name *</label>
-                      <input type="text" placeholder="Your company name" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-[#003087]/10 transition-all" />
+                      <input type="text" placeholder="Your company name" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-[#1a24d2]/10 transition-all" />
                     </div>
                     <div className="space-y-2">
                       <label className="block text-sm font-bold text-gray-700">Location *</label>
-                      <input type="text" placeholder="City, Country or Remote" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-[#003087]/10 transition-all" />
+                      <input type="text" placeholder="City, Country or Remote" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-[#1a24d2]/10 transition-all" />
                     </div>
                     <div className="space-y-2">
                       <label className="block text-sm font-bold text-gray-700">Employment Type *</label>
@@ -298,14 +298,14 @@ export function CareersView({ userRole }: { userRole: string }) {
                   </div>
                   <div className="space-y-2">
                     <label className="block text-sm font-bold text-gray-700">Description *</label>
-                    <textarea placeholder="Describe the role, responsibilities, and requirements..." rows={6} className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none resize-none focus:bg-white focus:ring-2 focus:ring-[#003087]/10" />
+                    <textarea placeholder="Describe the role, responsibilities, and requirements..." rows={6} className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none resize-none focus:bg-white focus:ring-2 focus:ring-[#1a24d2]/10" />
                   </div>
                   <div className="space-y-2">
                     <label className="block text-sm font-bold text-gray-700">Application Email *</label>
-                    <input type="email" placeholder="careers@company.com" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-[#003087]/10" />
+                    <input type="email" placeholder="careers@company.com" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-[#1a24d2]/10" />
                   </div>
                   <div className="pt-6 flex gap-4">
-                    <button onClick={() => setSubmissionStatus('published')} className="px-10 py-4 bg-[#003087] text-white rounded-xl font-bold hover:bg-[#002566] transition-all shadow-lg shadow-blue-900/10">
+                    <button onClick={() => setSubmissionStatus('published')} className="px-10 py-4 bg-[#1a24d2] text-white rounded-xl font-bold hover:bg-[#002566] transition-all shadow-lg shadow-blue-900/10">
                       Post Opportunity
                     </button>
                     <button onClick={() => setSubmissionStatus('draft')} className="px-10 py-4 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-all">
@@ -317,7 +317,7 @@ export function CareersView({ userRole }: { userRole: string }) {
             ) : (
               <div className="py-20 flex flex-col items-center text-center space-y-6">
                 <div className={`w-20 h-20 rounded-full flex items-center justify-center ${submissionStatus === 'published' ? 'bg-green-100' : 'bg-blue-100'}`}>
-                  <CheckCircle2 className={`w-10 h-10 ${submissionStatus === 'published' ? 'text-green-600' : 'text-[#003087]'}`} />
+                  <CheckCircle2 className={`w-10 h-10 ${submissionStatus === 'published' ? 'text-green-600' : 'text-[#1a24d2]'}`} />
                 </div>
                 <div className="space-y-2">
                   <h2 className="text-3xl font-bold text-gray-900">{submissionStatus === 'published' ? 'Opportunity Posted!' : 'Draft Saved!'}</h2>
@@ -327,7 +327,7 @@ export function CareersView({ userRole }: { userRole: string }) {
                       : "Your progress has been saved. You can find this listing in your drafts later."}
                   </p>
                 </div>
-                <button onClick={handleCloseForm} className="mt-4 px-8 py-3 bg-[#003087] text-white rounded-xl font-bold hover:bg-[#002566] transition-all">
+                <button onClick={handleCloseForm} className="mt-4 px-8 py-3 bg-[#1a24d2] text-white rounded-xl font-bold hover:bg-[#002566] transition-all">
                   Return to Directory
                 </button>
               </div>
@@ -347,13 +347,13 @@ export function CareersView({ userRole }: { userRole: string }) {
             <h1 className="text-3xl font-bold text-gray-900">Career Opportunities</h1>
             <p className="text-gray-500 text-sm mt-1">Explore jobs and internships from the ADDU community</p>
           </div>
-          <button onClick={() => setShowPostForm(true)} className="bg-[#003087] text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-[#002566] transition-all flex items-center gap-2">
+          <button onClick={() => setShowPostForm(true)} className="bg-[#1a24d2] text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-[#002566] transition-all flex items-center gap-2">
             Post a Job Opening <ArrowRight className="w-4 h-4" />
           </button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <div className="bg-[#003087] p-6 rounded-[24px] shadow-sm border border-blue-100/10 text-left">
+          <div className="bg-[#1a24d2] p-6 rounded-[24px] shadow-sm border border-blue-100/10 text-left">
             <p className="text-blue-200 text-[11px] font-bold uppercase tracking-wider mb-2">Full-time Jobs</p>
             <p className="text-4xl font-bold text-white">31</p>
           </div>
@@ -363,7 +363,7 @@ export function CareersView({ userRole }: { userRole: string }) {
           </div>
           <div className="bg-gray-50 p-6 rounded-[24px] border border-gray-100 text-left">
             <p className="text-gray-400 text-[11px] font-bold uppercase tracking-wider mb-2">Posted This Week</p>
-            <p className="text-4xl font-bold text-[#003087]">12</p>
+            <p className="text-4xl font-bold text-[#1a24d2]">12</p>
           </div>
         </div>
 
@@ -372,10 +372,10 @@ export function CareersView({ userRole }: { userRole: string }) {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`pb-4 text-[13px] font-bold whitespace-nowrap transition-all relative ${activeTab === tab ? 'text-[#003087]' : 'text-gray-400'}`}
+              className={`pb-4 text-[13px] font-bold whitespace-nowrap transition-all relative ${activeTab === tab ? 'text-[#1a24d2]' : 'text-gray-400'}`}
             >
               {tab}
-              {activeTab === tab && <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#003087]" />}
+              {activeTab === tab && <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#1a24d2]" />}
             </button>
           ))}
         </div>
@@ -388,13 +388,13 @@ export function CareersView({ userRole }: { userRole: string }) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by job title or company..."
-              className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#003087]/20 outline-none text-sm transition-all"
+              className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#1a24d2]/20 outline-none text-sm transition-all"
             />
           </div>
           <div className="relative">
             <button 
               onClick={() => setShowFilters(!showFilters)}
-              className={`flex items-center justify-center gap-2 px-8 py-4 border rounded-2xl font-bold text-sm transition-all h-full ${showFilters || selectedModality !== 'All' ? 'bg-[#003087] text-white border-[#003087]' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'}`}
+              className={`flex items-center justify-center gap-2 px-8 py-4 border rounded-2xl font-bold text-sm transition-all h-full ${showFilters || selectedModality !== 'All' ? 'bg-[#1a24d2] text-white border-[#1a24d2]' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'}`}
             >
               <Filter className="w-4 h-4" />
               {selectedModality === 'All' ? 'Filter' : `Modality: ${selectedModality}`}
@@ -412,7 +412,7 @@ export function CareersView({ userRole }: { userRole: string }) {
                       setSelectedModality(modality);
                       setShowFilters(false);
                     }}
-                    className={`w-full text-left px-4 py-3 text-sm rounded-xl transition-colors ${selectedModality === modality ? 'bg-blue-50 text-[#003087] font-bold' : 'text-gray-600 hover:bg-gray-50'}`}
+                    className={`w-full text-left px-4 py-3 text-sm rounded-xl transition-colors ${selectedModality === modality ? 'bg-blue-50 text-[#1a24d2] font-bold' : 'text-gray-600 hover:bg-gray-50'}`}
                   >
                     {modality}
                   </button>
@@ -427,7 +427,7 @@ export function CareersView({ userRole }: { userRole: string }) {
             filteredOpportunities.map((item) => (
               <div 
                 key={item.id} 
-                className={`rounded-[32px] p-8 flex flex-col md:flex-row justify-between gap-8 transition-all ${item.isPriority ? 'bg-[#003087] text-white shadow-2xl shadow-blue-900/20' : 'bg-white text-gray-900 border border-gray-100 hover:border-gray-200 hover:shadow-xl hover:shadow-gray-200/40'}`}
+                className={`rounded-[32px] p-8 flex flex-col md:flex-row justify-between gap-8 transition-all ${item.isPriority ? 'bg-[#1a24d2] text-white shadow-2xl shadow-blue-900/20' : 'bg-white text-gray-900 border border-gray-100 hover:border-gray-200 hover:shadow-xl hover:shadow-gray-200/40'}`}
               >
                 <div className="flex-1 space-y-5">
                   <div className="flex items-center gap-3">
@@ -439,7 +439,7 @@ export function CareersView({ userRole }: { userRole: string }) {
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold leading-tight">{item.title}</h3>
-                    <p className={`${item.isPriority ? 'text-blue-100' : 'text-[#003087]'} font-semibold text-lg mt-1 flex items-center gap-2`}><Building2 className="w-4 h-4 opacity-70" /> {item.company}</p>
+                    <p className={`${item.isPriority ? 'text-blue-100' : 'text-[#1a24d2]'} font-semibold text-lg mt-1 flex items-center gap-2`}><Building2 className="w-4 h-4 opacity-70" /> {item.company}</p>
                   </div>
                   <div className="flex flex-wrap gap-6 text-[14px]">
                     <div className={`flex items-center gap-2 ${item.isPriority ? 'text-blue-100' : 'text-gray-500'}`}><MapPin className="w-4 h-4 opacity-70" /> {item.location}</div>
@@ -449,7 +449,7 @@ export function CareersView({ userRole }: { userRole: string }) {
                 <div className="flex flex-row md:flex-col justify-end gap-3 min-w-[180px]">
                   <button 
                     onClick={() => setSelectedOpportunity(item)}
-                    className={`px-8 py-4 rounded-2xl font-bold text-sm transition-all flex-1 md:flex-none shadow-sm ${item.isPriority ? 'bg-white text-[#003087] hover:bg-blue-50' : 'bg-[#003087] text-white hover:bg-[#002566]'}`}
+                    className={`px-8 py-4 rounded-2xl font-bold text-sm transition-all flex-1 md:flex-none shadow-sm ${item.isPriority ? 'bg-white text-[#1a24d2] hover:bg-blue-50' : 'bg-[#1a24d2] text-white hover:bg-[#002566]'}`}
                   >
                     {item.isPriority ? 'Apply Now' : 'View Details'}
                   </button>

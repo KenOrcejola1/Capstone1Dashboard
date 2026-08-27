@@ -184,7 +184,7 @@ export function PaymentVerificationPanel({ userRole }: PaymentVerificationProps)
             <button
               onClick={() => setActiveSection('registrations')}
               className={`px-5 py-2 rounded-xl font-bold text-sm transition-all ${
-                activeSection === 'registrations' ? 'bg-[#003087] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                activeSection === 'registrations' ? 'bg-[#1a24d2] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
               Event Registrations
@@ -192,7 +192,7 @@ export function PaymentVerificationPanel({ userRole }: PaymentVerificationProps)
             <button
               onClick={() => setActiveSection('donations')}
               className={`px-5 py-2 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${
-                activeSection === 'donations' ? 'bg-[#003087] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                activeSection === 'donations' ? 'bg-[#1a24d2] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
               GiveBack Donations
@@ -249,7 +249,7 @@ export function PaymentVerificationPanel({ userRole }: PaymentVerificationProps)
                       onClick={() => setFilter(status)}
                       className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
                         filter === status
-                          ? 'bg-[#003087] text-white'
+                          ? 'bg-[#1a24d2] text-white'
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
                     >
@@ -267,7 +267,7 @@ export function PaymentVerificationPanel({ userRole }: PaymentVerificationProps)
                     placeholder="Search by name, email, or event..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] w-full md:w-80"
+                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] w-full md:w-80"
                   />
                 </div>
               </div>
@@ -338,7 +338,7 @@ export function PaymentVerificationPanel({ userRole }: PaymentVerificationProps)
                               {reg.proof_path && (
                                 <button
                                   onClick={() => { setSelectedRegistration(reg); setShowProofModal(true); }}
-                                  className="text-[#003087] hover:text-blue-700 font-medium text-sm"
+                                  className="text-[#1a24d2] hover:text-blue-700 font-medium text-sm"
                                 >
                                   View Proof
                                 </button>
@@ -449,7 +449,7 @@ export function PaymentVerificationPanel({ userRole }: PaymentVerificationProps)
                               {donation.proof_path && (
                                 <button
                                   onClick={() => { setSelectedDonation(donation); setShowDonationProofModal(true); }}
-                                  className="text-[#003087] hover:text-blue-700 font-medium text-sm"
+                                  className="text-[#1a24d2] hover:text-blue-700 font-medium text-sm"
                                 >
                                   View Proof
                                 </button>
@@ -518,7 +518,7 @@ export function PaymentVerificationPanel({ userRole }: PaymentVerificationProps)
               </div>
               {selectedRegistration.proof_path && (
                 <div className="mt-4">
-                  <a href={`http://localhost:8000${selectedRegistration.proof_path}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[#003087] font-semibold hover:underline">
+                  <a href={`http://localhost:8000${selectedRegistration.proof_path}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[#1a24d2] font-semibold hover:underline">
                     <Download className="w-4 h-4" /> Download Full Image
                   </a>
                 </div>
@@ -571,7 +571,7 @@ export function PaymentVerificationPanel({ userRole }: PaymentVerificationProps)
                   <p className="text-gray-500 text-sm">No proof uploaded</p>
                 )}
                 {selectedDonation.proof_path && (
-                  <a href={`http://localhost:8000${selectedDonation.proof_path}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 mt-3 text-[#003087] font-semibold hover:underline">
+                  <a href={`http://localhost:8000${selectedDonation.proof_path}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 mt-3 text-[#1a24d2] font-semibold hover:underline">
                     <Download className="w-4 h-4" /> Download Full Image
                   </a>
                 )}

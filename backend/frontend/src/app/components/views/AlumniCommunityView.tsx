@@ -219,7 +219,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                   status: 'upcoming',
                 });
               }}
-              className="flex items-center gap-2 text-gray-500 font-bold mb-8 hover:text-[#003087] transition-all"
+              className="flex items-center gap-2 text-gray-500 font-bold mb-8 hover:text-[#1a24d2] transition-all"
             >
               <ChevronLeft className="w-5 h-5" /> Back to Events
             </button>
@@ -238,7 +238,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     placeholder="e.g., Spring Networking Breakfast"
-                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all"
+                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                   />
                 </div>
 
@@ -249,7 +249,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     placeholder="Describe the event..."
                     rows={4}
-                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all resize-none"
+                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all resize-none"
                   />
                 </div>
 
@@ -259,7 +259,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                     <select
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all appearance-none"
+                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all appearance-none"
                     >
                       <option value="">Select Category</option>
                       <option>Networking</option>
@@ -275,7 +275,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                     <select
                       value={formData.event_type}
                       onChange={(e) => setFormData({ ...formData, event_type: e.target.value as any })}
-                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all appearance-none"
+                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all appearance-none"
                     >
                       <option value="social">Social</option>
                       <option value="professional">Professional</option>
@@ -293,7 +293,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                       type="date"
                       value={formData.date}
                       onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all"
+                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                     />
                   </div>
 
@@ -304,7 +304,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                       value={formData.time}
                       onChange={(e) => setFormData({ ...formData, time: e.target.value })}
                       placeholder="e.g., 6:00 PM - 8:00 PM"
-                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all"
+                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                     />
                   </div>
                 </div>
@@ -317,7 +317,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                       value={formData.location}
                       onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                       placeholder="e.g., ADDU Campus"
-                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all"
+                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                     />
                   </div>
 
@@ -328,7 +328,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                       value={formData.max_attendees}
                       onChange={(e) => setFormData({ ...formData, max_attendees: e.target.value })}
                       placeholder="Leave empty for unlimited"
-                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all"
+                      className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                     />
                   </div>
                 </div>
@@ -342,7 +342,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                   </button>
                   <button
                     onClick={handleCreateEvent}
-                    className="flex-1 py-4 bg-[#003087] text-white rounded-xl font-bold shadow-lg hover:bg-blue-800 transition-all"
+                    className="flex-1 py-4 bg-[#1a24d2] text-white rounded-xl font-bold shadow-lg hover:bg-blue-800 transition-all"
                   >
                     Create Event
                   </button>
@@ -360,7 +360,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
     <div className="flex flex-col min-h-screen bg-white">
       <main className="flex-1">
         {/* HERO */}
-        <div className="bg-[#003087] text-white py-24 px-8 text-center">
+        <div className="bg-[#1a24d2] text-white py-24 px-8 text-center">
           <div className="max-w-4xl mx-auto space-y-6">
             <h1 className="text-5xl font-bold leading-tight">Alumni Community</h1>
             <p className="text-xl text-blue-100 leading-relaxed max-w-3xl mx-auto">
@@ -391,7 +391,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                 onClick={() => setActiveTab(tab)}
                 className={`pb-4 text-base font-bold transition-all border-b-4 capitalize ${
                   activeTab === tab
-                    ? 'border-[#003087] text-[#003087]'
+                    ? 'border-[#1a24d2] text-[#1a24d2]'
                     : 'border-transparent text-gray-400 hover:text-gray-600'
                 }`}
               >
@@ -418,14 +418,14 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                   <div className="flex flex-col md:flex-row gap-8">
                     {/* Left: Visual */}
                     <div className="md:w-2/5 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl h-64 flex items-center justify-center shrink-0">
-                      <Calendar className="w-20 h-20 text-[#003087] opacity-30" />
+                      <Calendar className="w-20 h-20 text-[#1a24d2] opacity-30" />
                     </div>
 
                     {/* Right: Content */}
                     <div className="md:w-3/5 flex flex-col">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex-1">
-                          <span className="inline-block bg-blue-100 text-[#003087] text-xs font-bold px-3 py-1 rounded-full mb-3 capitalize">
+                          <span className="inline-block bg-blue-100 text-[#1a24d2] text-xs font-bold px-3 py-1 rounded-full mb-3 capitalize">
                             {event.event_type}
                           </span>
                           <h3 className="text-2xl font-bold text-gray-900 mb-2">{event.title}</h3>
@@ -444,7 +444,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                       {/* Event Details Grid */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 py-6 border-y border-gray-100">
                         <div className="flex items-center gap-3">
-                          <Calendar className="w-5 h-5 text-[#003087]" />
+                          <Calendar className="w-5 h-5 text-[#1a24d2]" />
                           <div>
                             <p className="text-xs text-gray-500 font-semibold">Date</p>
                             <p className="font-bold text-gray-900">{event.formatted_date}</p>
@@ -452,7 +452,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                         </div>
 
                         <div className="flex items-center gap-3">
-                          <Clock className="w-5 h-5 text-[#003087]" />
+                          <Clock className="w-5 h-5 text-[#1a24d2]" />
                           <div>
                             <p className="text-xs text-gray-500 font-semibold">Time</p>
                             <p className="font-bold text-gray-900">{event.time}</p>
@@ -460,7 +460,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                         </div>
 
                         <div className="flex items-center gap-3">
-                          <MapPin className="w-5 h-5 text-[#003087]" />
+                          <MapPin className="w-5 h-5 text-[#1a24d2]" />
                           <div>
                             <p className="text-xs text-gray-500 font-semibold">Location</p>
                             <p className="font-bold text-gray-900">{event.location}</p>
@@ -468,7 +468,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                         </div>
 
                         <div className="flex items-center gap-3">
-                          <Users className="w-5 h-5 text-[#003087]" />
+                          <Users className="w-5 h-5 text-[#1a24d2]" />
                           <div>
                             <p className="text-xs text-gray-500 font-semibold">Registrations</p>
                             <p className="font-bold text-gray-900">
@@ -487,7 +487,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                               setSelectedEvent(event);
                               setShowRegistrationModal(true);
                             }}
-                            className="px-8 py-3 bg-[#003087] text-white rounded-xl font-bold hover:bg-[#002566] transition-all shadow-lg flex items-center gap-2"
+                            className="px-8 py-3 bg-[#1a24d2] text-white rounded-xl font-bold hover:bg-[#002566] transition-all shadow-lg flex items-center gap-2"
                           >
                             <CheckCircle className="w-4 h-4" /> RSVP
                           </button>
@@ -538,7 +538,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                       type="text"
                       value={registrationData.firstName}
                       onChange={(e) => setRegistrationData({ ...registrationData, firstName: e.target.value })}
-                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                     />
                   </div>
                   <div className="space-y-2">
@@ -547,7 +547,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                       type="text"
                       value={registrationData.lastName}
                       onChange={(e) => setRegistrationData({ ...registrationData, lastName: e.target.value })}
-                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                     />
                   </div>
                 </div>
@@ -558,7 +558,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                     type="email"
                     value={registrationData.email}
                     onChange={(e) => setRegistrationData({ ...registrationData, email: e.target.value })}
-                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                   />
                 </div>
 
@@ -568,7 +568,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                     type="tel"
                     value={registrationData.phone}
                     onChange={(e) => setRegistrationData({ ...registrationData, phone: e.target.value })}
-                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all"
+                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all"
                   />
                 </div>
 
@@ -583,7 +583,7 @@ export function AlumniCommunityView({ userRole = 'alumni', onNavigate }: AlumniC
                   <button
                     onClick={handleRegisterEvent}
                     disabled={isRegistering}
-                    className="flex-1 py-4 bg-[#003087] text-white rounded-xl font-bold shadow-lg hover:bg-[#002566] transition-all disabled:opacity-50"
+                    className="flex-1 py-4 bg-[#1a24d2] text-white rounded-xl font-bold shadow-lg hover:bg-[#002566] transition-all disabled:opacity-50"
                   >
                     {isRegistering ? 'Registering...' : 'Confirm Registration'}
                   </button>

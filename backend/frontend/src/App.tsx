@@ -4,6 +4,8 @@ import { LoginPage } from './app/pages/LoginPage';
 import { RegisterPage } from './app/pages/RegisterPage';
 import { Dashboard } from './app/pages/Dashboard';
 import { TracerSurveyPage } from './app/pages/TracerSurveyPage';
+import { AboutHistoryPage } from './app/pages/AboutHistoryPage';
+import { DevelopersPage } from './app/pages/DevelopersPage';
 
 export default function App() {
   return (
@@ -14,6 +16,8 @@ export default function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/survey/tracer" element={<TracerSurveyPage />} />
+        <Route path="/about" element={<AboutHistoryPage />} />
+        <Route path="/developers" element={<DevelopersPage />} />
       </Routes>
     </BrowserRouter>
   );
