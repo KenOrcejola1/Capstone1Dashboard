@@ -270,7 +270,7 @@ export function DirectoryView({ userRole }: { userRole: string }) {
     <div className="flex flex-col min-h-screen bg-[#F8FAFC]">
       <div className="p-8 space-y-6 flex-1">
         <div className="text-left">
-          <h1 className="text-2xl font-bold text-gray-900">Alumni Directory</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Alumni Careers</h1>
           <p className="text-gray-500 text-sm">Connect with fellow Ateneans around the world</p>
         </div>
 
@@ -418,7 +418,7 @@ function DirectoryFooter() {
           <ul className="space-y-3 text-gray-400 text-sm">
             <li className="hover:text-white cursor-pointer">About Us</li>
             <li className="hover:text-white cursor-pointer">Events Calendar</li>
-            <li className="hover:text-white cursor-pointer">Alumni Directory</li>
+            <li className="hover:text-white cursor-pointer">Alumni Careers</li>
             <li className="hover:text-white cursor-pointer">Career Services</li>
             <li className="hover:text-white cursor-pointer">Mentorship Program</li>
           </ul>
