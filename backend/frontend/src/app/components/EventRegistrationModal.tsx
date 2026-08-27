@@ -145,7 +145,7 @@ export function EventRegistrationModal({ event, onClose }: EventRegistrationModa
                 href={receiptUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 text-[#003087] font-semibold hover:underline"
+                className="inline-flex items-center gap-2 text-[#1a24d2] font-semibold hover:underline"
               >
                 <FileText className="w-4 h-4" /> Download Receipt (PDF)
               </a>
@@ -154,7 +154,7 @@ export function EventRegistrationModal({ event, onClose }: EventRegistrationModa
           <div className="px-6 pb-6">
             <button
               onClick={onClose}
-              className="w-full py-3 bg-[#003087] text-white rounded-xl font-bold hover:bg-[#002566] transition-colors"
+              className="w-full py-3 bg-[#1a24d2] text-white rounded-xl font-bold hover:bg-[#002566] transition-colors"
             >
               Close
             </button>
@@ -191,7 +191,7 @@ export function EventRegistrationModal({ event, onClose }: EventRegistrationModa
                   key={option.value}
                   className={`flex items-center gap-4 p-4 border rounded-lg cursor-pointer transition-all ${
                     isSelected
-                      ? 'border-[#003087] bg-blue-50 ring-1 ring-[#003087]'
+                      ? 'border-[#1a24d2] bg-blue-50 ring-1 ring-[#1a24d2]'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
@@ -201,11 +201,11 @@ export function EventRegistrationModal({ event, onClose }: EventRegistrationModa
                     value={option.value}
                     checked={isSelected}
                     onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
-                    className="w-4 h-4 accent-[#003087]"
+                    className="w-4 h-4 accent-[#1a24d2]"
                   />
-                  <Icon className={`w-6 h-6 ${isSelected ? 'text-[#003087]' : 'text-gray-400'}`} />
+                  <Icon className={`w-6 h-6 ${isSelected ? 'text-[#1a24d2]' : 'text-gray-400'}`} />
                   <div className="flex-1">
-                    <p className={`font-semibold ${isSelected ? 'text-[#003087]' : 'text-gray-900'}`}>
+                    <p className={`font-semibold ${isSelected ? 'text-[#1a24d2]' : 'text-gray-900'}`}>
                       {option.label}
                     </p>
                     <p className="text-xs text-gray-500">{option.description}</p>
@@ -225,7 +225,7 @@ export function EventRegistrationModal({ event, onClose }: EventRegistrationModa
                     value={referenceNumber}
                     onChange={(e) => setReferenceNumber(e.target.value)}
                     placeholder="Enter transaction reference"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent"
                   />
                 </div>
                 <div>
@@ -236,7 +236,7 @@ export function EventRegistrationModal({ event, onClose }: EventRegistrationModa
                     type="file"
                     accept="image/*,application/pdf"
                     onChange={(e) => setProofFile(e.target.files?.[0] || null)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent"
                   />
                 </div>
               </div>
@@ -260,7 +260,7 @@ export function EventRegistrationModal({ event, onClose }: EventRegistrationModa
             </div>
             <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
               <span className="font-bold text-gray-900">Total Amount:</span>
-              <span className="text-2xl font-bold text-[#003087]">₱{totalPrice.toLocaleString()}</span>
+              <span className="text-2xl font-bold text-[#1a24d2]">₱{totalPrice.toLocaleString()}</span>
             </div>
           </div>
 
@@ -274,7 +274,7 @@ export function EventRegistrationModal({ event, onClose }: EventRegistrationModa
             <button
               onClick={() => submitRegistration()}
               disabled={isProcessing}
-              className="flex-1 px-4 py-2 bg-[#003087] text-white rounded-lg font-semibold hover:bg-[#002566] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-4 py-2 bg-[#1a24d2] text-white rounded-lg font-semibold hover:bg-[#002566] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isProcessing ? 'Submitting...' : `Pay ₱${totalPrice.toLocaleString()}`}
             </button>
@@ -313,7 +313,7 @@ export function EventRegistrationModal({ event, onClose }: EventRegistrationModa
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               placeholder="Enter your first name"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent"
             />
           </div>
 
@@ -325,7 +325,7 @@ export function EventRegistrationModal({ event, onClose }: EventRegistrationModa
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Enter your last name"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent"
             />
           </div>
 
@@ -337,7 +337,7 @@ export function EventRegistrationModal({ event, onClose }: EventRegistrationModa
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent"
             />
           </div>
 
@@ -381,7 +381,7 @@ export function EventRegistrationModal({ event, onClose }: EventRegistrationModa
           <button
             type="submit"
             disabled={isProcessing}
-            className="w-full py-3 bg-[#003087] text-white rounded-xl font-bold hover:bg-[#002566] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 bg-[#1a24d2] text-white rounded-xl font-bold hover:bg-[#002566] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {event.feeAmount > 0 ? 'Proceed to Payment' : 'Confirm Registration'}
           </button>
@@ -446,7 +446,7 @@ export function MyRegistrations({ registrations, isLoading = false }: MyRegistra
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-          <Ticket className="w-8 h-8 text-[#003087]" />
+          <Ticket className="w-8 h-8 text-[#1a24d2]" />
         </div>
         <h3 className="text-lg font-bold text-gray-800 mb-1">No registrations yet</h3>
         <p className="text-sm text-gray-500 max-w-xs">
@@ -502,15 +502,15 @@ export function MyRegistrations({ registrations, isLoading = false }: MyRegistra
             <div className="p-5 space-y-3">
               <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-600">
                 <span className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-[#003087]" />
+                  <Calendar className="w-3.5 h-3.5 text-[#1a24d2]" />
                   {reg.date}
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-[#003087]" />
+                  <Clock className="w-3.5 h-3.5 text-[#1a24d2]" />
                   {reg.time}
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-[#003087]" />
+                  <MapPin className="w-3.5 h-3.5 text-[#1a24d2]" />
                   {reg.location}
                 </span>
               </div>
@@ -520,7 +520,7 @@ export function MyRegistrations({ registrations, isLoading = false }: MyRegistra
                   <span className="font-semibold text-gray-900">{reg.attendees}</span>{' '}
                   {reg.attendees === 1 ? 'attendee' : 'attendees'}
                   {reg.feeAmount > 0 && (
-                    <span className="ml-2 text-[#003087] font-semibold">
+                    <span className="ml-2 text-[#1a24d2] font-semibold">
                       · ₱{(reg.attendees * reg.feeAmount).toLocaleString()}
                     </span>
                   )}
@@ -531,7 +531,7 @@ export function MyRegistrations({ registrations, isLoading = false }: MyRegistra
                     href={reg.receiptUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#003087] hover:underline"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#1a24d2] hover:underline"
                   >
                     <FileText className="w-3.5 h-3.5" />
                     Receipt

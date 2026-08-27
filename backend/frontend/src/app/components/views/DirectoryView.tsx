@@ -268,8 +268,8 @@ export function DirectoryView({ userRole }: { userRole: string }) {
         </div>
 
         <div className="flex gap-8 border-b border-gray-200">
-          <button onClick={() => setActiveTab('all')} className={`pb-4 text-sm font-bold ${activeTab === 'all' ? 'text-[#003087] border-b-2 border-[#003087]' : 'text-gray-400'}`}>All Alumni</button>
-          <button onClick={() => setActiveTab('officers')} className={`pb-4 text-sm font-bold flex items-center gap-2 ${activeTab === 'officers' ? 'text-[#003087] border-b-2 border-[#003087]' : 'text-gray-400'}`}><Award className="w-4 h-4" /> Alumni Officers</button>
+          <button onClick={() => setActiveTab('all')} className={`pb-4 text-sm font-bold ${activeTab === 'all' ? 'text-[#1a24d2] border-b-2 border-[#1a24d2]' : 'text-gray-400'}`}>All Alumni</button>
+          <button onClick={() => setActiveTab('officers')} className={`pb-4 text-sm font-bold flex items-center gap-2 ${activeTab === 'officers' ? 'text-[#1a24d2] border-b-2 border-[#1a24d2]' : 'text-gray-400'}`}><Award className="w-4 h-4" /> Alumni Officers</button>
         </div>
 
         {activeTab === 'all' ? (
@@ -332,7 +332,7 @@ export function DirectoryView({ userRole }: { userRole: string }) {
             </div>
             {chapters.map((chapter, idx) => (
               <div key={idx} className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-                <div className="bg-[#003087] p-4 flex items-center gap-3 text-white font-bold text-sm">
+                <div className="bg-[#1a24d2] p-4 flex items-center gap-3 text-white font-bold text-sm">
                   <Award className="w-5 h-5" /> {chapter.title}
                 </div>
                 <div className="divide-y divide-gray-50">
@@ -354,7 +354,7 @@ function AlumniRow({ alumnus, isOfficer }: { alumnus: any, isOfficer?: boolean }
 
   return (
     <div className="p-6 flex flex-col lg:flex-row items-center gap-6 text-left transition-colors hover:bg-gray-50/50">
-      <div className="w-12 h-12 bg-[#003087] rounded-full flex items-center justify-center text-white font-bold text-xs shrink-0 overflow-hidden">
+      <div className="w-12 h-12 bg-[#1a24d2] rounded-full flex items-center justify-center text-white font-bold text-xs shrink-0 overflow-hidden">
         {hasProfileImage ? (
           <img
             src={alumnus.profileImageUrl}
@@ -367,9 +367,9 @@ function AlumniRow({ alumnus, isOfficer }: { alumnus: any, isOfficer?: boolean }
         )}
       </div>
       <div className="flex-1 min-w-[180px]">
-        <h3 className="text-[#003087] font-bold text-sm hover:underline cursor-pointer">{alumnus.name}</h3>
+        <h3 className="text-[#1a24d2] font-bold text-sm hover:underline cursor-pointer">{alumnus.name}</h3>
         <p className="text-gray-400 text-[11px]">Class of {alumnus.class}</p>
-        {isOfficer && <p className="text-[#003087] font-bold text-[11px] mt-1">{alumnus.officerRole}</p>}
+        {isOfficer && <p className="text-[#1a24d2] font-bold text-[11px] mt-1">{alumnus.officerRole}</p>}
       </div>
       <div className="flex-1 text-gray-500 text-[12px]">{alumnus.program}</div>
       <div className="flex-1 text-gray-500 text-[12px] flex items-center gap-2">
@@ -380,8 +380,8 @@ function AlumniRow({ alumnus, isOfficer }: { alumnus: any, isOfficer?: boolean }
         <MapPin className="w-4 h-4 shrink-0" /> <span className="truncate">{alumnus.location}</span>
       </div>
       <div className="flex gap-2 shrink-0">
-        <button className="flex items-center gap-2 px-4 py-2 border border-[#003087] rounded-lg text-[#003087] font-bold text-xs hover:bg-blue-50 transition-all"><MessageSquare className="w-3.5 h-3.5" /> Message</button>
-        <button className="flex items-center gap-2 px-4 py-2 border border-[#003087] rounded-lg text-[#003087] font-bold text-xs hover:bg-blue-50 transition-all"><Mail className="w-3.5 h-3.5" /> Email</button>
+        <button className="flex items-center gap-2 px-4 py-2 border border-[#1a24d2] rounded-lg text-[#1a24d2] font-bold text-xs hover:bg-blue-50 transition-all"><MessageSquare className="w-3.5 h-3.5" /> Message</button>
+        <button className="flex items-center gap-2 px-4 py-2 border border-[#1a24d2] rounded-lg text-[#1a24d2] font-bold text-xs hover:bg-blue-50 transition-all"><Mail className="w-3.5 h-3.5" /> Email</button>
       </div>
     </div>
   );

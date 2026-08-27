@@ -477,7 +477,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
   return (
     <div className="p-8 relative">
       {/* ADDU Decorative Shapes */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-[#003087]/5 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute top-0 right-0 w-64 h-64 bg-[#1a24d2]/5 rounded-full blur-3xl -z-10"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl -z-10"></div>
 
       {/* Header */}
@@ -489,14 +489,14 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
         <div className="flex items-center gap-3 flex-wrap">
           <button
             onClick={() => setIsCreateModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold shadow-md"
+            className="flex items-center gap-2 px-4 py-2 bg-[#1a24d2] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold shadow-md"
           >
             <Plus className="w-5 h-5" />
             Create New User
           </button>
-          <div className="bg-white border-2 border-[#003087]/20 rounded-lg px-4 py-2">
+          <div className="bg-white border-2 border-[#1a24d2]/20 rounded-lg px-4 py-2">
             <span className="text-sm text-gray-600">Total Users: </span>
-            <span className="text-lg font-bold text-[#003087]">{users.length}</span>
+            <span className="text-lg font-bold text-[#1a24d2]">{users.length}</span>
           </div>
           <div className="bg-purple-50 border-2 border-purple-200 rounded-lg px-4 py-2">
             <span className="text-sm text-purple-600">Admin: </span>
@@ -516,13 +516,13 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="bg-white rounded-lg border-2 border-[#003087]/20 shadow-sm mb-6 overflow-hidden">
+      <div className="bg-white rounded-lg border-2 border-[#1a24d2]/20 shadow-sm mb-6 overflow-hidden">
         <div className="flex border-b border-gray-200">
           <button
             onClick={() => setActiveTab('all')}
             className={`flex-1 px-4 py-2.5 text-sm font-semibold transition-colors ${
               activeTab === 'all'
-                ? 'bg-[#003087] text-white'
+                ? 'bg-[#1a24d2] text-white'
                 : 'bg-white text-gray-600 hover:bg-gray-50'
             }`}
           >
@@ -532,7 +532,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
             onClick={() => setActiveTab('approval')}
             className={`flex-1 px-4 py-2.5 text-sm font-semibold transition-colors flex items-center justify-center gap-2 ${
               activeTab === 'approval'
-                ? 'bg-[#003087] text-white'
+                ? 'bg-[#1a24d2] text-white'
                 : 'bg-white text-gray-600 hover:bg-gray-50'
             }`}
           >
@@ -548,7 +548,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
 
       {/* Search Bar and Filters */}
       {activeTab === 'all' && (
-      <div className="bg-white rounded-xl border-2 border-[#003087]/20 p-4 mb-6 shadow-sm">
+      <div className="bg-white rounded-xl border-2 border-[#1a24d2]/20 p-4 mb-6 shadow-sm">
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search Input */}
           <div className="relative flex-1">
@@ -558,7 +558,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
               placeholder="Search by name, email, or role..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent"
             />
           </div>
 
@@ -567,7 +567,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value as 'all' | 'alumni' | 'admin')}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent appearance-none bg-white cursor-pointer"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent appearance-none bg-white cursor-pointer"
             >
               <option value="all">All Roles</option>
               <option value="alumni">Alumni Only</option>
@@ -581,7 +581,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
             <select
               value={courseFilter}
               onChange={(e) => setCourseFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent appearance-none bg-white cursor-pointer"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent appearance-none bg-white cursor-pointer"
             >
               <option value="all">All Courses</option>
               {PROGRAM_OPTIONS.map((course) => (
@@ -612,16 +612,16 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
 
       {/* All Users Tab Content */}
       {activeTab === 'all' && (
-      <div className="bg-white rounded-xl border-2 border-[#003087]/20 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border-2 border-[#1a24d2]/20 shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-12 text-center">
-            <div className="inline-block w-12 h-12 border-4 border-[#003087] border-t-transparent rounded-full animate-spin"></div>
+            <div className="inline-block w-12 h-12 border-4 border-[#1a24d2] border-t-transparent rounded-full animate-spin"></div>
             <p className="mt-4 text-gray-600">Loading users...</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#003087] text-white">
+              <thead className="bg-[#1a24d2] text-white">
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-semibold">User</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Contact</th>
@@ -639,7 +639,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                   <tr key={user.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-[#003087] rounded-full flex items-center justify-center text-white font-bold text-sm overflow-hidden">
+                        <div className="w-10 h-10 bg-[#1a24d2] rounded-full flex items-center justify-center text-white font-bold text-sm overflow-hidden">
                           {profileImageUrl ? (
                             <img
                               src={profileImageUrl}
@@ -753,10 +753,10 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
 
       {/* For Approval Tab Content */}
       {activeTab === 'approval' && (
-        <div className="bg-white rounded-xl border-2 border-[#003087]/20 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-xl border-2 border-[#1a24d2]/20 shadow-sm overflow-hidden">
           {loadingPending ? (
             <div className="p-12 text-center">
-              <div className="inline-block w-12 h-12 border-4 border-[#003087] border-t-transparent rounded-full animate-spin"></div>
+              <div className="inline-block w-12 h-12 border-4 border-[#1a24d2] border-t-transparent rounded-full animate-spin"></div>
               <p className="mt-4 text-gray-600">Loading pending registrations...</p>
             </div>
           ) : pendingUsers.length === 0 ? (
@@ -768,7 +768,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-[#003087] text-white">
+                <thead className="bg-[#1a24d2] text-white">
                   <tr>
                     <th className="px-6 py-4 text-left font-semibold">Name</th>
                     <th className="px-6 py-4 text-left font-semibold">Email</th>
@@ -815,7 +815,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                           <button
                             onClick={() => { setSelectedPendingUser(user); setIsPendingModalOpen(true); }}
                             title="Review"
-                            className="p-1.5 bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors"
+                            className="p-1.5 bg-[#1a24d2] text-white rounded-lg hover:bg-[#002066] transition-colors"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
@@ -865,7 +865,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
             <div className="p-6 space-y-6">
               {/* Personal Info */}
               <div>
-                <h3 className="text-lg font-bold text-[#003087] border-b border-gray-200 pb-2 mb-4">Personal Information</h3>
+                <h3 className="text-lg font-bold text-[#1a24d2] border-b border-gray-200 pb-2 mb-4">Personal Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div><span className="font-medium text-gray-500">First Name:</span><p className="text-gray-900 mt-0.5">{selectedPendingUser.first_name || '—'}</p></div>
                   <div><span className="font-medium text-gray-500">Middle Name:</span><p className="text-gray-900 mt-0.5">{selectedPendingUser.middle_name || '—'}</p></div>
@@ -882,7 +882,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
 
               {/* Contact & Address */}
               <div>
-                <h3 className="text-lg font-bold text-[#003087] border-b border-gray-200 pb-2 mb-4">Contact & Address</h3>
+                <h3 className="text-lg font-bold text-[#1a24d2] border-b border-gray-200 pb-2 mb-4">Contact & Address</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div><span className="font-medium text-gray-500">Phone Number:</span><p className="text-gray-900 mt-0.5">{selectedPendingUser.phone_number || '—'}</p></div>
                   <div><span className="font-medium text-gray-500">Telephone:</span><p className="text-gray-900 mt-0.5">{selectedPendingUser.telephone_number || '—'}</p></div>
@@ -900,7 +900,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
 
               {/* Academic Info */}
               <div>
-                <h3 className="text-lg font-bold text-[#003087] border-b border-gray-200 pb-2 mb-4">Academic Information</h3>
+                <h3 className="text-lg font-bold text-[#1a24d2] border-b border-gray-200 pb-2 mb-4">Academic Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div><span className="font-medium text-gray-500">Course:</span><p className="text-gray-900 mt-0.5">{selectedPendingUser.course || '—'}</p></div>
                   <div><span className="font-medium text-gray-500">Batch Year:</span><p className="text-gray-900 mt-0.5">{selectedPendingUser.batch_year || '—'}</p></div>
@@ -910,7 +910,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
 
               {/* Uploaded Documents */}
               <div>
-                <h3 className="text-lg font-bold text-[#003087] border-b border-gray-200 pb-2 mb-4">Submitted Documents</h3>
+                <h3 className="text-lg font-bold text-[#1a24d2] border-b border-gray-200 pb-2 mb-4">Submitted Documents</h3>
                 <div className="space-y-4">
                   {/* Diploma */}
                   <div className="bg-gray-50 rounded-lg p-4">
@@ -925,7 +925,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                         />
                         <button
                           onClick={() => { setImageViewerUrl(`http://localhost:8000/storage/${selectedPendingUser.diploma_file_path}`); setImageViewerTitle('Diploma/Degree Certificate'); }}
-                          className="px-3 py-1.5 text-sm bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors"
+                          className="px-3 py-1.5 text-sm bg-[#1a24d2] text-white rounded-lg hover:bg-[#002066] transition-colors"
                         >
                           View Full Image
                         </button>
@@ -949,7 +949,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                         />
                         <button
                           onClick={() => { setImageViewerUrl(`http://localhost:8000/storage/${selectedPendingUser.valid_id_file_path}`); setImageViewerTitle('Valid ID'); }}
-                          className="px-3 py-1.5 text-sm bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors"
+                          className="px-3 py-1.5 text-sm bg-[#1a24d2] text-white rounded-lg hover:bg-[#002066] transition-colors"
                         >
                           View Full Image
                         </button>
@@ -1014,7 +1014,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
       {isModalOpen && selectedUser && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-gradient-to-r from-[#003087] to-[#0055cc] text-white p-6 flex items-center justify-between rounded-t-2xl">
+            <div className="sticky top-0 bg-gradient-to-r from-[#1a24d2] to-[#0055cc] text-white p-6 flex items-center justify-between rounded-t-2xl">
               <h2 className="text-2xl font-bold">Edit User</h2>
               <button
                 onClick={() => {
@@ -1036,7 +1036,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                     type="text"
                     value={selectedUser.first_name || ''}
                     onChange={(e) => setSelectedUser({ ...selectedUser, first_name: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
                   />
                 </div>
                 <div>
@@ -1045,7 +1045,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                     type="text"
                     value={selectedUser.middle_name || ''}
                     onChange={(e) => setSelectedUser({ ...selectedUser, middle_name: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
                   />
                 </div>
                 <div>
@@ -1054,7 +1054,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                     type="text"
                     value={selectedUser.last_name || ''}
                     onChange={(e) => setSelectedUser({ ...selectedUser, last_name: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
                   />
                 </div>
               </div>
@@ -1065,7 +1065,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                   type="email"
                   value={selectedUser.email}
                   onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
                 />
               </div>
 
@@ -1074,7 +1074,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                 <select
                   value={selectedUser.role}
                   onChange={(e) => setSelectedUser({ ...selectedUser, role: e.target.value as 'alumni' | 'admin' })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
                 >
                   <option value="alumni">Alumni</option>
                   <option value="admin">Admin</option>
@@ -1092,7 +1092,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                     validatePhone(digits, 'edit');
                   }}
                   inputMode="numeric"
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] ${editPhoneError ? 'border-red-500 bg-red-50' : 'border-gray-300'}`}
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] ${editPhoneError ? 'border-red-500 bg-red-50' : 'border-gray-300'}`}
                 />
                 {editPhoneError && <p className="text-xs text-red-500 mt-1">{editPhoneError}</p>}
               </div>
@@ -1103,7 +1103,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                   value={selectedUser.current_address || ''}
                   onChange={(e) => setSelectedUser({ ...selectedUser, current_address: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
                 />
               </div>
 
@@ -1115,7 +1115,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                     value={selectedUser.course || ''}
                     onChange={(e) => setSelectedUser({ ...selectedUser, course: e.target.value })}
                     placeholder="Type or select course"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
                   />
                   <datalist id="edit-course-options">
                     {PROGRAM_OPTIONS.map(opt => <option key={opt} value={opt} />)}
@@ -1126,7 +1126,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                   <select
                     value={selectedUser.batch_year || ''}
                     onChange={(e) => setSelectedUser({ ...selectedUser, batch_year: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
                   >
                     <option value="">Select batch year</option>
                     {Array.from({ length: 57 }, (_, i) => 2026 - i).map(year => (
@@ -1139,7 +1139,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
               <div className="flex gap-3 pt-4">
                 <button
                   onClick={handleSave}
-                  className="flex-1 bg-[#003087] text-white px-6 py-3 rounded-lg hover:bg-[#002066] transition-colors font-semibold"
+                  className="flex-1 bg-[#1a24d2] text-white px-6 py-3 rounded-lg hover:bg-[#002066] transition-colors font-semibold"
                 >
                   Save Changes
                 </button>
@@ -1163,7 +1163,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
       {isCreateModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-gradient-to-r from-[#003087] to-[#0055cc] text-white p-6 flex items-center justify-between rounded-t-2xl">
+            <div className="sticky top-0 bg-gradient-to-r from-[#1a24d2] to-[#0055cc] text-white p-6 flex items-center justify-between rounded-t-2xl">
               <div>
                 <h2 className="text-2xl font-bold">Create New User</h2>
                 <p className="text-sm text-blue-100 mt-1">New users will be created with Alumni role by default</p>
@@ -1200,7 +1200,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                     type="text"
                     value={newUser.first_name}
                     onChange={(e) => setNewUser({ ...newUser, first_name: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
                     placeholder="Juan"
                     required
                   />
@@ -1211,7 +1211,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                     type="text"
                     value={newUser.middle_name}
                     onChange={(e) => setNewUser({ ...newUser, middle_name: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
                     placeholder="Santos"
                   />
                 </div>
@@ -1223,7 +1223,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                     type="text"
                     value={newUser.last_name}
                     onChange={(e) => setNewUser({ ...newUser, last_name: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
                     placeholder="Dela Cruz"
                     required
                   />
@@ -1238,7 +1238,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                   type="email"
                   value={newUser.email}
                   onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
                   placeholder="juan.delacruz@addu.edu.ph"
                   required
                 />
@@ -1252,7 +1252,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                   type="password"
                   value={newUser.password}
                   onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
                   placeholder="Enter password"
                   required
                 />
@@ -1269,7 +1269,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                     validatePhone(digits, 'create');
                   }}
                   inputMode="numeric"
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] ${createPhoneError ? 'border-red-500 bg-red-50' : 'border-gray-300'}`}
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] ${createPhoneError ? 'border-red-500 bg-red-50' : 'border-gray-300'}`}
                   placeholder="09171234567"
                 />
                 {createPhoneError && <p className="text-xs text-red-500 mt-1">{createPhoneError}</p>}
@@ -1281,7 +1281,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                   value={newUser.current_address}
                   onChange={(e) => setNewUser({ ...newUser, current_address: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
                   placeholder="Enter current address"
                 />
               </div>
@@ -1294,7 +1294,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                     value={newUser.course}
                     onChange={(e) => setNewUser({ ...newUser, course: e.target.value })}
                     placeholder="Type or select course"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
                   />
                   <datalist id="create-course-options">
                     {PROGRAM_OPTIONS.map(opt => <option key={opt} value={opt} />)}
@@ -1305,7 +1305,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
                   <select
                     value={newUser.batch_year}
                     onChange={(e) => setNewUser({ ...newUser, batch_year: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
                   >
                     <option value="">Select batch year</option>
                     {Array.from({ length: 57 }, (_, i) => 2026 - i).map(year => (
@@ -1324,7 +1324,7 @@ export function UserManagementView({ userRole }: UserManagementViewProps) {
               <div className="flex gap-3 pt-4">
                 <button
                   onClick={handleCreate}
-                  className="flex-1 bg-[#003087] text-white px-6 py-3 rounded-lg hover:bg-[#002066] transition-colors font-semibold"
+                  className="flex-1 bg-[#1a24d2] text-white px-6 py-3 rounded-lg hover:bg-[#002066] transition-colors font-semibold"
                 >
                   Create User
                 </button>

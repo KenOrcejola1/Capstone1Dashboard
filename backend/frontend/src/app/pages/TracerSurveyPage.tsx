@@ -6,7 +6,7 @@ export function TracerSurveyPage() {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="flex items-center gap-4 px-6 py-3 bg-[#003087] shadow-md shrink-0">
+      <div className="flex items-center gap-4 px-6 py-3 bg-[#1a24d2] shadow-md shrink-0">
         <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-white hover:text-orange-300 transition-colors font-semibold text-sm"

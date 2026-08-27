@@ -136,7 +136,7 @@ function EventCard({ event, userRole, onApprove, onReject, onView, onRemove, onE
               </button>
             </>
           )}
-          <span className="px-4 py-1.5 bg-[#003087] text-white text-[10px] rounded-full font-bold uppercase tracking-wider shadow-lg">
+          <span className="px-4 py-1.5 bg-[#1a24d2] text-white text-[10px] rounded-full font-bold uppercase tracking-wider shadow-lg">
             {event.category}
           </span>
           {event.status && (
@@ -169,7 +169,7 @@ function EventCard({ event, userRole, onApprove, onReject, onView, onRemove, onE
               <Award className="w-4 h-4 mt-0.5" /> {event.compensation}
             </div>
           )}
-          <div className="flex items-start gap-2 text-[#003087] text-[13px] font-semibold">
+          <div className="flex items-start gap-2 text-[#1a24d2] text-[13px] font-semibold">
             <Users className="w-4 h-4 mt-0.5" />
             {event.participants} {isPast ? 'attended' : isTeaching ? 'applications' : 'participants'}
           </div>
@@ -206,7 +206,7 @@ function EventCard({ event, userRole, onApprove, onReject, onView, onRemove, onE
               </button>
               <button
                 onClick={() => onRegister(event)}
-                className="flex-1 py-2.5 rounded-lg font-bold text-sm transition-colors bg-[#003087] text-white hover:bg-[#002566]"
+                className="flex-1 py-2.5 rounded-lg font-bold text-sm transition-colors bg-[#1a24d2] text-white hover:bg-[#002566]"
               >
                 Register
               </button>
@@ -215,7 +215,7 @@ function EventCard({ event, userRole, onApprove, onReject, onView, onRemove, onE
             <button
               onClick={() => onView(event)}
               className={`flex-1 py-2.5 rounded-lg font-bold text-sm transition-colors ${
-                isPast ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : isTeaching ? 'bg-[#003087] text-white hover:bg-[#002566]' : 'bg-[#003087] text-white hover:bg-[#002566]'
+                isPast ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : isTeaching ? 'bg-[#1a24d2] text-white hover:bg-[#002566]' : 'bg-[#1a24d2] text-white hover:bg-[#002566]'
               }`}
             >
               {isPast ? 'View Gallery' : isTeaching ? 'Apply Now' : 'View Details'}
@@ -255,7 +255,7 @@ function ActivityCard({ activity, userRole, onEdit, onRemove, onToggleRegistrati
               </button>
             </>
           )}
-          <span className="px-4 py-1.5 bg-[#003087] text-white text-[10px] rounded-full font-bold uppercase tracking-wider shadow-lg">
+          <span className="px-4 py-1.5 bg-[#1a24d2] text-white text-[10px] rounded-full font-bold uppercase tracking-wider shadow-lg">
             {activity.status}
           </span>
         </div>
@@ -271,7 +271,7 @@ function ActivityCard({ activity, userRole, onEdit, onRemove, onToggleRegistrati
           <div className="flex items-start gap-2 text-gray-500 text-[13px]">
             <MapPin className="w-4 h-4 text-gray-400 mt-0.5" /> {activity.venue}
           </div>
-          <div className="flex items-start gap-2 text-[#003087] text-[13px] font-semibold">
+          <div className="flex items-start gap-2 text-[#1a24d2] text-[13px] font-semibold">
             <Users className="w-4 h-4 mt-0.5" />
             {activity.participant_limit ? `${activity.participant_limit} slots` : 'Open slots'}
           </div>
@@ -297,7 +297,7 @@ function ActivityCard({ activity, userRole, onEdit, onRemove, onToggleRegistrati
             <button
               onClick={() => onRegister(activity)}
               disabled={!activity.registration_open}
-              className="flex-1 py-2.5 rounded-lg font-bold text-sm transition-colors bg-[#003087] text-white hover:bg-[#002566] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 py-2.5 rounded-lg font-bold text-sm transition-colors bg-[#1a24d2] text-white hover:bg-[#002566] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {activity.registration_open ? 'Register' : 'Registration Closed'}
             </button>
@@ -813,7 +813,7 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
           {userRole === 'admin' ? (
             <button
               onClick={() => setActiveTab(activeTab === 'GiveBack Activities' ? 'Create GiveBack Activity' : 'Create Event')}
-              className="flex items-center gap-2 px-4 py-2 bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold shadow-md"
+              className="flex items-center gap-2 px-4 py-2 bg-[#1a24d2] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold shadow-md"
             >
               <Plus className="w-5 h-5" />
               {activeTab === 'GiveBack Activities' ? 'Create GiveBack Activity' : 'Create Event'}
@@ -821,7 +821,7 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
           ) : (
             <button
               onClick={() => setActiveTab('Submit Proposal')}
-              className="flex items-center gap-2 px-4 py-2 bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold shadow-md"
+              className="flex items-center gap-2 px-4 py-2 bg-[#1a24d2] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold shadow-md"
             >
               <Plus className="w-5 h-5" />
               Submit Proposal
@@ -836,24 +836,24 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`pb-4 text-[13px] font-bold whitespace-nowrap transition-all relative ${
-                activeTab === tab ? 'text-[#003087]' : 'text-gray-400'
+                activeTab === tab ? 'text-[#1a24d2]' : 'text-gray-400'
               }`}
             >
               {tab}
               {activeTab === tab && (
-                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#003087]" />
+                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#1a24d2]" />
               )}
             </button>
           ))}
         </div>
 
         {activeTab === 'Teaching Opportunities' && (
-          <div className="bg-[#003087] rounded-[24px] p-8 text-white flex flex-col md:flex-row justify-between items-center gap-6 text-left">
+          <div className="bg-[#1a24d2] rounded-[24px] p-8 text-white flex flex-col md:flex-row justify-between items-center gap-6 text-left">
             <div>
               <h2 className="text-2xl font-bold mb-2">Share Your Expertise with Future Ateneans</h2>
               <p className="text-blue-100 text-sm max-w-2xl">Give back to your alma mater by teaching or mentoring. Help shape the next generation.</p>
             </div>
-            <button className="whitespace-nowrap bg-white text-[#003087] px-8 py-3 rounded-xl font-bold hover:bg-blue-50 transition-colors shadow-lg">Express Interest</button>
+            <button className="whitespace-nowrap bg-white text-[#1a24d2] px-8 py-3 rounded-xl font-bold hover:bg-blue-50 transition-colors shadow-lg">Express Interest</button>
           </div>
         )}
 
@@ -948,21 +948,21 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
 
         {/* Create GiveBack Activity form */}
         {activeTab === 'Create GiveBack Activity' && userRole === 'admin' && (
-          <div className="bg-white rounded-xl border-2 border-[#003087]/20 p-8 shadow-sm">
+          <div className="bg-white rounded-xl border-2 border-[#1a24d2]/20 p-8 shadow-sm">
             <h3 className="text-2xl font-bold text-gray-900 mb-6">Create GiveBack Activity</h3>
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Activity Title *</label>
-                <input type="text" placeholder="Enter activity title" value={activityForm.title} onChange={(e) => setActivityForm({ ...activityForm, title: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="text" placeholder="Enter activity title" value={activityForm.title} onChange={(e) => setActivityForm({ ...activityForm, title: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Date *</label>
-                  <input type="date" value={activityForm.date} onChange={(e) => setActivityForm({ ...activityForm, date: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="date" value={activityForm.date} onChange={(e) => setActivityForm({ ...activityForm, date: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Status *</label>
-                  <select value={activityForm.status} onChange={(e) => setActivityForm({ ...activityForm, status: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent">
+                  <select value={activityForm.status} onChange={(e) => setActivityForm({ ...activityForm, status: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent">
                     <option value="upcoming">Upcoming</option>
                     <option value="ongoing">Ongoing</option>
                     <option value="completed">Completed</option>
@@ -972,42 +972,42 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Start Time *</label>
-                  <input type="time" value={activityForm.startTime} onChange={(e) => setActivityForm({ ...activityForm, startTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="time" value={activityForm.startTime} onChange={(e) => setActivityForm({ ...activityForm, startTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">End Time *</label>
-                  <input type="time" value={activityForm.endTime} onChange={(e) => setActivityForm({ ...activityForm, endTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="time" value={activityForm.endTime} onChange={(e) => setActivityForm({ ...activityForm, endTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Venue *</label>
-                <input type="text" placeholder="Enter venue or location" value={activityForm.venue} onChange={(e) => setActivityForm({ ...activityForm, venue: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="text" placeholder="Enter venue or location" value={activityForm.venue} onChange={(e) => setActivityForm({ ...activityForm, venue: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Description *</label>
-                <textarea rows={6} placeholder="Describe the activity details..." value={activityForm.description} onChange={(e) => setActivityForm({ ...activityForm, description: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent resize-none"></textarea>
+                <textarea rows={6} placeholder="Describe the activity details..." value={activityForm.description} onChange={(e) => setActivityForm({ ...activityForm, description: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent resize-none"></textarea>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Participant Limit</label>
-                  <input type="number" placeholder="Maximum number of participants" value={activityForm.participantLimit} onChange={(e) => setActivityForm({ ...activityForm, participantLimit: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="number" placeholder="Maximum number of participants" value={activityForm.participantLimit} onChange={(e) => setActivityForm({ ...activityForm, participantLimit: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Fee Amount (PHP)</label>
-                  <input type="number" placeholder="0 for free" value={activityForm.feeAmount} onChange={(e) => setActivityForm({ ...activityForm, feeAmount: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="number" placeholder="0 for free" value={activityForm.feeAmount} onChange={(e) => setActivityForm({ ...activityForm, feeAmount: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <input type="checkbox" checked={activityForm.registrationOpen} onChange={(e) => setActivityForm({ ...activityForm, registrationOpen: e.target.checked })} className="w-4 h-4 accent-[#003087]" />
+                <input type="checkbox" checked={activityForm.registrationOpen} onChange={(e) => setActivityForm({ ...activityForm, registrationOpen: e.target.checked })} className="w-4 h-4 accent-[#1a24d2]" />
                 <span className="text-sm font-semibold text-gray-700">Open registration</span>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Poster / Image</label>
-                <input type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (file) { setActivityImage(file); setActivityImagePreview(URL.createObjectURL(file)); } }} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (file) { setActivityImage(file); setActivityImagePreview(URL.createObjectURL(file)); } }} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 {activityImagePreview && <img src={activityImagePreview} alt="Preview" className="mt-3 h-32 rounded-lg object-cover" />}
               </div>
               <div className="flex gap-3 pt-6 border-t border-gray-200">
-                <button onClick={handleCreateActivity} className="px-6 py-3 bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold">Create Activity</button>
+                <button onClick={handleCreateActivity} className="px-6 py-3 bg-[#1a24d2] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold">Create Activity</button>
                 <button onClick={() => { resetActivityForm(); setActiveTab('GiveBack Activities'); }} className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold">Cancel</button>
               </div>
             </div>
@@ -1022,16 +1022,16 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Activity Title *</label>
-                <input type="text" placeholder="Enter activity title" value={activityForm.title} onChange={(e) => setActivityForm({ ...activityForm, title: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="text" placeholder="Enter activity title" value={activityForm.title} onChange={(e) => setActivityForm({ ...activityForm, title: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Date *</label>
-                  <input type="date" value={activityForm.date} onChange={(e) => setActivityForm({ ...activityForm, date: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="date" value={activityForm.date} onChange={(e) => setActivityForm({ ...activityForm, date: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Status *</label>
-                  <select value={activityForm.status} onChange={(e) => setActivityForm({ ...activityForm, status: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent">
+                  <select value={activityForm.status} onChange={(e) => setActivityForm({ ...activityForm, status: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent">
                     <option value="upcoming">Upcoming</option>
                     <option value="ongoing">Ongoing</option>
                     <option value="completed">Completed</option>
@@ -1041,38 +1041,38 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Start Time *</label>
-                  <input type="time" value={activityForm.startTime} onChange={(e) => setActivityForm({ ...activityForm, startTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="time" value={activityForm.startTime} onChange={(e) => setActivityForm({ ...activityForm, startTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">End Time *</label>
-                  <input type="time" value={activityForm.endTime} onChange={(e) => setActivityForm({ ...activityForm, endTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="time" value={activityForm.endTime} onChange={(e) => setActivityForm({ ...activityForm, endTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Venue *</label>
-                <input type="text" placeholder="Enter venue or location" value={activityForm.venue} onChange={(e) => setActivityForm({ ...activityForm, venue: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="text" placeholder="Enter venue or location" value={activityForm.venue} onChange={(e) => setActivityForm({ ...activityForm, venue: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Description *</label>
-                <textarea rows={6} placeholder="Describe the activity details..." value={activityForm.description} onChange={(e) => setActivityForm({ ...activityForm, description: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent resize-none"></textarea>
+                <textarea rows={6} placeholder="Describe the activity details..." value={activityForm.description} onChange={(e) => setActivityForm({ ...activityForm, description: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent resize-none"></textarea>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Participant Limit</label>
-                  <input type="number" placeholder="Maximum number of participants" value={activityForm.participantLimit} onChange={(e) => setActivityForm({ ...activityForm, participantLimit: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="number" placeholder="Maximum number of participants" value={activityForm.participantLimit} onChange={(e) => setActivityForm({ ...activityForm, participantLimit: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Fee Amount (PHP)</label>
-                  <input type="number" placeholder="0 for free" value={activityForm.feeAmount} onChange={(e) => setActivityForm({ ...activityForm, feeAmount: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="number" placeholder="0 for free" value={activityForm.feeAmount} onChange={(e) => setActivityForm({ ...activityForm, feeAmount: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <input type="checkbox" checked={activityForm.registrationOpen} onChange={(e) => setActivityForm({ ...activityForm, registrationOpen: e.target.checked })} className="w-4 h-4 accent-[#003087]" />
+                <input type="checkbox" checked={activityForm.registrationOpen} onChange={(e) => setActivityForm({ ...activityForm, registrationOpen: e.target.checked })} className="w-4 h-4 accent-[#1a24d2]" />
                 <span className="text-sm font-semibold text-gray-700">Open registration</span>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Poster / Image</label>
-                <input type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (file) { setActivityImage(file); setActivityImagePreview(URL.createObjectURL(file)); } }} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (file) { setActivityImage(file); setActivityImagePreview(URL.createObjectURL(file)); } }} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 {activityImagePreview && <img src={activityImagePreview} alt="Preview" className="mt-3 h-32 rounded-lg object-cover" />}
               </div>
               <div className="flex gap-3 pt-6 border-t border-gray-200">
@@ -1085,21 +1085,21 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
 
         {/* Create Event form */}
         {activeTab === 'Create Event' && userRole === 'admin' && (
-          <div className="bg-white rounded-xl border-2 border-[#003087]/20 p-8 shadow-sm">
+          <div className="bg-white rounded-xl border-2 border-[#1a24d2]/20 p-8 shadow-sm">
             <h3 className="text-2xl font-bold text-gray-900 mb-6">Create New Event</h3>
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Event Title *</label>
-                <input type="text" placeholder="Enter event title" value={newEvent.title} onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="text" placeholder="Enter event title" value={newEvent.title} onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Event Date *</label>
-                  <input type="date" value={newEvent.date} onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="date" value={newEvent.date} onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Category *</label>
-                  <select value={newEvent.category} onChange={(e) => setNewEvent({ ...newEvent, category: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent">
+                  <select value={newEvent.category} onChange={(e) => setNewEvent({ ...newEvent, category: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent">
                     <option value="">Select category</option>
                     <option value="Networking">Networking</option>
                     <option value="Professional Dev">Professional Development</option>
@@ -1115,31 +1115,31 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Start Time *</label>
-                  <input type="time" value={newEvent.startTime} onChange={(e) => setNewEvent({ ...newEvent, startTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="time" value={newEvent.startTime} onChange={(e) => setNewEvent({ ...newEvent, startTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">End Time *</label>
-                  <input type="time" value={newEvent.endTime} onChange={(e) => setNewEvent({ ...newEvent, endTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="time" value={newEvent.endTime} onChange={(e) => setNewEvent({ ...newEvent, endTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Location *</label>
-                <input type="text" placeholder="e.g., ADDU Campus or Virtual Event" value={newEvent.location} onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="text" placeholder="e.g., ADDU Campus or Virtual Event" value={newEvent.location} onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Event Description *</label>
-                <textarea rows={6} placeholder="Describe the event details..." value={newEvent.description} onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent resize-none"></textarea>
+                <textarea rows={6} placeholder="Describe the event details..." value={newEvent.description} onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent resize-none"></textarea>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Event Capacity</label>
-                <input type="number" placeholder="Maximum number of attendees" value={newEvent.capacity} onChange={(e) => setNewEvent({ ...newEvent, capacity: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="number" placeholder="Maximum number of attendees" value={newEvent.capacity} onChange={(e) => setNewEvent({ ...newEvent, capacity: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Event Banner Image</label>
-                <input type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (file) { const imageUrl = URL.createObjectURL(file); setNewEvent({ ...newEvent, image: imageUrl }); } }} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (file) { const imageUrl = URL.createObjectURL(file); setNewEvent({ ...newEvent, image: imageUrl }); } }} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
               </div>
               <div className="flex gap-3 pt-6 border-t border-gray-200">
-                <button onClick={handleCreateEvent} className="px-6 py-3 bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold">Create Event</button>
+                <button onClick={handleCreateEvent} className="px-6 py-3 bg-[#1a24d2] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold">Create Event</button>
                 <button onClick={() => { setNewEvent({ title: '', category: '', date: '', startTime: '', endTime: '', location: '', description: '', capacity: '', image: '' }); setActiveTab('Upcoming Events'); }} className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold">Cancel</button>
               </div>
             </div>
@@ -1154,16 +1154,16 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Event Title *</label>
-                <input type="text" placeholder="Enter event title" value={editEvent.title} onChange={(e) => setEditEvent({ ...editEvent, title: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="text" placeholder="Enter event title" value={editEvent.title} onChange={(e) => setEditEvent({ ...editEvent, title: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Event Date *</label>
-                  <input type="date" value={editEvent.date} onChange={(e) => setEditEvent({ ...editEvent, date: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="date" value={editEvent.date} onChange={(e) => setEditEvent({ ...editEvent, date: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Category *</label>
-                  <select value={editEvent.category} onChange={(e) => setEditEvent({ ...editEvent, category: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent">
+                  <select value={editEvent.category} onChange={(e) => setEditEvent({ ...editEvent, category: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent">
                     <option value="">Select category</option>
                     <option value="Networking">Networking</option>
                     <option value="Professional Dev">Professional Development</option>
@@ -1179,28 +1179,28 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Start Time *</label>
-                  <input type="time" value={editEvent.startTime} onChange={(e) => setEditEvent({ ...editEvent, startTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="time" value={editEvent.startTime} onChange={(e) => setEditEvent({ ...editEvent, startTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">End Time *</label>
-                  <input type="time" value={editEvent.endTime} onChange={(e) => setEditEvent({ ...editEvent, endTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="time" value={editEvent.endTime} onChange={(e) => setEditEvent({ ...editEvent, endTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Location *</label>
-                <input type="text" placeholder="e.g., ADDU Campus or Virtual Event" value={editEvent.location} onChange={(e) => setEditEvent({ ...editEvent, location: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="text" placeholder="e.g., ADDU Campus or Virtual Event" value={editEvent.location} onChange={(e) => setEditEvent({ ...editEvent, location: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Event Description *</label>
-                <textarea rows={6} placeholder="Describe the event details..." value={editEvent.description} onChange={(e) => setEditEvent({ ...editEvent, description: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent resize-none"></textarea>
+                <textarea rows={6} placeholder="Describe the event details..." value={editEvent.description} onChange={(e) => setEditEvent({ ...editEvent, description: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent resize-none"></textarea>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Event Capacity</label>
-                <input type="number" placeholder="Maximum number of attendees" value={editEvent.capacity} onChange={(e) => setEditEvent({ ...editEvent, capacity: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="number" placeholder="Maximum number of attendees" value={editEvent.capacity} onChange={(e) => setEditEvent({ ...editEvent, capacity: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Event Banner Image</label>
-                <input type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (file) { const imageUrl = URL.createObjectURL(file); setEditEvent({ ...editEvent, image: imageUrl }); } }} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (file) { const imageUrl = URL.createObjectURL(file); setEditEvent({ ...editEvent, image: imageUrl }); } }} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
               </div>
               <div className="flex gap-3 pt-6 border-t border-gray-200">
                 <button onClick={handleUpdateEvent} className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold">Update Event</button>
@@ -1212,22 +1212,22 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
 
         {/* Submit Proposal form */}
         {activeTab === 'Submit Proposal' && userRole !== 'admin' && (
-          <div className="bg-white rounded-xl border-2 border-[#003087]/20 p-8 shadow-sm">
+          <div className="bg-white rounded-xl border-2 border-[#1a24d2]/20 p-8 shadow-sm">
             <h3 className="text-2xl font-bold text-gray-900 mb-6">Submit Event Proposal</h3>
             <p className="text-gray-600 text-sm mb-6">Submit your event proposal for admin review. Once approved, your event will be published to the Upcoming Events section.</p>
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Event Title *</label>
-                <input type="text" placeholder="Enter event title" value={newEvent.title} onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="text" placeholder="Enter event title" value={newEvent.title} onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Event Date *</label>
-                  <input type="date" value={newEvent.date} onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="date" value={newEvent.date} onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Category *</label>
-                  <select value={newEvent.category} onChange={(e) => setNewEvent({ ...newEvent, category: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent">
+                  <select value={newEvent.category} onChange={(e) => setNewEvent({ ...newEvent, category: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent">
                     <option value="">Select category</option>
                     <option value="Networking">Networking</option>
                     <option value="Professional Dev">Professional Development</option>
@@ -1243,28 +1243,28 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Start Time *</label>
-                  <input type="time" value={newEvent.startTime} onChange={(e) => setNewEvent({ ...newEvent, startTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="time" value={newEvent.startTime} onChange={(e) => setNewEvent({ ...newEvent, startTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">End Time *</label>
-                  <input type="time" value={newEvent.endTime} onChange={(e) => setNewEvent({ ...newEvent, endTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                  <input type="time" value={newEvent.endTime} onChange={(e) => setNewEvent({ ...newEvent, endTime: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Location *</label>
-                <input type="text" placeholder="e.g., ADDU Campus or Virtual Event" value={newEvent.location} onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="text" placeholder="e.g., ADDU Campus or Virtual Event" value={newEvent.location} onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Event Description *</label>
-                <textarea rows={6} placeholder="Describe the event details..." value={newEvent.description} onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent resize-none"></textarea>
+                <textarea rows={6} placeholder="Describe the event details..." value={newEvent.description} onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent resize-none"></textarea>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Event Capacity</label>
-                <input type="number" placeholder="Maximum number of attendees" value={newEvent.capacity} onChange={(e) => setNewEvent({ ...newEvent, capacity: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="number" placeholder="Maximum number of attendees" value={newEvent.capacity} onChange={(e) => setNewEvent({ ...newEvent, capacity: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Event Banner Image</label>
-                <input type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (file) { const imageUrl = URL.createObjectURL(file); setNewEvent({ ...newEvent, image: imageUrl }); } }} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent" />
+                <input type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (file) { const imageUrl = URL.createObjectURL(file); setNewEvent({ ...newEvent, image: imageUrl }); } }} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent" />
               </div>
               <div className="flex gap-3 pt-6 border-t border-gray-200">
                 <button
@@ -1295,7 +1295,7 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
                     alert('Event proposal submitted successfully! The admin will review and approve your event before it goes live.');
                     triggerToast();
                   }}
-                  className="px-6 py-3 bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold"
+                  className="px-6 py-3 bg-[#1a24d2] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold"
                 >
                   Submit Proposal
                 </button>
@@ -1317,24 +1317,24 @@ export function EventsView({ userRole, userName = 'Alumni User' }: { userRole: s
               </button>
             </div>
             <div className="p-8 text-left">
-              <span className="inline-block px-3 py-1 bg-blue-50 text-[#003087] rounded-full text-[10px] font-bold uppercase mb-3">
+              <span className="inline-block px-3 py-1 bg-blue-50 text-[#1a24d2] rounded-full text-[10px] font-bold uppercase mb-3">
                 {selectedEvent.category}
               </span>
               <h2 className="text-2xl font-bold mb-4 text-gray-900">{selectedEvent.title}</h2>
               <div className="space-y-3 mb-6">
                 <div className="flex items-center gap-3 text-gray-600 text-sm">
-                  <Calendar className="w-4 h-4 text-[#003087]" />
+                  <Calendar className="w-4 h-4 text-[#1a24d2]" />
                   <span>{selectedEvent.date} • {selectedEvent.time}</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-600 text-sm">
-                  <MapPin className="w-4 h-4 text-[#003087]" />
+                  <MapPin className="w-4 h-4 text-[#1a24d2]" />
                   <span>{selectedEvent.location}</span>
                 </div>
               </div>
               <div className="bg-gray-50 p-4 rounded-2xl mb-8">
                 <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{selectedEvent.description}</p>
               </div>
-              <button onClick={() => setSelectedEvent(null)} className="w-full py-3 bg-[#003087] text-white rounded-xl font-bold hover:bg-[#002566] transition-colors">
+              <button onClick={() => setSelectedEvent(null)} className="w-full py-3 bg-[#1a24d2] text-white rounded-xl font-bold hover:bg-[#002566] transition-colors">
                 Close Details
               </button>
             </div>

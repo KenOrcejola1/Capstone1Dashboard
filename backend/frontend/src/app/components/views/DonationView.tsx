@@ -881,7 +881,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                   if (userRole === 'admin' && onNavigate) onNavigate('home');
                 }
               }}
-              className="flex items-center gap-2 text-gray-500 font-bold mb-8 hover:text-[#003087] transition-all"
+              className="flex items-center gap-2 text-gray-500 font-bold mb-8 hover:text-[#1a24d2] transition-all"
             >
               <ChevronLeft className="w-5 h-5" />
               {isCreatingCampaign ? "Back to Campaign List" : isEditingCampaign ? "Back to Campaign List" : adminManagementView ? "Back to Donation Form" : managementView ? "Back to Donation Form" : "Back to Information"}
@@ -900,7 +900,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                     <div className="grid grid-cols-2 gap-4">
                       {['₱500', '₱1,000', '₱2,000', '₱5,000'].map((amt) => (
                         <button key={amt} onClick={() => { setSelectedAmount(amt); setTempAmount(""); }}
-                          className={`py-4 rounded-2xl font-bold border-2 transition-all ${selectedAmount === amt ? 'bg-[#003087] border-[#003087] text-white' : 'border-gray-100'}`}>
+                          className={`py-4 rounded-2xl font-bold border-2 transition-all ${selectedAmount === amt ? 'bg-[#1a24d2] border-[#1a24d2] text-white' : 'border-gray-100'}`}>
                           {amt}
                         </button>
                       ))}
@@ -908,7 +908,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                     <input type="text" placeholder="Custom Amount" value={tempAmount}
                       onChange={(e) => { setTempAmount(e.target.value); setSelectedAmount(null); }}
                       className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none font-bold" />
-                    <button onClick={confirmNewAmount} className="w-full py-4 bg-[#003087] text-white rounded-xl font-bold">Confirm New Amount</button>
+                    <button onClick={confirmNewAmount} className="w-full py-4 bg-[#1a24d2] text-white rounded-xl font-bold">Confirm New Amount</button>
                   </div>
                 </div>
               )}
@@ -923,12 +923,12 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                   <div className="space-y-6">
                     {['Credit Card', 'GCash', 'Bank Transfer'].map(m => (
                       <button key={m} onClick={() => setSelectedPayment(m)}
-                        className={`w-full p-6 border-2 rounded-2xl flex justify-between items-center font-bold transition-all ${selectedPayment === m ? 'border-[#003087] bg-blue-50' : 'border-gray-100'}`}>
+                        className={`w-full p-6 border-2 rounded-2xl flex justify-between items-center font-bold transition-all ${selectedPayment === m ? 'border-[#1a24d2] bg-blue-50' : 'border-gray-100'}`}>
                         {m}
-                        {selectedPayment === m && <CheckCircle2 className="text-[#003087]" />}
+                        {selectedPayment === m && <CheckCircle2 className="text-[#1a24d2]" />}
                       </button>
                     ))}
-                    <button onClick={() => setIsChangingPayment(false)} className="w-full py-4 bg-[#003087] text-white rounded-xl font-bold">Save Payment Method</button>
+                    <button onClick={() => setIsChangingPayment(false)} className="w-full py-4 bg-[#1a24d2] text-white rounded-xl font-bold">Save Payment Method</button>
                   </div>
                 </div>
               )}
@@ -943,19 +943,19 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                     <div className="space-y-2">
                       <label className="text-sm font-bold text-gray-700">Campaign Title *</label>
                       <input type="text" value={newCampaign.title} onChange={(e) => setNewCampaign({...newCampaign, title: e.target.value})}
-                        placeholder="e.g., Scholar Excellence Fund 2026" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                        placeholder="e.g., Scholar Excellence Fund 2026" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm font-bold text-gray-700">Description *</label>
                       <textarea value={newCampaign.description} onChange={(e) => setNewCampaign({...newCampaign, description: e.target.value})}
                         placeholder="Tell the story of this campaign..." rows={4}
-                        className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all resize-none" />
+                        className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all resize-none" />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label className="text-sm font-bold text-gray-700">Category</label>
                         <select value={newCampaign.category} onChange={(e) => setNewCampaign({...newCampaign, category: e.target.value})}
-                          className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all appearance-none">
+                          className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all appearance-none">
                           <option>Student Aid</option><option>Infrastructure</option><option>Research</option><option>Faculty</option>
                         </select>
                       </div>
@@ -964,7 +964,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                         <div className="relative">
                           <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                           <input type="text" value={newCampaign.imageUrl} onChange={(e) => setNewCampaign({...newCampaign, imageUrl: e.target.value})}
-                            placeholder="https://..." className="w-full p-4 pl-12 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                            placeholder="https://..." className="w-full p-4 pl-12 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                         </div>
                       </div>
                     </div>
@@ -977,17 +977,17 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                       <div className="space-y-2">
                         <label className="text-sm font-bold text-gray-700">Goal Amount (₱) *</label>
                         <input type="number" value={newCampaign.goalAmount} onChange={(e) => setNewCampaign({...newCampaign, goalAmount: e.target.value})}
-                          placeholder="0.00" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                          placeholder="0.00" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                       </div>
                       <div className="space-y-2">
                         <label className="text-sm font-bold text-gray-700">End Date *</label>
                         <input type="date" value={newCampaign.endDate} onChange={(e) => setNewCampaign({...newCampaign, endDate: e.target.value})}
-                          className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                          className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                       </div>
                     </div>
                     <div className="flex gap-4 pt-8">
                       <button onClick={() => setIsCreatingCampaign(false)} className="flex-1 py-4 border border-gray-200 rounded-xl font-bold text-gray-600 hover:bg-gray-50 transition-all">Cancel</button>
-                      <button onClick={handleCreateCampaign} className="flex-1 py-4 bg-[#003087] text-white rounded-xl font-bold shadow-lg shadow-blue-900/20 hover:bg-blue-800 transition-all">Create Campaign</button>
+                      <button onClick={handleCreateCampaign} className="flex-1 py-4 bg-[#1a24d2] text-white rounded-xl font-bold shadow-lg shadow-blue-900/20 hover:bg-blue-800 transition-all">Create Campaign</button>
                     </div>
                   </div>
                 </div>
@@ -1001,19 +1001,19 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                     <div className="space-y-2">
                       <label className="text-sm font-bold text-gray-700">Campaign Title *</label>
                       <input type="text" value={editCampaignData.title} onChange={(e) => setEditCampaignData({...editCampaignData, title: e.target.value})}
-                        placeholder="e.g., Scholar Excellence Fund 2026" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                        placeholder="e.g., Scholar Excellence Fund 2026" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm font-bold text-gray-700">Description *</label>
                       <textarea value={editCampaignData.description} onChange={(e) => setEditCampaignData({...editCampaignData, description: e.target.value})}
                         placeholder="Tell the story of this campaign..." rows={4}
-                        className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all resize-none" />
+                        className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all resize-none" />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label className="text-sm font-bold text-gray-700">Category</label>
                         <select value={editCampaignData.category} onChange={(e) => setEditCampaignData({...editCampaignData, category: e.target.value})}
-                          className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all appearance-none">
+                          className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all appearance-none">
                           <option>Student Aid</option><option>Infrastructure</option><option>Research</option><option>Faculty</option>
                         </select>
                       </div>
@@ -1022,7 +1022,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                         <div className="relative">
                           <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                           <input type="text" value={editCampaignData.imageUrl} onChange={(e) => setEditCampaignData({...editCampaignData, imageUrl: e.target.value})}
-                            placeholder="https://..." className="w-full p-4 pl-12 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                            placeholder="https://..." className="w-full p-4 pl-12 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                         </div>
                       </div>
                     </div>
@@ -1030,17 +1030,17 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                       <div className="space-y-2">
                         <label className="text-sm font-bold text-gray-700">Goal Amount (₱) *</label>
                         <input type="number" value={editCampaignData.goalAmount} onChange={(e) => setEditCampaignData({...editCampaignData, goalAmount: e.target.value})}
-                          placeholder="0.00" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                          placeholder="0.00" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                       </div>
                       <div className="space-y-2">
                         <label className="text-sm font-bold text-gray-700">End Date *</label>
                         <input type="date" value={editCampaignData.endDate} onChange={(e) => setEditCampaignData({...editCampaignData, endDate: e.target.value})}
-                          className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                          className="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                       </div>
                     </div>
                     <div className="flex gap-4 pt-8">
                       <button onClick={() => setIsEditingCampaign(false)} className="flex-1 py-4 border border-gray-200 rounded-xl font-bold text-gray-600 hover:bg-gray-50 transition-all">Cancel</button>
-                      <button onClick={handleEditCampaign} className="flex-1 py-4 bg-[#003087] text-white rounded-xl font-bold shadow-lg shadow-blue-900/20 hover:bg-blue-800 transition-all">Update Campaign</button>
+                      <button onClick={handleEditCampaign} className="flex-1 py-4 bg-[#1a24d2] text-white rounded-xl font-bold shadow-lg shadow-blue-900/20 hover:bg-blue-800 transition-all">Update Campaign</button>
                     </div>
                   </div>
                 </div>
@@ -1054,7 +1054,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                       </div>
                       {adminSection === 'campaigns' && (
                         <button onClick={() => setIsCreatingCampaign(true)}
-                          className="flex items-center gap-2 px-6 py-3 bg-[#003087] text-white rounded-xl font-bold text-sm shadow-lg hover:bg-blue-800 transition-all">
+                          className="flex items-center gap-2 px-6 py-3 bg-[#1a24d2] text-white rounded-xl font-bold text-sm shadow-lg hover:bg-blue-800 transition-all">
                           <Plus className="w-4 h-4" /> New Campaign
                         </button>
                       )}
@@ -1067,7 +1067,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                         { key: 'programs', label: 'GiveBack Programs' }
                       ].map((item) => (
                         <button key={item.key} onClick={() => setAdminSection(item.key as any)}
-                          className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${adminSection === item.key ? 'bg-[#003087] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                          className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${adminSection === item.key ? 'bg-[#1a24d2] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
                           {item.label}
                         </button>
                       ))}
@@ -1092,10 +1092,10 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                             <div className="space-y-2">
                               <div className="flex justify-between text-sm">
                                 <span className="text-gray-500 font-medium">Progress</span>
-                                <span className="font-bold text-[#003087]">{campaign.raised} / {campaign.goal}</span>
+                                <span className="font-bold text-[#1a24d2]">{campaign.raised} / {campaign.goal}</span>
                               </div>
                               <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
-                                <div className="h-full bg-[#003087] rounded-full transition-all duration-1000"
+                                <div className="h-full bg-[#1a24d2] rounded-full transition-all duration-1000"
                                   style={{ width: `${(parseInt(campaign.raised.replace(/\D/g,'')) || 0) / (parseInt(campaign.goal.replace(/\D/g,'')) || 1) * 100}%` }} />
                               </div>
                             </div>
@@ -1105,7 +1105,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                                 <span>Ends in 14 days</span>
                               </div>
                               <div className="flex gap-2">
-                                <button onClick={() => openEditCampaign(campaign)} className="p-2 hover:bg-blue-50 rounded-lg text-gray-400 hover:text-[#003087] transition-all" title="Edit campaign"><Settings className="w-5 h-5" /></button>
+                                <button onClick={() => openEditCampaign(campaign)} className="p-2 hover:bg-blue-50 rounded-lg text-gray-400 hover:text-[#1a24d2] transition-all" title="Edit campaign"><Settings className="w-5 h-5" /></button>
                                 <button onClick={() => handleToggleCampaignVisibility(campaign.id, campaign.is_active || false)} className="p-2 hover:bg-yellow-50 rounded-lg text-gray-400 hover:text-yellow-600 transition-all" title={campaign.is_active ? "Hide campaign" : "Show campaign"}>
                                   {campaign.is_active ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
                                 </button>
@@ -1159,7 +1159,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                           </div>
                         </div>
                         <div className="flex gap-3 mt-6">
-                          <button onClick={editingProjectId ? handleUpdateProject : handleCreateProject} className="px-6 py-3 bg-[#003087] text-white rounded-xl font-bold">{editingProjectId ? 'Update Project' : 'Create Project'}</button>
+                          <button onClick={editingProjectId ? handleUpdateProject : handleCreateProject} className="px-6 py-3 bg-[#1a24d2] text-white rounded-xl font-bold">{editingProjectId ? 'Update Project' : 'Create Project'}</button>
                           <button onClick={resetProjectForm} className="px-6 py-3 border border-gray-200 rounded-xl font-bold text-gray-600">Clear</button>
                         </div>
                       </div>
@@ -1178,7 +1178,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                                 <span>{project.start_date} - {project.end_date}</span>
                               </div>
                               <div className="flex gap-2">
-                                <button onClick={() => openEditProject(project)} className="px-3 py-2 text-sm font-bold text-[#003087] bg-blue-50 rounded-lg">Edit</button>
+                                <button onClick={() => openEditProject(project)} className="px-3 py-2 text-sm font-bold text-[#1a24d2] bg-blue-50 rounded-lg">Edit</button>
                                 <button onClick={() => handleArchiveProject(project.id)} className="px-3 py-2 text-sm font-bold text-yellow-700 bg-yellow-50 rounded-lg">Archive</button>
                                 <button onClick={() => handleDeleteProject(project.id)} className="px-3 py-2 text-sm font-bold text-red-600 bg-red-50 rounded-lg">Delete</button>
                               </div>
@@ -1196,7 +1196,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                               </div>
                               <p className="text-sm text-gray-500">{project.description}</p>
                               <div className="flex gap-2">
-                                <button onClick={() => handleRestoreProject(project.id)} className="px-3 py-2 text-sm font-bold text-[#003087] bg-blue-50 rounded-lg">Restore</button>
+                                <button onClick={() => handleRestoreProject(project.id)} className="px-3 py-2 text-sm font-bold text-[#1a24d2] bg-blue-50 rounded-lg">Restore</button>
                               </div>
                             </div>
                           ))}
@@ -1249,7 +1249,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                           </div>
                         </div>
                         <div className="flex gap-3 mt-6">
-                          <button onClick={editingProjectEventId ? handleUpdateProjectEvent : handleCreateProjectEvent} className="px-6 py-3 bg-[#003087] text-white rounded-xl font-bold">{editingProjectEventId ? 'Update Event' : 'Create Event'}</button>
+                          <button onClick={editingProjectEventId ? handleUpdateProjectEvent : handleCreateProjectEvent} className="px-6 py-3 bg-[#1a24d2] text-white rounded-xl font-bold">{editingProjectEventId ? 'Update Event' : 'Create Event'}</button>
                           <button onClick={resetProjectEventForm} className="px-6 py-3 border border-gray-200 rounded-xl font-bold text-gray-600">Clear</button>
                         </div>
                       </div>
@@ -1268,7 +1268,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                                 <span>{event.location || 'TBD'}</span>
                               </div>
                               <div className="flex gap-2">
-                                <button onClick={() => openEditProjectEvent(event)} className="px-3 py-2 text-sm font-bold text-[#003087] bg-blue-50 rounded-lg">Edit</button>
+                                <button onClick={() => openEditProjectEvent(event)} className="px-3 py-2 text-sm font-bold text-[#1a24d2] bg-blue-50 rounded-lg">Edit</button>
                                 <button onClick={() => handleArchiveProjectEvent(event.id)} className="px-3 py-2 text-sm font-bold text-yellow-700 bg-yellow-50 rounded-lg">Archive</button>
                                 <button onClick={() => handleDeleteProjectEvent(event.id)} className="px-3 py-2 text-sm font-bold text-red-600 bg-red-50 rounded-lg">Delete</button>
                               </div>
@@ -1286,7 +1286,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                               </div>
                               <p className="text-sm text-gray-500">{event.description}</p>
                               <div className="flex gap-2">
-                                <button onClick={() => handleRestoreProjectEvent(event.id)} className="px-3 py-2 text-sm font-bold text-[#003087] bg-blue-50 rounded-lg">Restore</button>
+                                <button onClick={() => handleRestoreProjectEvent(event.id)} className="px-3 py-2 text-sm font-bold text-[#1a24d2] bg-blue-50 rounded-lg">Restore</button>
                               </div>
                             </div>
                           ))}
@@ -1338,7 +1338,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                           </div>
                         </div>
                         <div className="flex gap-3 mt-6">
-                          <button onClick={editingProgramId ? handleUpdateProgram : handleCreateProgram} className="px-6 py-3 bg-[#003087] text-white rounded-xl font-bold">{editingProgramId ? 'Update Program' : 'Create Program'}</button>
+                          <button onClick={editingProgramId ? handleUpdateProgram : handleCreateProgram} className="px-6 py-3 bg-[#1a24d2] text-white rounded-xl font-bold">{editingProgramId ? 'Update Program' : 'Create Program'}</button>
                           <button onClick={resetProgramForm} className="px-6 py-3 border border-gray-200 rounded-xl font-bold text-gray-600">Clear</button>
                         </div>
                       </div>
@@ -1355,10 +1355,10 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                               <div className="space-y-2">
                                 <div className="flex justify-between text-sm">
                                   <span className="text-gray-500 font-medium">Progress</span>
-                                  <span className="font-bold text-[#003087]">₱{Number(program.amount_raised).toLocaleString()} / ₱{Number(program.funding_goal).toLocaleString()}</span>
+                                  <span className="font-bold text-[#1a24d2]">₱{Number(program.amount_raised).toLocaleString()} / ₱{Number(program.funding_goal).toLocaleString()}</span>
                                 </div>
                                 <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
-                                  <div className="h-full bg-[#003087] rounded-full" style={{ width: `${program.progress_percentage || 0}%` }} />
+                                  <div className="h-full bg-[#1a24d2] rounded-full" style={{ width: `${program.progress_percentage || 0}%` }} />
                                 </div>
                               </div>
                               <div className="flex justify-between text-sm text-gray-600">
@@ -1366,7 +1366,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                                 <span>Donors: {program.donor_count}</span>
                               </div>
                               <div className="flex gap-2">
-                                <button onClick={() => openEditProgram(program)} className="px-3 py-2 text-sm font-bold text-[#003087] bg-blue-50 rounded-lg">Edit</button>
+                                <button onClick={() => openEditProgram(program)} className="px-3 py-2 text-sm font-bold text-[#1a24d2] bg-blue-50 rounded-lg">Edit</button>
                                 <button onClick={() => handleArchiveProgram(program.id)} className="px-3 py-2 text-sm font-bold text-yellow-700 bg-yellow-50 rounded-lg">Archive</button>
                                 <button onClick={() => handleDeleteProgram(program.id)} className="px-3 py-2 text-sm font-bold text-red-600 bg-red-50 rounded-lg">Delete</button>
                               </div>
@@ -1386,14 +1386,14 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                               <div className="space-y-2">
                                 <div className="flex justify-between text-sm">
                                   <span className="text-gray-500 font-medium">Progress</span>
-                                  <span className="font-bold text-[#003087]">₱{Number(program.amount_raised).toLocaleString()} / ₱{Number(program.funding_goal).toLocaleString()}</span>
+                                  <span className="font-bold text-[#1a24d2]">₱{Number(program.amount_raised).toLocaleString()} / ₱{Number(program.funding_goal).toLocaleString()}</span>
                                 </div>
                                 <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
-                                  <div className="h-full bg-[#003087] rounded-full" style={{ width: `${program.progress_percentage || 0}%` }} />
+                                  <div className="h-full bg-[#1a24d2] rounded-full" style={{ width: `${program.progress_percentage || 0}%` }} />
                                 </div>
                               </div>
                               <div className="flex gap-2">
-                                <button onClick={() => handleRestoreProgram(program.id)} className="px-3 py-2 text-sm font-bold text-[#003087] bg-blue-50 rounded-lg">Restore</button>
+                                <button onClick={() => handleRestoreProgram(program.id)} className="px-3 py-2 text-sm font-bold text-[#1a24d2] bg-blue-50 rounded-lg">Restore</button>
                               </div>
                             </div>
                           ))}
@@ -1413,7 +1413,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                       <div key={gift.id} className="p-6 border border-blue-100 rounded-3xl bg-blue-50/30 space-y-4">
                         <div className="flex justify-between items-start">
                           <div>
-                            <p className="text-sm font-bold text-[#003087] uppercase tracking-wider">{gift.freq} Gift</p>
+                            <p className="text-sm font-bold text-[#1a24d2] uppercase tracking-wider">{gift.freq} Gift</p>
                             <h4 className="text-2xl font-bold text-gray-900">{gift.amount}</h4>
                           </div>
                           <span className="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">Active</span>
@@ -1436,7 +1436,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                         <p className="text-sm font-bold text-gray-900">Default Payment Method</p>
                         <p className="text-xs">{selectedPayment === 'Credit Card' ? 'Visa ending in 4242' : selectedPayment}</p>
                       </div>
-                      <button onClick={() => setIsChangingPayment(true)} className="text-[#003087] text-xs font-bold underline">Change</button>
+                      <button onClick={() => setIsChangingPayment(true)} className="text-[#1a24d2] text-xs font-bold underline">Change</button>
                     </div>
                   </div>
                 </div>
@@ -1458,18 +1458,18 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                   </div>
                   <div className="space-y-12">
                     <div className="space-y-6">
-                      <h3 className="text-xl font-bold flex items-center gap-3"><span className="w-8 h-8 rounded-full bg-[#003087] text-white flex items-center justify-center text-sm">1</span>Select Your Gift Amount</h3>
+                      <h3 className="text-xl font-bold flex items-center gap-3"><span className="w-8 h-8 rounded-full bg-[#1a24d2] text-white flex items-center justify-center text-sm">1</span>Select Your Gift Amount</h3>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {['₱50', '₱100', '₱200', '₱1,000'].map((amt) => (
                           <button key={amt} onClick={() => handleToggle(selectedAmount, amt, setSelectedAmount)}
-                            className={`py-4 rounded-2xl font-bold border-2 transition-all ${selectedAmount === amt ? 'bg-[#003087] border-[#003087] text-white' : 'bg-white border-gray-100 text-gray-600 hover:border-blue-200'}`}>{amt}</button>
+                            className={`py-4 rounded-2xl font-bold border-2 transition-all ${selectedAmount === amt ? 'bg-[#1a24d2] border-[#1a24d2] text-white' : 'bg-white border-gray-100 text-gray-600 hover:border-blue-200'}`}>{amt}</button>
                         ))}
                       </div>
                       <input type="text" placeholder="Enter Amount" className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none font-bold" />
                     </div>
                     <div className="space-y-6">
                       <div className="flex justify-between items-center">
-                        <h3 className="text-xl font-bold flex items-center gap-3"><span className="w-8 h-8 rounded-full bg-[#003087] text-white flex items-center justify-center text-sm">2</span>Choose Gift Frequency</h3>
+                        <h3 className="text-xl font-bold flex items-center gap-3"><span className="w-8 h-8 rounded-full bg-[#1a24d2] text-white flex items-center justify-center text-sm">2</span>Choose Gift Frequency</h3>
                         {selectedFreq && selectedFreq !== 'One-Time' && (
                           <span className="text-xs font-bold text-orange-600 bg-orange-50 px-3 py-1 rounded-full flex items-center gap-1 animate-pulse">
                             <Heart className="w-3 h-3 fill-current" /> Recurring Active
@@ -1479,17 +1479,17 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                       <div className="flex flex-wrap gap-4">
                         {['One-Time', 'Monthly', 'Annual'].map((freq) => (
                           <button key={freq} onClick={() => handleToggle(selectedFreq, freq, setSelectedFreq)}
-                            className={`px-8 py-3 rounded-xl border-2 font-bold transition-all ${selectedFreq === freq ? 'bg-[#003087] border-[#003087] text-white' : 'bg-white border-gray-200 text-gray-600'}`}>{freq}</button>
+                            className={`px-8 py-3 rounded-xl border-2 font-bold transition-all ${selectedFreq === freq ? 'bg-[#1a24d2] border-[#1a24d2] text-white' : 'bg-white border-gray-200 text-gray-600'}`}>{freq}</button>
                         ))}
                       </div>
                     </div>
                     <div className="space-y-6">
-                      <h3 className="text-xl font-bold flex items-center gap-3"><span className="w-8 h-8 rounded-full bg-[#003087] text-white flex items-center justify-center text-sm">3</span>Designate Your Gift</h3>
+                      <h3 className="text-xl font-bold flex items-center gap-3"><span className="w-8 h-8 rounded-full bg-[#1a24d2] text-white flex items-center justify-center text-sm">3</span>Designate Your Gift</h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {["Where it's needed most (Unrestricted)", "Student Financial Aid", "Faculty Excellence", "Research & Innovation", "Campus Infrastructure", "Academic Programs", "Global Engagement"].map((dest) => (
                           <button key={dest} onClick={() => handleToggle(selectedDesignation, dest, setSelectedDesignation)}
-                            className={`flex items-center gap-3 p-4 border-2 rounded-xl transition-all text-left ${selectedDesignation === dest ? 'bg-blue-50 border-[#003087] text-[#003087]' : 'bg-white border-gray-100 text-gray-600'}`}>
-                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${selectedDesignation === dest ? 'border-[#003087] bg-[#003087]' : 'border-gray-300'}`}>
+                            className={`flex items-center gap-3 p-4 border-2 rounded-xl transition-all text-left ${selectedDesignation === dest ? 'bg-blue-50 border-[#1a24d2] text-[#1a24d2]' : 'bg-white border-gray-100 text-gray-600'}`}>
+                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${selectedDesignation === dest ? 'border-[#1a24d2] bg-[#1a24d2]' : 'border-gray-300'}`}>
                               {selectedDesignation === dest && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                             </div>
                             <span className="text-sm font-bold">{dest}</span>
@@ -1498,7 +1498,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                       </div>
                     </div>
                     <div className="space-y-6">
-                      <h3 className="text-xl font-bold flex items-center gap-3"><span className="w-8 h-8 rounded-full bg-[#003087] text-white flex items-center justify-center text-sm">4</span>Your Information</h3>
+                      <h3 className="text-xl font-bold flex items-center gap-3"><span className="w-8 h-8 rounded-full bg-[#1a24d2] text-white flex items-center justify-center text-sm">4</span>Your Information</h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <input type="text" placeholder="First Name *" className="p-4 bg-gray-50 border border-gray-100 rounded-xl" />
                         <input type="text" placeholder="Last Name *" className="p-4 bg-gray-50 border border-gray-100 rounded-xl" />
@@ -1506,12 +1506,12 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                       </div>
                     </div>
                     <div className="space-y-6">
-                      <h3 className="text-xl font-bold flex items-center gap-3"><span className="w-8 h-8 rounded-full bg-[#003087] text-white flex items-center justify-center text-sm">5</span>Payment Details</h3>
+                      <h3 className="text-xl font-bold flex items-center gap-3"><span className="w-8 h-8 rounded-full bg-[#1a24d2] text-white flex items-center justify-center text-sm">5</span>Payment Details</h3>
                       <div className="space-y-4">
                         <div className="flex gap-4">
                           {['Credit Card', 'GCash', 'Bank Transfer'].map(m => (
                             <button key={m} onClick={() => setSelectedPayment(m)}
-                              className={`px-6 py-3 border-2 rounded-xl text-sm font-bold transition-all ${selectedPayment === m ? 'bg-[#003087] border-[#003087] text-white' : 'bg-white border-gray-200 text-gray-600'}`}>{m}</button>
+                              className={`px-6 py-3 border-2 rounded-xl text-sm font-bold transition-all ${selectedPayment === m ? 'bg-[#1a24d2] border-[#1a24d2] text-white' : 'bg-white border-gray-200 text-gray-600'}`}>{m}</button>
                           ))}
                         </div>
                         {selectedPayment === 'Credit Card' && (
@@ -1582,7 +1582,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                         </div>
                       )}
                       <button onClick={handleCompleteGift} disabled={!!submittedDonation}
-                        className="w-full py-5 bg-[#003087] text-white rounded-2xl font-bold text-xl shadow-xl hover:bg-[#002566] transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                        className="w-full py-5 bg-[#1a24d2] text-white rounded-2xl font-bold text-xl shadow-xl hover:bg-[#002566] transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                         {selectedFreq === 'One-Time' || !selectedFreq ? 'Complete My Gift' : `Start My ${selectedFreq} Gift`}
                       </button>
                       <div className="grid grid-cols-3 gap-4 text-[11px] text-gray-400 font-bold uppercase text-center">
@@ -1608,7 +1608,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
       <main className="flex-1">
 
         {/* HERO */}
-        <div className="bg-[#003087] text-white py-24 px-8 text-center">
+        <div className="bg-[#1a24d2] text-white py-24 px-8 text-center">
           <div className="max-w-4xl mx-auto space-y-6">
             <h1 className="text-5xl font-bold leading-tight">Supporting Excellence at ADDU</h1>
             <p className="text-xl text-blue-100 leading-relaxed max-w-3xl mx-auto">Your generosity empowers students, advances research, and strengthens our Jesuit mission of service and excellence.</p>
@@ -1629,11 +1629,11 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
         <div className="max-w-7xl mx-auto px-8 mt-16 border-b border-gray-200">
           <div className="flex gap-12">
             <button onClick={() => setActiveTab('gift')}
-              className={`pb-4 text-base font-bold transition-all border-b-4 ${activeTab === 'gift' ? 'border-[#003087] text-[#003087]' : 'border-transparent text-gray-400 hover:text-gray-600'}`}>
+              className={`pb-4 text-base font-bold transition-all border-b-4 ${activeTab === 'gift' ? 'border-[#1a24d2] text-[#1a24d2]' : 'border-transparent text-gray-400 hover:text-gray-600'}`}>
               Make a Gift
             </button>
             <button onClick={() => setActiveTab('needs')}
-              className={`pb-4 text-base font-bold transition-all border-b-4 ${activeTab === 'needs' ? 'border-[#003087] text-[#003087]' : 'border-transparent text-gray-400 hover:text-gray-600'}`}>
+              className={`pb-4 text-base font-bold transition-all border-b-4 ${activeTab === 'needs' ? 'border-[#1a24d2] text-[#1a24d2]' : 'border-transparent text-gray-400 hover:text-gray-600'}`}>
               Areas of Greatest Need
             </button>
           </div>
@@ -1646,14 +1646,14 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
               <div className="flex flex-col sm:flex-row justify-center gap-8">
                 {[["Active Donors", "4,250"], ["Alumni Participation", "35%"]].map(([label, val], i) => (
                   <div key={i} className="flex-1 max-w-sm space-y-2 border-2 border-blue-500 p-10 rounded-[32px] shadow-lg shadow-blue-100/50 hover:shadow-xl transition-all bg-white text-center">
-                    <p className="text-5xl font-extrabold text-[#003087]">{val}</p>
+                    <p className="text-5xl font-extrabold text-[#1a24d2]">{val}</p>
                     <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">{label}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-[#003087] py-24 px-8">
+            <div className="bg-[#1a24d2] py-24 px-8">
               <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
                   <div className="lg:col-span-7 space-y-12">
@@ -1685,14 +1685,14 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                   </div>
                   <div className="lg:col-span-5">
                     <div className="bg-white rounded-[40px] p-10 h-full shadow-2xl">
-                      <div className="flex items-center gap-3 text-[#003087] font-bold uppercase tracking-widest text-sm mb-4"><Gift className="w-5 h-5" /> Giving Methods</div>
+                      <div className="flex items-center gap-3 text-[#1a24d2] font-bold uppercase tracking-widest text-sm mb-4"><Gift className="w-5 h-5" /> Giving Methods</div>
                       <h3 className="text-3xl font-bold text-gray-900 mb-8">Ways to Give</h3>
                       <div className="space-y-10">
                         {[{ t: "Cash Gifts", d: "Immediate impact via credit card, GCash, or bank transfer." }, { t: "Planned Giving", d: "Create a legacy through bequests or trusts." }].map((way, i) => (
                           <div key={i} className="group">
-                            <h4 className="text-lg font-bold text-gray-900 group-hover:text-[#003087] transition-colors">{way.t}</h4>
+                            <h4 className="text-lg font-bold text-gray-900 group-hover:text-[#1a24d2] transition-colors">{way.t}</h4>
                             <p className="text-gray-500 text-sm mb-3 leading-relaxed">{way.d}</p>
-                            <button onClick={() => setShowForm(true)} className="text-[#003087] text-sm font-bold flex items-center gap-2 group-hover:gap-4 transition-all">Give Now <ArrowRight className="w-4 h-4" /></button>
+                            <button onClick={() => setShowForm(true)} className="text-[#1a24d2] text-sm font-bold flex items-center gap-2 group-hover:gap-4 transition-all">Give Now <ArrowRight className="w-4 h-4" /></button>
                           </div>
                         ))}
                       </div>
@@ -1721,8 +1721,8 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                     onClick={() => setNeedsTab(item.key as typeof needsTab)}
                     className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all border-2 ${
                       needsTab === item.key
-                        ? 'bg-[#003087] border-[#003087] text-white shadow-md shadow-blue-900/20'
-                        : 'bg-white border-gray-200 text-gray-600 hover:border-[#003087] hover:text-[#003087]'
+                        ? 'bg-[#1a24d2] border-[#1a24d2] text-white shadow-md shadow-blue-900/20'
+                        : 'bg-white border-gray-200 text-gray-600 hover:border-[#1a24d2] hover:text-[#1a24d2]'
                     }`}
                   >
                     {item.label}
@@ -1759,16 +1759,16 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                             <div>
                               <div className="flex justify-between mb-2">
                                 <span className="text-sm text-gray-600 font-medium">Progress</span>
-                                <span className="text-sm font-bold text-[#003087]">{campaign.raised} / {campaign.goal}</span>
+                                <span className="text-sm font-bold text-[#1a24d2]">{campaign.raised} / {campaign.goal}</span>
                               </div>
                               <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                                <div className="h-full bg-[#003087] rounded-full transition-all"
+                                <div className="h-full bg-[#1a24d2] rounded-full transition-all"
                                   style={{ width: `${Math.min(100, (parseInt(campaign.raised.replace(/\D/g, '')) || 0) / (parseInt(campaign.goal.replace(/\D/g, '')) || 1) * 100)}%` }} />
                               </div>
                             </div>
                             <p className="text-sm text-gray-500 font-medium">👥 {campaign.backers} supporters</p>
                             <button onClick={() => openDonationModal(campaign)}
-                              className="w-full py-3 bg-[#003087] text-white rounded-xl font-bold hover:bg-[#002566] transition-all">
+                              className="w-full py-3 bg-[#1a24d2] text-white rounded-xl font-bold hover:bg-[#002566] transition-all">
                               Donate Now
                             </button>
                           </div>
@@ -1810,7 +1810,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                               </span>
                             </div>
                             {project.collaboration && (
-                              <p className="text-xs font-semibold text-[#003087] mb-2">In collaboration with: {project.collaboration}</p>
+                              <p className="text-xs font-semibold text-[#1a24d2] mb-2">In collaboration with: {project.collaboration}</p>
                             )}
                             <p className="text-gray-500 text-sm mb-5 flex-1 leading-relaxed">{project.description}</p>
                             <div className="pt-4 border-t border-gray-100 space-y-1.5 text-sm text-gray-500">
@@ -1901,12 +1901,12 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                           <div className="space-y-2 mb-4">
                             <div className="flex justify-between text-sm">
                               <span className="text-gray-500 font-medium">Raised</span>
-                              <span className="font-bold text-[#003087]">
+                              <span className="font-bold text-[#1a24d2]">
                                 ₱{Number(program.amount_raised).toLocaleString()} / ₱{Number(program.funding_goal).toLocaleString()}
                               </span>
                             </div>
                             <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                              <div className="h-full bg-[#003087] rounded-full transition-all"
+                              <div className="h-full bg-[#1a24d2] rounded-full transition-all"
                                 style={{ width: `${Math.min(100, program.progress_percentage || 0)}%` }} />
                             </div>
                           </div>
@@ -1915,7 +1915,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                             <p>👥 {program.donor_count} donor{program.donor_count !== 1 ? 's' : ''}</p>
                           </div>
                           <button onClick={() => setShowForm(true)}
-                            className="w-full py-3 border-2 border-[#003087] text-[#003087] rounded-xl font-bold text-sm hover:bg-[#003087] hover:text-white transition-all">
+                            className="w-full py-3 border-2 border-[#1a24d2] text-[#1a24d2] rounded-xl font-bold text-sm hover:bg-[#1a24d2] hover:text-white transition-all">
                             Support This Program
                           </button>
                         </div>
@@ -1940,7 +1940,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                     { title: "Global Engagement", desc: "Expand international partnerships.", stats: ["₱3.5M exchanges", "85 experiences"], icon: <Globe /> }
                   ].map((area, i) => (
                     <div key={i} className="bg-white p-10 rounded-[32px] border border-gray-100 flex flex-col shadow-sm">
-                      <div className="bg-blue-50 text-[#003087] w-14 h-14 rounded-2xl flex items-center justify-center mb-6">{area.icon}</div>
+                      <div className="bg-blue-50 text-[#1a24d2] w-14 h-14 rounded-2xl flex items-center justify-center mb-6">{area.icon}</div>
                       <h3 className="text-2xl font-bold mb-4">{area.title}</h3>
                       <p className="text-gray-500 mb-8 flex-1 leading-relaxed">{area.desc}</p>
                       <div className="space-y-3 mb-10 pt-6 border-t border-gray-100">
@@ -1948,7 +1948,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                           <div key={si} className="text-sm font-bold text-gray-700 flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-orange-500" />{s}</div>
                         ))}
                       </div>
-                      <button onClick={() => setShowForm(true)} className="w-full py-4 rounded-xl border-2 border-[#003087] text-[#003087] font-bold text-sm hover:bg-[#003087] hover:text-white transition-all">Support This Area</button>
+                      <button onClick={() => setShowForm(true)} className="w-full py-4 rounded-xl border-2 border-[#1a24d2] text-[#1a24d2] font-bold text-sm hover:bg-[#1a24d2] hover:text-white transition-all">Support This Area</button>
                     </div>
                   ))}
                 </div>
@@ -1959,7 +1959,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
 
         {/* READY TO MAKE AN IMPACT CTA */}
         <div className="max-w-7xl mx-auto px-8 py-24">
-          <div className="relative overflow-hidden flex flex-col gap-12 rounded-[48px] p-12 md:p-20 shadow-2xl bg-[#003087]">
+          <div className="relative overflow-hidden flex flex-col gap-12 rounded-[48px] p-12 md:p-20 shadow-2xl bg-[#1a24d2]">
             <div className="relative z-10 text-center space-y-6">
               <h2 className="text-4xl md:text-5xl font-bold text-white">Ready to Make an Impact?</h2>
               <p className="text-blue-100 text-lg max-w-2xl mx-auto leading-relaxed">Your gift today will transform lives for generations to come.</p>
@@ -1970,8 +1970,8 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
             <div className="relative z-10 pt-12 border-t border-white/10 text-center">
               <h3 className="text-2xl font-bold text-white mb-2">Questions?</h3>
               <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-                <a href="mailto:development@addu.edu.ph" className="flex items-center gap-3 px-8 py-4 rounded-xl border-2 border-white/10 text-white font-bold hover:bg-white hover:text-[#003087] transition-all"><Mail className="w-5 h-5" /> development@addu.edu.ph</a>
-                <a href="tel:+63822212411" className="flex items-center gap-3 px-8 py-4 rounded-xl border-2 border-white/10 text-white font-bold hover:bg-white hover:text-[#003087] transition-all"><Phone className="w-5 h-5" /> +63 (82) 221-2411</a>
+                <a href="mailto:development@addu.edu.ph" className="flex items-center gap-3 px-8 py-4 rounded-xl border-2 border-white/10 text-white font-bold hover:bg-white hover:text-[#1a24d2] transition-all"><Mail className="w-5 h-5" /> development@addu.edu.ph</a>
+                <a href="tel:+63822212411" className="flex items-center gap-3 px-8 py-4 rounded-xl border-2 border-white/10 text-white font-bold hover:bg-white hover:text-[#1a24d2] transition-all"><Phone className="w-5 h-5" /> +63 (82) 221-2411</a>
               </div>
             </div>
           </div>
@@ -1989,10 +1989,10 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                 <div className="bg-gray-50 p-6 rounded-2xl">
                   <div className="flex justify-between mb-3">
                     <span className="text-gray-600 font-medium">Progress</span>
-                    <span className="font-bold text-[#003087]">{selectedCampaignForDonation.raised} / {selectedCampaignForDonation.goal}</span>
+                    <span className="font-bold text-[#1a24d2]">{selectedCampaignForDonation.raised} / {selectedCampaignForDonation.goal}</span>
                   </div>
                   <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
-                    <div className="h-full bg-[#003087] rounded-full"
+                    <div className="h-full bg-[#1a24d2] rounded-full"
                       style={{ width: `${Math.min(100, (parseInt(selectedCampaignForDonation.raised.replace(/\D/g, '')) || 0) / (parseInt(selectedCampaignForDonation.goal.replace(/\D/g, '')) || 1) * 100)}%` }} />
                   </div>
                   <p className="text-sm text-gray-600 mt-3">{selectedCampaignForDonation.backers} supporters already donated</p>
@@ -2001,22 +2001,22 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                 <div className="space-y-3">
                   <label className="text-sm font-bold text-gray-700">Donation Amount (₱) *</label>
                   <input type="number" value={donationAmount} onChange={(e) => setDonationAmount(e.target.value)} placeholder="Enter amount"
-                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-bold text-gray-700">First Name *</label>
                   <input type="text" value={donationFirstName} onChange={(e) => setDonationFirstName(e.target.value)} placeholder="Your first name"
-                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-bold text-gray-700">Last Name *</label>
                   <input type="text" value={donationLastName} onChange={(e) => setDonationLastName(e.target.value)} placeholder="Your last name"
-                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-bold text-gray-700">Email Address *</label>
                   <input type="email" value={donationEmail} onChange={(e) => setDonationEmail(e.target.value)} placeholder="your@email.com"
-                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                 </div>
 
                 <div className="space-y-3">
@@ -2024,7 +2024,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                   <div className="grid grid-cols-3 gap-3">
                     {['Credit Card', 'GCash', 'Bank Transfer'].map((method) => (
                       <button key={method} onClick={() => setDonationPaymentMethod(method)}
-                        className={`p-3 border-2 rounded-xl font-bold text-sm transition-all ${donationPaymentMethod === method ? 'bg-[#003087] border-[#003087] text-white' : 'bg-white border-gray-200 text-gray-600 hover:border-[#003087]'}`}>
+                        className={`p-3 border-2 rounded-xl font-bold text-sm transition-all ${donationPaymentMethod === method ? 'bg-[#1a24d2] border-[#1a24d2] text-white' : 'bg-white border-gray-200 text-gray-600 hover:border-[#1a24d2]'}`}>
                         {method}
                       </button>
                     ))}
@@ -2035,7 +2035,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                   <div className="space-y-3">
                     <label className="text-sm font-bold text-gray-700">Card Number *</label>
                     <input type="text" value={campaignPaymentFields.cardNumber} onChange={(e) => setCampaignPaymentFields({ ...campaignPaymentFields, cardNumber: e.target.value })}
-                      placeholder="Card number used for payment" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                      placeholder="Card number used for payment" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                   </div>
                 )}
 
@@ -2047,17 +2047,17 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                     <div className="space-y-3">
                       <label className="text-sm font-bold text-gray-700">GCash Number *</label>
                       <input type="text" value={campaignPaymentFields.gcashNumber} onChange={(e) => setCampaignPaymentFields({ ...campaignPaymentFields, gcashNumber: e.target.value })}
-                        placeholder="Your GCash number" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                        placeholder="Your GCash number" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                     </div>
                     <div className="space-y-3">
                       <label className="text-sm font-bold text-gray-700">Reference Number / Code *</label>
                       <input type="text" value={campaignPaymentFields.referenceNumber} onChange={(e) => setCampaignPaymentFields({ ...campaignPaymentFields, referenceNumber: e.target.value })}
-                        placeholder="Transaction reference" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                        placeholder="Transaction reference" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                     </div>
                     <div className="space-y-3">
                       <label className="text-sm font-bold text-gray-700">Transaction Date *</label>
                       <input type="date" value={campaignPaymentFields.transactionDate} onChange={(e) => setCampaignPaymentFields({ ...campaignPaymentFields, transactionDate: e.target.value })}
-                        className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                        className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                     </div>
                   </>
                 )}
@@ -2074,22 +2074,22 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                     <div className="space-y-3">
                       <label className="text-sm font-bold text-gray-700">Account Name (Sender) *</label>
                       <input type="text" value={campaignPaymentFields.accountName} onChange={(e) => setCampaignPaymentFields({ ...campaignPaymentFields, accountName: e.target.value })}
-                        placeholder="Your account name" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                        placeholder="Your account name" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                     </div>
                     <div className="space-y-3">
                       <label className="text-sm font-bold text-gray-700">Bank Name *</label>
                       <input type="text" value={campaignPaymentFields.bankName} onChange={(e) => setCampaignPaymentFields({ ...campaignPaymentFields, bankName: e.target.value })}
-                        placeholder="Your bank" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                        placeholder="Your bank" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                     </div>
                     <div className="space-y-3">
                       <label className="text-sm font-bold text-gray-700">Reference / Transaction Number *</label>
                       <input type="text" value={campaignPaymentFields.referenceNumber} onChange={(e) => setCampaignPaymentFields({ ...campaignPaymentFields, referenceNumber: e.target.value })}
-                        placeholder="Transaction reference" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                        placeholder="Transaction reference" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                     </div>
                     <div className="space-y-3">
                       <label className="text-sm font-bold text-gray-700">Transaction Date *</label>
                       <input type="date" value={campaignPaymentFields.transactionDate} onChange={(e) => setCampaignPaymentFields({ ...campaignPaymentFields, transactionDate: e.target.value })}
-                        className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#003087] transition-all" />
+                        className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-[#1a24d2] transition-all" />
                     </div>
                   </>
                 )}
@@ -2110,7 +2110,7 @@ export function DonationsView({ userRole, onNavigate }: DonationsViewProps) {
                   <button onClick={() => setShowDonationModal(false)} disabled={isDonating}
                     className="flex-1 py-4 border border-gray-200 rounded-xl font-bold text-gray-600 hover:bg-gray-50 transition-all">Cancel</button>
                   <button onClick={handleDonateToCampaign} disabled={isDonating || !!campaignSubmittedDonation}
-                    className="flex-1 py-4 bg-[#003087] text-white rounded-xl font-bold shadow-lg shadow-blue-900/20 hover:bg-[#002566] transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                    className="flex-1 py-4 bg-[#1a24d2] text-white rounded-xl font-bold shadow-lg shadow-blue-900/20 hover:bg-[#002566] transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                     {isDonating ? 'Submitting...' : campaignSubmittedDonation ? 'Submitted for Verification' : `Donate ₱${donationAmount || '0'}`}
                   </button>
                 </div>

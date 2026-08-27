@@ -5,6 +5,8 @@ import { RegisterPage } from './app/pages/RegisterPage';
 import { Dashboard } from './app/pages/Dashboard';
 import { TracerSurveyPage } from './app/pages/TracerSurveyPage';
 import { TermsAndConditionsPage } from './app/pages/TermsAndConditionsPage';
+import { AboutHistoryPage } from './app/pages/AboutHistoryPage';
+import { DevelopersPage } from './app/pages/DevelopersPage';
 
 export default function App() {
   return (
@@ -16,6 +18,8 @@ export default function App() {
         <Route path="/terms" element={<TermsAndConditionsPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/survey/tracer" element={<TracerSurveyPage />} />
+        <Route path="/about" element={<AboutHistoryPage />} />
+        <Route path="/developers" element={<DevelopersPage />} />
       </Routes>
     </BrowserRouter>
   );

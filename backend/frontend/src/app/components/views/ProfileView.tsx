@@ -568,7 +568,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
             <p className="text-gray-500 text-sm">Manage your personal information and career history</p>
           </div>
           {!isEditing ? (
-            <button onClick={handleEdit} className="flex items-center gap-2 px-6 py-2 bg-[#003087] text-white rounded-lg font-bold hover:bg-blue-800 transition-all shadow-md">
+            <button onClick={handleEdit} className="flex items-center gap-2 px-6 py-2 bg-[#1a24d2] text-white rounded-lg font-bold hover:bg-blue-800 transition-all shadow-md">
               <Edit3 className="w-4 h-4" /> Edit Profile
             </button>
           ) : (
@@ -595,7 +595,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
                 type="button"
                 onClick={() => isEditing && !uploadingImage && fileInputRef.current?.click()}
                 disabled={!isEditing || uploadingImage}
-                className={`w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-md bg-[#003087] flex items-center justify-center text-white text-4xl font-bold ${isEditing ? 'cursor-pointer' : 'cursor-default'}`}
+                className={`w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-md bg-[#1a24d2] flex items-center justify-center text-white text-4xl font-bold ${isEditing ? 'cursor-pointer' : 'cursor-default'}`}
                 title={isEditing ? 'Change profile image' : 'Profile image'}
               >
                 {profileImageUrl ? (
@@ -605,7 +605,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
                 )}
               </button>
               {isEditing && (
-                <div className="absolute -bottom-1 -right-1 w-9 h-9 rounded-full bg-[#003087] text-white flex items-center justify-center shadow-md border-2 border-white">
+                <div className="absolute -bottom-1 -right-1 w-9 h-9 rounded-full bg-[#1a24d2] text-white flex items-center justify-center shadow-md border-2 border-white">
                   <Camera className="w-4 h-4" />
                 </div>
               )}
@@ -628,14 +628,14 @@ export function ProfileView({ userRole }: ProfileViewProps) {
                 <p className="text-gray-500 font-medium">Class of {formData.batchYear || 'N/A'} • {formData.course || 'Course Not Set'}</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-12">
-                <div className="flex items-center gap-3 text-gray-600"><Mail className="w-4 h-4 text-[#003087]" /><span className="text-sm">{formData.email || 'Not provided'}</span></div>
-                <div className="flex items-center gap-3 text-gray-600"><Phone className="w-4 h-4 text-[#003087]" /><span className="text-sm">{formData.phone || 'Not provided'}</span></div>
-                <div className="flex items-center gap-3 text-gray-600"><MapPin className="w-4 h-4 text-[#003087]" /><span className="text-sm">
+                <div className="flex items-center gap-3 text-gray-600"><Mail className="w-4 h-4 text-[#1a24d2]" /><span className="text-sm">{formData.email || 'Not provided'}</span></div>
+                <div className="flex items-center gap-3 text-gray-600"><Phone className="w-4 h-4 text-[#1a24d2]" /><span className="text-sm">{formData.phone || 'Not provided'}</span></div>
+                <div className="flex items-center gap-3 text-gray-600"><MapPin className="w-4 h-4 text-[#1a24d2]" /><span className="text-sm">
                   {formData.country === 'Philippines'
                     ? `${formData.city || 'City not set'}, ${formData.province || 'Province not set'}, Philippines`
                     : formData.country || 'Location not set'}
                 </span></div>
-                <div className="flex items-center gap-3 text-gray-600"><Briefcase className="w-4 h-4 text-[#003087]" /><span className="text-sm">{formData.jobTitle || 'Job title not set'} {formData.company && `at ${formData.company}`}</span></div>
+                <div className="flex items-center gap-3 text-gray-600"><Briefcase className="w-4 h-4 text-[#1a24d2]" /><span className="text-sm">{formData.jobTitle || 'Job title not set'} {formData.company && `at ${formData.company}`}</span></div>
               </div>
             </div>
           </div>
@@ -1046,7 +1046,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
           <div className="flex justify-between items-center mb-8">
               <h3 className="text-xl font-bold text-gray-900">Educational Background</h3>
               {isEditing && (
-                <button onClick={addEducation} className="px-4 py-2 text-sm text-[#003087] font-bold border-2 border-[#003087] rounded-lg hover:bg-blue-50 transition-colors">
+                <button onClick={addEducation} className="px-4 py-2 text-sm text-[#1a24d2] font-bold border-2 border-[#1a24d2] rounded-lg hover:bg-blue-50 transition-colors">
                   + Add Education
                 </button>
               )}
@@ -1054,7 +1054,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
           <div className="space-y-4">
             {education.map((edu, index) => (
               <div key={edu.id} className="bg-gray-50 rounded-2xl p-6 flex items-start gap-6 border border-gray-100 relative">
-                <div className="w-12 h-12 bg-[#003087] rounded-xl flex items-center justify-center text-white shrink-0"><GraduationCap className="w-6 h-6" /></div>
+                <div className="w-12 h-12 bg-[#1a24d2] rounded-xl flex items-center justify-center text-white shrink-0"><GraduationCap className="w-6 h-6" /></div>
                 <div className="flex-1 space-y-2">
                   <input 
                     disabled={!isEditing}
@@ -1102,7 +1102,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
           <div className="flex justify-between items-center mb-8">
               <h3 className="text-xl font-bold text-gray-900">Career Milestones</h3>
               {isEditing && (
-                <button onClick={addExperience} className="px-4 py-2 text-sm text-[#003087] font-bold border-2 border-[#003087] rounded-lg hover:bg-blue-50 transition-colors">
+                <button onClick={addExperience} className="px-4 py-2 text-sm text-[#1a24d2] font-bold border-2 border-[#1a24d2] rounded-lg hover:bg-blue-50 transition-colors">
                   + Add Experience
                 </button>
               )}
@@ -1110,7 +1110,7 @@ export function ProfileView({ userRole }: ProfileViewProps) {
           <div className="space-y-4">
             {experience.map((exp, index) => (
               <div key={exp.id} className="bg-gray-50 rounded-2xl p-6 flex items-start gap-6 border border-gray-100 relative">
-                <div className="w-12 h-12 bg-[#003087] rounded-xl flex items-center justify-center text-white shrink-0"><Briefcase className="w-6 h-6" /></div>
+                <div className="w-12 h-12 bg-[#1a24d2] rounded-xl flex items-center justify-center text-white shrink-0"><Briefcase className="w-6 h-6" /></div>
                 <div className="flex-1 space-y-2">
                   <input 
                     disabled={!isEditing}

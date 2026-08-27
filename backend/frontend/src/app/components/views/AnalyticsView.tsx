@@ -260,11 +260,11 @@ export function AnalyticsView({ userRole }: AnalyticsViewProps) {
           <div className="flex items-center gap-3">
             <button
               onClick={fetchAnalytics}
-              className="flex items-center gap-2 px-4 py-2 border-2 border-[#003087] text-[#003087] rounded-lg hover:bg-[#003087] hover:text-white transition-colors font-medium"
+              className="flex items-center gap-2 px-4 py-2 border-2 border-[#1a24d2] text-[#1a24d2] rounded-lg hover:bg-[#1a24d2] hover:text-white transition-colors font-medium"
             >
               <BarChart3 className="w-5 h-5" /> Refresh Data
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors font-medium">
+            <button className="flex items-center gap-2 px-4 py-2 bg-[#1a24d2] text-white rounded-lg hover:bg-[#002066] transition-colors font-medium">
               <Download className="w-5 h-5" /> Export Report
             </button>
           </div>
@@ -278,8 +278,8 @@ export function AnalyticsView({ userRole }: AnalyticsViewProps) {
               onClick={() => setActiveReport(tab.id)}
               className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all ${
                 activeReport === tab.id
-                  ? 'bg-[#003087] text-white shadow-md'
-                  : 'bg-white text-gray-600 border border-gray-200 hover:border-[#003087] hover:text-[#003087]'
+                  ? 'bg-[#1a24d2] text-white shadow-md'
+                  : 'bg-white text-gray-600 border border-gray-200 hover:border-[#1a24d2] hover:text-[#1a24d2]'
               }`}
             >
               {tab.icon}
@@ -300,14 +300,14 @@ export function AnalyticsView({ userRole }: AnalyticsViewProps) {
                 label="Total Visits (Jun)"
                 value="380"
                 sub="Alumni + Guests combined"
-                gradient="from-[#003087] to-[#0055cc]"
+                gradient="from-[#1a24d2] to-[#0055cc]"
                 icon={<Globe className="w-6 h-6" />}
               />
               <MetricCard
                 label="Alumni Visits"
                 value="230"
                 sub="+15% vs last month"
-                gradient="from-[#003087] to-[#0055cc]"
+                gradient="from-[#1a24d2] to-[#0055cc]"
                 icon={<Users className="w-6 h-6" />}
               />
               <MetricCard
@@ -326,7 +326,7 @@ export function AnalyticsView({ userRole }: AnalyticsViewProps) {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="alumni" stroke="#003087" strokeWidth={2} dot={{ r: 4 }} />
+                  <Line type="monotone" dataKey="alumni" stroke="#1a24d2" strokeWidth={2} dot={{ r: 4 }} />
                   <Line type="monotone" dataKey="guests" stroke="#ff8c42" strokeWidth={2} dot={{ r: 4 }} />
                 </LineChart>
               </ChartCard>
@@ -355,14 +355,14 @@ export function AnalyticsView({ userRole }: AnalyticsViewProps) {
                 label="Overall Job Match Rate"
                 value="78%"
                 sub="Across all programs"
-                gradient="from-[#003087] to-[#0055cc]"
+                gradient="from-[#1a24d2] to-[#0055cc]"
                 icon={<BarChart3 className="w-6 h-6" />}
               />
               <MetricCard
                 label="Total Respondents"
                 value="420"
                 sub="Out of 730 graduates"
-                gradient="from-[#003087] to-[#0055cc]"
+                gradient="from-[#1a24d2] to-[#0055cc]"
                 icon={<Users className="w-6 h-6" />}
               />
               <MetricCard
@@ -381,7 +381,7 @@ export function AnalyticsView({ userRole }: AnalyticsViewProps) {
                   <YAxis domain={[0, 100]} />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="matched" name="Matched (%)" fill="#003087" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="matched" name="Matched (%)" fill="#1a24d2" radius={[4, 4, 0, 0]} />
                   <Bar dataKey="unmatched" name="Unmatched (%)" fill="#ff8c42" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ChartCard>
@@ -418,7 +418,7 @@ export function AnalyticsView({ userRole }: AnalyticsViewProps) {
                     label="Total Registrants"
                     value={String(analyticsData.total_registrants)}
                     sub="All-time registrations"
-                    gradient="from-[#003087] to-[#0055cc]"
+                    gradient="from-[#1a24d2] to-[#0055cc]"
                     icon={<Users className="w-6 h-6" />}
                   />
                   <MetricCard
@@ -455,7 +455,7 @@ export function AnalyticsView({ userRole }: AnalyticsViewProps) {
                         <YAxis yAxisId="right" orientation="right" />
                         <Tooltip />
                         <Legend />
-                        <Bar yAxisId="left" dataKey="registrations" fill="#003087" name="Registrations" radius={[4, 4, 0, 0]} />
+                        <Bar yAxisId="left" dataKey="registrations" fill="#1a24d2" name="Registrations" radius={[4, 4, 0, 0]} />
                         <Bar yAxisId="right" dataKey="verified_total" fill="#10b981" name="Verified Amount (PHP)" radius={[4, 4, 0, 0]} />
                       </BarChart>
                     </ChartCard>
@@ -516,7 +516,7 @@ export function AnalyticsView({ userRole }: AnalyticsViewProps) {
                       <div className="bg-slate-50 rounded-3xl p-6 border border-gray-100 flex flex-col gap-4">
                         <div className="rounded-2xl bg-white p-4 border border-gray-100">
                           <p className="text-sm font-semibold text-gray-900">Upcoming Events</p>
-                          <p className="mt-1 text-2xl font-bold text-[#003087]">{projectAnalytics.upcoming_events}</p>
+                          <p className="mt-1 text-2xl font-bold text-[#1a24d2]">{projectAnalytics.upcoming_events}</p>
                         </div>
                         <div className="rounded-2xl bg-white p-4 border border-gray-100">
                           <p className="text-sm font-semibold text-gray-900">Ongoing Events</p>
@@ -555,14 +555,14 @@ export function AnalyticsView({ userRole }: AnalyticsViewProps) {
                 label="Total Events (2025)"
                 value="5"
                 sub="Across all campuses"
-                gradient="from-[#003087] to-[#0055cc]"
+                gradient="from-[#1a24d2] to-[#0055cc]"
                 icon={<Calendar className="w-6 h-6" />}
               />
               <MetricCard
                 label="Total Attendees"
                 value="980"
                 sub="Out of 1,120 registered"
-                gradient="from-[#003087] to-[#0055cc]"
+                gradient="from-[#1a24d2] to-[#0055cc]"
                 icon={<Users className="w-6 h-6" />}
               />
               <MetricCard
@@ -581,7 +581,7 @@ export function AnalyticsView({ userRole }: AnalyticsViewProps) {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="registered" name="Registered" fill="#003087" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="registered" name="Registered" fill="#1a24d2" radius={[4, 4, 0, 0]} />
                   <Bar dataKey="attended" name="Attended" fill="#3399FF" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ChartCard>
@@ -610,14 +610,14 @@ export function AnalyticsView({ userRole }: AnalyticsViewProps) {
                 label="Total Applicants (Jun)"
                 value="201"
                 sub="Jobs + Internships"
-                gradient="from-[#003087] to-[#0055cc]"
+                gradient="from-[#1a24d2] to-[#0055cc]"
                 icon={<Briefcase className="w-6 h-6" />}
               />
               <MetricCard
                 label="Most Applied Role"
                 value="Backend Dev"
                 sub="56 applicants"
-                gradient="from-[#003087] to-[#0055cc]"
+                gradient="from-[#1a24d2] to-[#0055cc]"
                 icon={<BarChart3 className="w-6 h-6" />}
               />
               <MetricCard
@@ -635,7 +635,7 @@ export function AnalyticsView({ userRole }: AnalyticsViewProps) {
                   <XAxis dataKey="title" tick={{ fontSize: 11 }} />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="applicants" fill="#003087" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="applicants" fill="#1a24d2" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ChartCard>
               <ChartCard title="Monthly Applicants Trend">
@@ -645,7 +645,7 @@ export function AnalyticsView({ userRole }: AnalyticsViewProps) {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="jobs" name="Job Applicants" stroke="#003087" strokeWidth={2} dot={{ r: 4 }} />
+                  <Line type="monotone" dataKey="jobs" name="Job Applicants" stroke="#1a24d2" strokeWidth={2} dot={{ r: 4 }} />
                   <Line type="monotone" dataKey="internships" name="Internship Applicants" stroke="#ff8c42" strokeWidth={2} dot={{ r: 4 }} />
                 </LineChart>
               </ChartCard>

@@ -57,7 +57,7 @@ function Toast({ message, onDone }: { message: string; onDone: () => void }) {
         bottom: 32,
         right: 32,
         zIndex: 9999,
-        background: '#003087',
+        background: '#1a24d2',
         color: '#fff',
         padding: '14px 24px',
         borderRadius: 16,
@@ -142,7 +142,7 @@ function NewsCard({ article, userRole, onReadMore, onDelete, onToggleHide, onEdi
                   className={`p-2 rounded-lg transition-colors ${featured ? 'text-yellow-500 bg-yellow-50 cursor-default' : 'text-gray-400 hover:text-yellow-500 hover:bg-yellow-50'}`}>
                   <Star className={`w-4 h-4 ${featured ? 'fill-yellow-400' : ''}`} />
                 </button>
-                <button onClick={onEdit} title="Edit" className="p-2 rounded-lg text-gray-400 hover:text-[#003087] hover:bg-blue-50 transition-colors">
+                <button onClick={onEdit} title="Edit" className="p-2 rounded-lg text-gray-400 hover:text-[#1a24d2] hover:bg-blue-50 transition-colors">
                   <Pencil className="w-4 h-4" />
                 </button>
                 <button onClick={onToggleHide} title={hidden ? 'Unhide' : 'Hide'} className="p-2 rounded-lg text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 transition-colors">
@@ -160,7 +160,7 @@ function NewsCard({ article, userRole, onReadMore, onDelete, onToggleHide, onEdi
             )}
           </div>
 
-          <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight group-hover:text-[#003087] transition-colors">
+          <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight group-hover:text-[#1a24d2] transition-colors">
             {title}
           </h3>
           <p className="text-gray-500 text-sm leading-relaxed mb-6 line-clamp-3">
@@ -170,7 +170,7 @@ function NewsCard({ article, userRole, onReadMore, onDelete, onToggleHide, onEdi
 
         <button
           onClick={onReadMore}
-          className="flex items-center gap-2 text-[#003087] font-bold text-sm hover:translate-x-1 transition-transform w-fit"
+          className="flex items-center gap-2 text-[#1a24d2] font-bold text-sm hover:translate-x-1 transition-transform w-fit"
         >
           Read More <ArrowRight className="w-4 h-4" />
         </button>
@@ -210,7 +210,7 @@ function ArticleDetailPage({
         {/* Back button */}
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-[#003087] font-semibold mb-8 hover:-translate-x-1 transition-transform"
+          className="flex items-center gap-2 text-[#1a24d2] font-semibold mb-8 hover:-translate-x-1 transition-transform"
         >
           <ArrowLeft className="w-4 h-4" /> Back to News
         </button>
@@ -277,7 +277,7 @@ function ArticleDetailPage({
             )}
             <button
               onClick={onEdit}
-              className="flex items-center gap-1 px-4 py-2 text-xs font-semibold text-[#003087] bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+              className="flex items-center gap-1 px-4 py-2 text-xs font-semibold text-[#1a24d2] bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
             >
               <Pencil className="w-3 h-3" /> Edit
             </button>
@@ -747,7 +747,7 @@ export function NewsView({ userRole }: { userRole: string }) {
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Category <span className="text-red-500">*</span></label>
           <select value={form.category} onChange={(e) => setForm(f => ({ ...f, category: e.target.value }))}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#003087]">
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a24d2]">
             <option value="">Select a category</option>
             <option value="Scholarship">Scholarship</option>
             <option value="Programs">Programs</option>
@@ -762,19 +762,19 @@ export function NewsView({ userRole }: { userRole: string }) {
           <label className="block text-sm font-semibold text-gray-700 mb-1">Title <span className="text-red-500">*</span></label>
           <input type="text" value={form.title} onChange={(e) => setForm(f => ({ ...f, title: e.target.value }))}
             placeholder="Article title"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#003087]" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a24d2]" />
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Excerpt <span className="text-red-500">*</span></label>
           <textarea value={form.excerpt} onChange={(e) => setForm(f => ({ ...f, excerpt: e.target.value }))}
             placeholder="Short summary shown on the news feed" rows={2}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#003087] resize-none" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a24d2] resize-none" />
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Full Content <span className="text-red-500">*</span></label>
           <textarea value={form.content} onChange={(e) => setForm(f => ({ ...f, content: e.target.value }))}
             placeholder="Full article content" rows={6}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#003087] resize-none" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a24d2] resize-none" />
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -785,21 +785,21 @@ export function NewsView({ userRole }: { userRole: string }) {
               onError={(e) => (e.currentTarget.style.display = 'none')} />
           )}
           <input type="file" accept="image/*" onChange={(e) => setNewPostImage(e.target.files?.[0] || null)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#003087] mb-2" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a24d2] mb-2" />
           <input type="text" value={form.image} onChange={(e) => setForm(f => ({ ...f, image: e.target.value }))}
             placeholder={isEdit ? 'Or paste a new image URL to replace' : 'Or paste an image URL: https://...'}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#003087]" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a24d2]" />
         </div>
         <label className="flex items-center gap-3 cursor-pointer">
           <input type="checkbox" checked={form.featured} onChange={(e) => setForm(f => ({ ...f, featured: e.target.checked }))}
-            className="w-4 h-4 accent-[#003087]" />
+            className="w-4 h-4 accent-[#1a24d2]" />
           <span className="text-sm font-semibold text-gray-700">
             Feature this article <span className="text-gray-400 font-normal">(pins to top and sets as the featured banner)</span>
           </span>
         </label>
         <div className="flex gap-3 pt-2">
           <button onClick={isEdit ? handleSaveEdit : handlePublish}
-            className="flex-1 bg-[#003087] text-white py-3 rounded-xl font-semibold hover:bg-[#002066] transition-colors">
+            className="flex-1 bg-[#1a24d2] text-white py-3 rounded-xl font-semibold hover:bg-[#002066] transition-colors">
             {isEdit ? 'Save Changes' : 'Publish Article'}
           </button>
           <button onClick={() => { setActiveTab('feed'); setForm(emptyForm); setEditingId(null); setNewPostImage(null); }}
@@ -868,7 +868,7 @@ export function NewsView({ userRole }: { userRole: string }) {
           {userRole === 'admin' && activeTab === 'feed' && (
             <button
               onClick={() => { setForm(emptyForm); setNewPostImage(null); setActiveTab('create'); }}
-              className="flex items-center gap-2 px-4 py-2 bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold shadow-md"
+              className="flex items-center gap-2 px-4 py-2 bg-[#1a24d2] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold shadow-md"
             >
               <Plus className="w-5 h-5" /> Post News
             </button>
@@ -878,7 +878,7 @@ export function NewsView({ userRole }: { userRole: string }) {
         {/* Tab bar */}
         {activeTab === 'feed' && (
           <div className="flex gap-2 mb-6 border-b-2 border-gray-200">
-            <button className="px-6 py-3 border-b-2 border-[#003087] text-[#003087] font-semibold">News Feed</button>
+            <button className="px-6 py-3 border-b-2 border-[#1a24d2] text-[#1a24d2] font-semibold">News Feed</button>
             {userRole === 'admin' && (
               <button onClick={() => setActiveTab('archived')}
                 className="px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-colors font-semibold">
@@ -947,7 +947,7 @@ export function NewsView({ userRole }: { userRole: string }) {
                                 </button>
                               )}
                               <button onClick={() => handleEdit(featuredArticle)}
-                                className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-[#003087] bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                                className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-[#1a24d2] bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
                                 <Pencil className="w-3 h-3" /> Edit
                               </button>
                               <button onClick={() => handleToggleHide(featuredArticle.id)}
@@ -969,7 +969,7 @@ export function NewsView({ userRole }: { userRole: string }) {
                           <p className="text-gray-600 text-sm leading-relaxed mb-8">{featuredArticle.excerpt}</p>
                         </div>
                         <button onClick={() => handleReadMore(featuredArticle)}
-                          className="text-[#003087] font-bold text-sm flex items-center gap-2 w-fit hover:translate-x-1 transition-transform">
+                          className="text-[#1a24d2] font-bold text-sm flex items-center gap-2 w-fit hover:translate-x-1 transition-transform">
                           Read More <ArrowRight className="w-4 h-4" />
                         </button>
                       </div>
@@ -1009,7 +1009,7 @@ export function NewsView({ userRole }: { userRole: string }) {
               <h2 className="text-2xl font-bold text-gray-900">Archived Posts</h2>
               <div className="h-[2px] flex-1 bg-gray-100"></div>
               <button onClick={() => setActiveTab('feed')}
-                className="flex items-center gap-2 text-[#003087] font-semibold text-sm hover:-translate-x-1 transition-transform">
+                className="flex items-center gap-2 text-[#1a24d2] font-semibold text-sm hover:-translate-x-1 transition-transform">
                 <ArrowLeft className="w-4 h-4" /> Back to Feed
               </button>
             </div>

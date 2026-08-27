@@ -10,15 +10,15 @@ import communityPhoto from '../../assets/_MG_1823.jpg';
 
 /* ─── Design tokens ─────────────────────────────────────── */
 const C = {
-  navy:   '#001F5B',
-  navyDk: '#00153D',
-  blue:   '#003087',
-  blueMd: '#1A4A9A',
-  gold:   '#C5A96A',
-  goldLt: '#D4BC86',
-  cream:  '#F7F3EC',
-  slate:  '#2C3E50',
-  muted:  '#6B7280',
+  navy:   '#09107a',
+  navyDk: '#09107a',
+  blue:   '#09107a',
+  blueMd: '#09107a',
+  gold:   '#c9a227',
+  goldLt: '#f5b800',
+  cream:  '#f0f2f9',
+  slate:  '#09107a',
+  muted:  '#475569',
   white:  '#FFFFFF',
 } as const;
 
@@ -57,35 +57,26 @@ interface ContactItem {
 }
 
 /* ─── Reusable components ────────────────────────────────── */
-const Tag: React.FC<TagProps> = ({ children, color = C.gold }) => (
-  <span
-    style={{
-      display: 'inline-block',
-      padding: '3px 12px',
-      borderRadius: 100,
-      border: `1px solid ${color}`,
-      color,
-      fontSize: 11,
-      fontWeight: 500,
-      letterSpacing: '0.1em',
-      textTransform: 'uppercase',
-    }}
-  >
-    {children}
+const Tag: React.FC<TagProps & { centered?: boolean }> = ({ children, color = C.gold, centered = false }) => (
+  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+    <span style={{ width: 26, height: 2, background: color, flexShrink: 0 }} />
+    <span
+      style={{
+        fontFamily: "'Cinzel', serif",
+        color,
+        fontSize: 12.5,
+        fontWeight: 700,
+        letterSpacing: '0.1em',
+        textTransform: 'uppercase',
+      }}
+    >
+      {children}
+    </span>
+    {centered && <span style={{ width: 26, height: 2, background: color, flexShrink: 0 }} />}
   </span>
 );
 
-const GoldLine: React.FC = () => (
-  <div
-    style={{
-      width: 40,
-      height: 2,
-      background: C.gold,
-      borderRadius: 2,
-      margin: '12px 0 20px',
-    }}
-  />
-);
+const GoldLine: React.FC = () => <div style={{ height: 16 }} />;
 
 /* ─── Main component ─────────────────────────────────────── */
 export function LandingPage(): React.ReactElement {
@@ -136,8 +127,19 @@ export function LandingPage(): React.ReactElement {
     },
   ];
 
-  const quickLinks: string[] = ['About Us', 'Alumni Directory', 'Benefits', 'Donate'];
-  const resources: string[] = ['Career Services', 'Mentorship', 'News & Stories', 'Contact Us'];
+  const quickLinks: { label: string; to?: string }[] = [
+    { label: 'About Us', to: '/about' },
+    { label: 'Alumni Directory' },
+    { label: 'Benefits' },
+    { label: 'Donate' },
+  ];
+  const resources: { label: string; to?: string }[] = [
+    { label: 'Career Services' },
+    { label: 'Mentorship' },
+    { label: 'News & Stories' },
+    { label: 'Contact Us' },
+    { label: 'Meet the Developers', to: '/developers' },
+  ];
 
   const contactItems: ContactItem[] = [
     { icon: <MapPin size={14} />, text: 'E. Jacinto St., Davao City, Philippines' },
@@ -152,27 +154,21 @@ export function LandingPage(): React.ReactElement {
     <Linkedin size={16} />,
   ];
 
-  const heroStatItems = [
-    { n: '25,000+', l: 'Active Alumni' },
-    { n: '50+',     l: 'Countries' },
-    { n: '₱10M+',  l: 'Scholarships' },
-  ];
-
   return (
     <div style={{ fontFamily: "'DM Sans', sans-serif", color: C.slate, background: C.white, overflowX: 'hidden' }}>
 
       {/* ── Global styles ─────────────────────────────────── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap');
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         .nav-link {
-          color: rgba(255,255,255,0.75);
+          color: rgba(255,255,255,0.85);
           text-decoration: none;
-          font-size: 13px;
-          font-weight: 400;
-          letter-spacing: 0.04em;
+          font-size: 15px;
+          font-weight: 600;
+          letter-spacing: 0.01em;
           transition: color 0.2s;
           background: none;
           border: none;
@@ -245,7 +241,7 @@ export function LandingPage(): React.ReactElement {
           transition: box-shadow 0.25s, transform 0.2s;
         }
         .benefit-card:hover {
-          box-shadow: 0 12px 40px rgba(0,48,135,0.1);
+          box-shadow: 0 12px 40px rgba(9,16,122,0.1);
           transform: translateY(-3px);
         }
 
@@ -285,12 +281,12 @@ export function LandingPage(): React.ReactElement {
         }
 
         .footer-link {
-          color: rgba(255,255,255,0.45);
+          color: rgba(255,255,255,0.68);
           text-decoration: none;
-          font-size: 13px;
+          font-size: 14px;
           transition: color 0.2s;
           display: block;
-          margin-bottom: 12px;
+          margin-bottom: 14px;
         }
         .footer-link:hover { color: ${C.gold}; }
 
@@ -312,21 +308,21 @@ export function LandingPage(): React.ReactElement {
       <nav
         style={{
           position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-          background: C.blue,
-          boxShadow: '0 2px 24px rgba(0,0,0,0.18)',
+          background: C.navyDk,
+          boxShadow: '0 2px 18px rgba(0,0,0,0.25)',
         }}
       >
         <div
           style={{
-            maxWidth: 1280, margin: '0 auto', padding: '0 2rem',
-            height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            width: '100%', padding: '0 2.5rem',
+            height: 58, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           }}
         >
           {/* Logo */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div
               style={{
-                width: 44, height: 44, borderRadius: '50%', background: '#fff',
+                width: 34, height: 34, borderRadius: '50%', background: '#fff',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 overflow: 'hidden', flexShrink: 0,
               }}
@@ -338,11 +334,18 @@ export function LandingPage(): React.ReactElement {
               />
             </div>
             <div>
-              <div style={{ color: '#fff', fontWeight: 500, fontSize: 15, lineHeight: 1.2 }}>ADDU Alumni</div>
+              <div style={{
+                fontFamily: "'Cinzel', serif",
+                color: '#fff', fontWeight: 700, fontSize: 14.5,
+                letterSpacing: '0.03em', lineHeight: 1.3, textTransform: 'uppercase',
+              }}>
+                ADDU Alumni
+              </div>
               <div
                 style={{
-                  color: 'rgba(255,255,255,0.55)', fontSize: 11,
-                  letterSpacing: '0.07em', textTransform: 'uppercase', fontWeight: 300,
+                  fontFamily: "'Cinzel', serif",
+                  color: 'rgba(255,255,255,0.6)', fontSize: 9.5,
+                  letterSpacing: '0.05em', textTransform: 'uppercase', fontWeight: 500,
                 }}
               >
                 Ateneo de Davao University
@@ -351,19 +354,20 @@ export function LandingPage(): React.ReactElement {
           </div>
 
           {/* Nav links */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-            <a href="#about" className="nav-link">About</a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.75rem' }}>
+            <button onClick={() => navigate('/about')} className="nav-link">About</button>
             <button onClick={() => scrollTo('events')} className="nav-link">Events</button>
-            <a href="#connect" className="nav-link">Connect</a>
             <button
               onClick={() => navigate('/login')}
               style={{
-                padding: '8px 22px',
-                border: '1px solid rgba(255,255,255,0.5)',
-                borderRadius: 100,
+                padding: '7px 22px',
+                border: '2px solid rgba(255,255,255,0.8)',
+                borderRadius: 10,
                 background: 'transparent',
                 color: '#fff',
                 fontSize: 13,
+                fontWeight: 700,
+                letterSpacing: '0.02em',
                 fontFamily: 'inherit',
                 cursor: 'pointer',
                 transition: 'background 0.2s',
@@ -381,7 +385,7 @@ export function LandingPage(): React.ReactElement {
       <section
         style={{
           position: 'relative', height: '100vh', minHeight: 620,
-          display: 'flex', alignItems: 'center', overflow: 'hidden',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
         }}
       >
         {/* Background image */}
@@ -397,7 +401,7 @@ export function LandingPage(): React.ReactElement {
         <div
           style={{
             position: 'absolute', inset: 0,
-            background: 'linear-gradient(120deg, rgba(0,21,61,0.88) 0%, rgba(0,48,135,0.6) 55%, rgba(0,21,61,0.75) 100%)',
+            background: 'linear-gradient(120deg, rgba(9,16,122,0.88) 0%, rgba(9,16,122,0.6) 55%, rgba(9,16,122,0.75) 100%)',
           }}
         />
         {/* Bottom fade */}
@@ -409,8 +413,8 @@ export function LandingPage(): React.ReactElement {
         />
 
         {/* Hero content */}
-        <div className="hero-content" style={{ position: 'relative', zIndex: 2, maxWidth: 680, padding: '0 3rem' }}>
-          <Tag>Ad Majorem Dei Gloriam</Tag>
+        <div className="hero-content" style={{ position: 'relative', zIndex: 2, maxWidth: 680, padding: '0 3rem', textAlign: 'center' }}>
+          <Tag centered>Ad Majorem Dei Gloriam</Tag>
           <div style={{ marginTop: 24 }}>
             <h1
               style={{
@@ -427,13 +431,13 @@ export function LandingPage(): React.ReactElement {
           </div>
           <p
             style={{
-              marginTop: 20, fontSize: 16, fontWeight: 300,
-              color: 'rgba(255,255,255,0.65)', lineHeight: 1.8, maxWidth: 480,
+              marginTop: 20, fontSize: 17, fontWeight: 300,
+              color: 'rgba(255,255,255,0.8)', lineHeight: 1.75, maxWidth: 500, margin: '20px auto 0',
             }}
           >
             Join thousands of ADDU graduates staying connected, giving back, and continuing the legacy of excellence and service.
           </p>
-          <div style={{ marginTop: 36, display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+          <div style={{ marginTop: 36, display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
             <button className="btn-gold" onClick={() => navigate('/login')}>
               Join the Network <ArrowRight size={16} />
             </button>
@@ -441,37 +445,6 @@ export function LandingPage(): React.ReactElement {
               Explore Benefits
             </button>
           </div>
-        </div>
-
-        {/* Hero stats – bottom right */}
-        <div
-          className="hero-stats"
-          style={{
-            position: 'absolute', bottom: '3rem', right: '3rem',
-            zIndex: 2, display: 'flex', gap: '2rem', alignItems: 'flex-end',
-          }}
-        >
-          {heroStatItems.map(({ n, l }) => (
-            <div key={l} style={{ textAlign: 'right' }}>
-              <div
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: '2.1rem', fontWeight: 600, color: C.gold, lineHeight: 1,
-                }}
-              >
-                {n}
-              </div>
-              <div
-                style={{
-                  fontSize: 11, fontWeight: 300,
-                  color: 'rgba(255,255,255,0.45)',
-                  letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: 4,
-                }}
-              >
-                {l}
-              </div>
-            </div>
-          ))}
         </div>
 
         {/* Scroll cue */}
@@ -513,7 +486,7 @@ export function LandingPage(): React.ReactElement {
             >
               {n}
             </div>
-            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', marginTop: 6, letterSpacing: '0.05em' }}>
+            <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', marginTop: 6, letterSpacing: '0.04em' }}>
               {l}
             </div>
           </div>
@@ -524,7 +497,7 @@ export function LandingPage(): React.ReactElement {
       <section id="benefits" style={{ padding: '6rem 2rem', background: C.cream }}>
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
           <div style={{ marginBottom: '4rem' }}>
-            <Tag color={C.blue}>Alumni Benefits</Tag>
+            <Tag color={C.blue} centered>Alumni Benefits</Tag>
             <GoldLine />
             <h2
               style={{
@@ -552,15 +525,15 @@ export function LandingPage(): React.ReactElement {
                 <div
                   style={{
                     width: 48, height: 48, borderRadius: 12,
-                    background: 'rgba(0,48,135,0.08)',
+                    background: 'rgba(9,16,122,0.08)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     color: C.blue, marginBottom: 20,
                   }}
                 >
                   {icon}
                 </div>
-                <h3 style={{ fontSize: 18, fontWeight: 500, color: C.navy, marginBottom: 8 }}>{title}</h3>
-                <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.75 }}>{desc}</p>
+                <h3 style={{ fontSize: 19, fontWeight: 600, color: C.navy, marginBottom: 8 }}>{title}</h3>
+                <p style={{ fontSize: 15.5, color: C.muted, lineHeight: 1.75 }}>{desc}</p>
               </div>
             ))}
           </div>
@@ -568,7 +541,7 @@ export function LandingPage(): React.ReactElement {
       </section>
 
       {/* ── STRONGER TOGETHER ───────────────────────────────── */}
-      <section style={{ padding: '6rem 2rem', background: '#fff' }}>
+      <section style={{ padding: '6rem 2rem', background: C.cream }}>
         <div
           style={{
             maxWidth: 1280, margin: '0 auto',
@@ -602,7 +575,7 @@ export function LandingPage(): React.ReactElement {
 
           {/* Text */}
           <div>
-            <Tag color={C.blue}>Our Community</Tag>
+            <Tag color={C.blue} centered>Our Community</Tag>
             <GoldLine />
             <h2
               style={{
@@ -632,7 +605,7 @@ export function LandingPage(): React.ReactElement {
       <section id="events" style={{ padding: '6rem 2rem', background: C.navy }}>
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
           <div style={{ marginBottom: '4rem' }}>
-            <Tag>Upcoming Events</Tag>
+            <Tag centered>Upcoming Events</Tag>
             <GoldLine />
             <h2
               style={{
@@ -684,27 +657,27 @@ export function LandingPage(): React.ReactElement {
 
                 {/* Card body */}
                 <div style={{ padding: '24px 24px 28px' }}>
-                  <h3 style={{ fontSize: 18, fontWeight: 500, color: C.navy, marginBottom: 14, lineHeight: 1.3 }}>
+                  <h3 style={{ fontSize: 19, fontWeight: 600, color: C.navy, marginBottom: 14, lineHeight: 1.3 }}>
                     {title}
                   </h3>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: C.muted, fontSize: 13, marginBottom: 6 }}>
-                    <MapPin size={14} /> <span>{loc}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: C.muted, fontSize: 14, marginBottom: 6 }}>
+                    <MapPin size={15} /> <span>{loc}</span>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: C.muted, fontSize: 13, marginBottom: 16 }}>
-                    <Clock size={14} /> <span>{time}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: C.muted, fontSize: 14, marginBottom: 16 }}>
+                    <Clock size={15} /> <span>{time}</span>
                   </div>
-                  <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.7, marginBottom: 20 }}>{desc}</p>
+                  <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.7, marginBottom: 20 }}>{desc}</p>
                   <button
                     style={{
-                      width: '100%', padding: '11px 0',
-                      background: 'rgba(0,48,135,0.06)',
+                      width: '100%', padding: '12px 0',
+                      background: 'rgba(9,16,122,0.06)',
                       color: C.blue,
-                      border: `1px solid rgba(0,48,135,0.15)`,
-                      borderRadius: 100, fontSize: 13, fontWeight: 500,
+                      border: `1px solid rgba(9,16,122,0.15)`,
+                      borderRadius: 100, fontSize: 14, fontWeight: 600,
                       fontFamily: 'inherit', cursor: 'pointer', transition: 'background 0.2s',
                     }}
-                    onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(0,48,135,0.12)')}
-                    onMouseOut={(e) => (e.currentTarget.style.background = 'rgba(0,48,135,0.06)')}
+                    onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(9,16,122,0.12)')}
+                    onMouseOut={(e) => (e.currentTarget.style.background = 'rgba(9,16,122,0.06)')}
                   >
                     Register Now →
                   </button>
@@ -737,7 +710,7 @@ export function LandingPage(): React.ReactElement {
       </section>
 
       {/* ── FOOTER ──────────────────────────────────────────── */}
-      <footer style={{ background: '#0F1623', color: 'rgba(255,255,255,0.5)', padding: '5rem 2rem 2rem' }}>
+      <footer style={{ background: C.navyDk, color: 'rgba(255,255,255,0.7)', padding: '5rem 2rem 2rem' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
           <div
             style={{
@@ -765,7 +738,7 @@ export function LandingPage(): React.ReactElement {
                   </div>
                 </div>
               </div>
-              <p style={{ fontSize: 13, lineHeight: 1.8 }}>
+              <p style={{ fontSize: 14, lineHeight: 1.8 }}>
                 Connecting Ateneans worldwide and fostering a lifetime of excellence and service.
               </p>
             </div>
@@ -774,14 +747,18 @@ export function LandingPage(): React.ReactElement {
             <div>
               <div
                 style={{
-                  color: '#fff', fontWeight: 500, fontSize: 13,
-                  letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 20,
+                  color: '#fff', fontWeight: 600, fontSize: 14,
+                  letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 20,
                 }}
               >
                 Quick Links
               </div>
-              {quickLinks.map((label) => (
-                <a key={label} href="#" className="footer-link">{label}</a>
+              {quickLinks.map(({ label, to }) => (
+                to ? (
+                  <button key={label} onClick={() => navigate(to)} className="footer-link" style={{ background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit' }}>{label}</button>
+                ) : (
+                  <a key={label} href="#" className="footer-link">{label}</a>
+                )
               ))}
             </div>
 
@@ -789,14 +766,18 @@ export function LandingPage(): React.ReactElement {
             <div>
               <div
                 style={{
-                  color: '#fff', fontWeight: 500, fontSize: 13,
-                  letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 20,
+                  color: '#fff', fontWeight: 600, fontSize: 14,
+                  letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 20,
                 }}
               >
                 Resources
               </div>
-              {resources.map((label) => (
-                <a key={label} href="#" className="footer-link">{label}</a>
+              {resources.map(({ label, to }) => (
+                to ? (
+                  <button key={label} onClick={() => navigate(to)} className="footer-link" style={{ background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit' }}>{label}</button>
+                ) : (
+                  <a key={label} href="#" className="footer-link">{label}</a>
+                )
               ))}
             </div>
 
@@ -804,8 +785,8 @@ export function LandingPage(): React.ReactElement {
             <div>
               <div
                 style={{
-                  color: '#fff', fontWeight: 500, fontSize: 13,
-                  letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 20,
+                  color: '#fff', fontWeight: 600, fontSize: 14,
+                  letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 20,
                 }}
               >
                 Get in Touch
@@ -815,7 +796,7 @@ export function LandingPage(): React.ReactElement {
                   key={text}
                   style={{
                     display: 'flex', alignItems: 'flex-start',
-                    gap: 10, marginBottom: 14, fontSize: 13,
+                    gap: 10, marginBottom: 14, fontSize: 14,
                   }}
                 >
                   <span style={{ color: C.gold, marginTop: 1, flexShrink: 0 }}>{icon}</span>
@@ -837,7 +818,7 @@ export function LandingPage(): React.ReactElement {
               gap: 16,
             }}
           >
-            <p style={{ fontSize: 12 }}>
+            <p style={{ fontSize: 13 }}>
               © 2026 Ateneo de Davao University Alumni Association. All rights reserved.
             </p>
             <div style={{ display: 'flex', gap: 10 }}>

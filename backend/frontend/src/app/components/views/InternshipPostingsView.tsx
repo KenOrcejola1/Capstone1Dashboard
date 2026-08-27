@@ -199,7 +199,7 @@ export function InternshipPostingsView({ role }: InternshipPostingsProps) {
           {viewState === 'list' && role === 'alumni' && (
             <button 
               onClick={() => { setSelectedRequest(null); setViewState('form'); }}
-              className="flex items-center justify-center gap-2 bg-[#003087] text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:bg-blue-800 transition-all active:scale-95"
+              className="flex items-center justify-center gap-2 bg-[#1a24d2] text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:bg-blue-800 transition-all active:scale-95"
             >
               <PlusCircle className="w-5 h-5" /> New Posting Request
             </button>
@@ -213,7 +213,7 @@ export function InternshipPostingsView({ role }: InternshipPostingsProps) {
               <div className="bg-white border-2 border-green-500 rounded-[40px] p-16 text-center shadow-xl">
                 <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6"><PartyPopper className="w-10 h-10" /></div>
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">{role === 'admin' ? "Update Successful!" : "Request Submitted!"}</h2>
-                <button onClick={() => setViewState('list')} className="font-bold text-[#003087] hover:underline flex items-center justify-center gap-2 mx-auto mt-4"><ArrowLeft className="w-4 h-4" /> Back to List</button>
+                <button onClick={() => setViewState('list')} className="font-bold text-[#1a24d2] hover:underline flex items-center justify-center gap-2 mx-auto mt-4"><ArrowLeft className="w-4 h-4" /> Back to List</button>
               </div>
             )}
 
@@ -259,7 +259,7 @@ export function InternshipPostingsView({ role }: InternshipPostingsProps) {
                     <label className="text-sm font-bold text-gray-700 ml-1">Job Description</label>
                     <textarea name="description" defaultValue={selectedRequest?.description} required rows={4} className="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:border-blue-500" />
                   </div>
-                  <button type="submit" className="w-full py-5 bg-[#003087] text-white rounded-2xl font-bold text-xl hover:bg-blue-800 shadow-lg transition-all active:scale-95">
+                  <button type="submit" className="w-full py-5 bg-[#1a24d2] text-white rounded-2xl font-bold text-xl hover:bg-blue-800 shadow-lg transition-all active:scale-95">
                     {selectedRequest ? (role === 'admin' ? "Save Changes" : "Update & Resubmit") : "Submit for Approval"}
                   </button>
                 </form>
@@ -274,7 +274,7 @@ export function InternshipPostingsView({ role }: InternshipPostingsProps) {
                   <p className="text-gray-500 font-medium">{selectedRequest.company}</p>
                 </div>
                 <h3 className="font-bold text-gray-900 mb-6 flex items-center gap-2 text-xl">
-                  <Users className="text-[#003087]" /> List of Applications ({selectedRequest.applicantsCount})
+                  <Users className="text-[#1a24d2]" /> List of Applications ({selectedRequest.applicantsCount})
                 </h3>
                 <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
                   {selectedRequest.applications.map(app => (
@@ -364,9 +364,9 @@ export function InternshipPostingsView({ role }: InternshipPostingsProps) {
                   <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     {role === 'admin' && (
                       <div className="bg-white p-1.5 rounded-2xl border flex gap-1 shadow-sm">
-                        <button onClick={() => setFilterType('All')} className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${filterType === 'All' ? 'bg-[#003087] text-white' : 'text-gray-500 hover:bg-gray-50'}`}>All Opportunities</button>
-                        <button onClick={() => setFilterType('Job')} className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${filterType === 'Job' ? 'bg-[#003087] text-white' : 'text-gray-500 hover:bg-gray-50'}`}>Jobs only</button>
-                        <button onClick={() => setFilterType('Internship')} className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${filterType === 'Internship' ? 'bg-[#003087] text-white' : 'text-gray-500 hover:bg-gray-50'}`}>Internship only</button>
+                        <button onClick={() => setFilterType('All')} className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${filterType === 'All' ? 'bg-[#1a24d2] text-white' : 'text-gray-500 hover:bg-gray-50'}`}>All Opportunities</button>
+                        <button onClick={() => setFilterType('Job')} className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${filterType === 'Job' ? 'bg-[#1a24d2] text-white' : 'text-gray-500 hover:bg-gray-50'}`}>Jobs only</button>
+                        <button onClick={() => setFilterType('Internship')} className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${filterType === 'Internship' ? 'bg-[#1a24d2] text-white' : 'text-gray-500 hover:bg-gray-50'}`}>Internship only</button>
                       </div>
                     )}
                     <div className="flex items-center gap-3 ml-auto">
@@ -411,7 +411,7 @@ export function InternshipPostingsView({ role }: InternshipPostingsProps) {
                             <td className="p-5 font-medium text-gray-600">{req.position}</td>
                             <td className="p-5 text-xs font-bold text-gray-400">{req.type}</td>
                             <td className="p-5"><span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase ${req.status === 'Approved' ? 'bg-green-100 text-green-700' : req.status === 'Pending' ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'}`}>{req.status}</span></td>
-                            <td className="p-5 text-center">{req.status === 'Approved' ? <button onClick={() => { setSelectedRequest(req); setViewState('applicants'); }} className="text-[#003087] font-bold underline">{req.applicantsCount}</button> : "-"}</td>
+                            <td className="p-5 text-center">{req.status === 'Approved' ? <button onClick={() => { setSelectedRequest(req); setViewState('applicants'); }} className="text-[#1a24d2] font-bold underline">{req.applicantsCount}</button> : "-"}</td>
                             <td className="p-5 text-right">
                               <div className="flex justify-end gap-2">
                                 {req.status === 'Denied' && (
@@ -454,7 +454,7 @@ export function InternshipPostingsView({ role }: InternshipPostingsProps) {
                           {(role === 'alumni' && (req.status === 'Pending' || req.status === 'Denied')) || (role === 'admin' && req.status === 'Denied') ? (
                             <button onClick={() => handleEdit(req)} className="p-2 text-gray-400 hover:text-blue-600 transition-all" title="Edit Posting"><Edit3 size={20}/></button>
                           ) : null}
-                          <button onClick={() => { setSelectedRequest(req); setViewState('detail'); }} className="p-2 bg-gray-50 text-gray-400 rounded-lg hover:bg-[#003087] hover:text-white transition-all"><Eye size={20} /></button>
+                          <button onClick={() => { setSelectedRequest(req); setViewState('detail'); }} className="p-2 bg-gray-50 text-gray-400 rounded-lg hover:bg-[#1a24d2] hover:text-white transition-all"><Eye size={20} /></button>
                         </div>
                       </div>
                     ))}
@@ -470,7 +470,7 @@ export function InternshipPostingsView({ role }: InternshipPostingsProps) {
           </div>
 
           <div className="space-y-6">
-            <div className={`${role === 'admin' ? 'bg-red-900' : 'bg-[#003087]'} p-8 rounded-[32px] text-white shadow-xl`}>
+            <div className={`${role === 'admin' ? 'bg-red-900' : 'bg-[#1a24d2]'} p-8 rounded-[32px] text-white shadow-xl`}>
               <h3 className="text-xl font-bold mb-4 flex items-center gap-2"><Info size={20} /> Guidelines</h3>
               <ul className="space-y-4 text-sm text-blue-100 font-medium opacity-90">
                 {role === 'admin' ? (

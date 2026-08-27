@@ -121,7 +121,7 @@ export function SurveysView({ userRole }: { userRole: string }) {
           {userRole === 'admin' && (
             <button
               onClick={() => setActiveTab('Create Survey')}
-              className="flex items-center gap-2 px-4 py-2 bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold shadow-md"
+              className="flex items-center gap-2 px-4 py-2 bg-[#1a24d2] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold shadow-md"
             >
               <Plus className="w-5 h-5" />
               Create Survey
@@ -141,7 +141,7 @@ export function SurveysView({ userRole }: { userRole: string }) {
               {/* UPDATED BLUE BUTTON */}
               <button
                 onClick={() => navigate('/survey/tracer')}
-                className="bg-[#003087] text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-[#002566] transition-all flex items-center gap-2 shadow-md"
+                className="bg-[#1a24d2] text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-[#002566] transition-all flex items-center gap-2 shadow-md"
               >
                 Take the Tracer Survey <ArrowRight className="w-4 h-4" />
               </button>
@@ -158,12 +158,12 @@ export function SurveysView({ userRole }: { userRole: string }) {
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`pb-4 text-[13px] font-bold transition-all relative ${
-                activeTab === tab ? 'text-[#003087]' : 'text-gray-400'
+                activeTab === tab ? 'text-[#1a24d2]' : 'text-gray-400'
               }`}
             >
               {tab}
               {activeTab === tab && (
-                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#003087]" />
+                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#1a24d2]" />
               )}
             </button>
           ))}
@@ -175,7 +175,7 @@ export function SurveysView({ userRole }: { userRole: string }) {
             {activeTab === 'Available Surveys' ? (
             availableSurveys.map((survey, index) => (
               <div key={index} className={`rounded-[24px] p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 text-left border transition-all ${
-                survey.isPriority ? 'bg-[#003087] text-white border-transparent shadow-md' : 'bg-white text-gray-900 border-gray-100'
+                survey.isPriority ? 'bg-[#1a24d2] text-white border-transparent shadow-md' : 'bg-white text-gray-900 border-gray-100'
               }`}>
                 <div className="flex-1 space-y-2">
                   <div className="flex items-center gap-3">
@@ -211,8 +211,8 @@ export function SurveysView({ userRole }: { userRole: string }) {
                   )}
                   <button className={`flex-1 md:flex-none px-8 py-3 rounded-xl font-bold text-sm transition-all shadow-sm ${
                     survey.isPriority 
-                    ? 'bg-white text-[#003087] hover:bg-blue-50' 
-                    : 'bg-[#003087] text-white hover:bg-[#002566]'
+                    ? 'bg-white text-[#1a24d2] hover:bg-blue-50' 
+                    : 'bg-[#1a24d2] text-white hover:bg-[#002566]'
                   }`}>
                     {survey.isPriority ? 'Edit Response' : 'Take Survey'}
                   </button>
@@ -249,7 +249,7 @@ export function SurveysView({ userRole }: { userRole: string }) {
 
         {/* CREATE SURVEY FORM (Admin Only) */}
         {activeTab === 'Create Survey' && userRole === 'admin' && (
-          <div className="bg-white rounded-xl border-2 border-[#003087]/20 p-8 shadow-sm">
+          <div className="bg-white rounded-xl border-2 border-[#1a24d2]/20 p-8 shadow-sm">
             <h3 className="text-2xl font-bold text-gray-900 mb-6">Create New Survey</h3>
             
             <div className="space-y-6">
@@ -260,7 +260,7 @@ export function SurveysView({ userRole }: { userRole: string }) {
                   placeholder="Enter survey title"
                   value={newSurvey.title}
                   onChange={(e) => setNewSurvey({ ...newSurvey, title: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent"
                 />
               </div>
               
@@ -271,7 +271,7 @@ export function SurveysView({ userRole }: { userRole: string }) {
                   placeholder="Describe the purpose of this survey"
                   value={newSurvey.description}
                   onChange={(e) => setNewSurvey({ ...newSurvey, description: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent resize-none"
                 ></textarea>
               </div>
               
@@ -281,7 +281,7 @@ export function SurveysView({ userRole }: { userRole: string }) {
                   <select 
                     value={newSurvey.type}
                     onChange={(e) => setNewSurvey({ ...newSurvey, type: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent"
                   >
                     <option value="">Select type</option>
                     <option value="Tracer Study">Tracer Study</option>
@@ -297,7 +297,7 @@ export function SurveysView({ userRole }: { userRole: string }) {
                     type="date" 
                     value={newSurvey.deadline}
                     onChange={(e) => setNewSurvey({ ...newSurvey, deadline: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent"
                   />
                 </div>
               </div>
@@ -310,7 +310,7 @@ export function SurveysView({ userRole }: { userRole: string }) {
                       type="checkbox" 
                       checked={newSurvey.targetAll}
                       onChange={(e) => setNewSurvey({ ...newSurvey, targetAll: e.target.checked })}
-                      className="w-4 h-4 text-[#003087] border-gray-300 rounded focus:ring-[#003087]"
+                      className="w-4 h-4 text-[#1a24d2] border-gray-300 rounded focus:ring-[#1a24d2]"
                     />
                     <span className="text-sm font-medium text-gray-700">All Alumni</span>
                   </label>
@@ -319,7 +319,7 @@ export function SurveysView({ userRole }: { userRole: string }) {
                       type="checkbox" 
                       checked={newSurvey.targetRecent}
                       onChange={(e) => setNewSurvey({ ...newSurvey, targetRecent: e.target.checked })}
-                      className="w-4 h-4 text-[#003087] border-gray-300 rounded focus:ring-[#003087]"
+                      className="w-4 h-4 text-[#1a24d2] border-gray-300 rounded focus:ring-[#1a24d2]"
                     />
                     <span className="text-sm font-medium text-gray-700">Recent Graduates (2020-2025)</span>
                   </label>
@@ -328,7 +328,7 @@ export function SurveysView({ userRole }: { userRole: string }) {
                       type="checkbox" 
                       checked={newSurvey.targetPrograms}
                       onChange={(e) => setNewSurvey({ ...newSurvey, targetPrograms: e.target.checked })}
-                      className="w-4 h-4 text-[#003087] border-gray-300 rounded focus:ring-[#003087]"
+                      className="w-4 h-4 text-[#1a24d2] border-gray-300 rounded focus:ring-[#1a24d2]"
                     />
                     <span className="text-sm font-medium text-gray-700">Specific Programs</span>
                   </label>
@@ -345,12 +345,12 @@ export function SurveysView({ userRole }: { userRole: string }) {
                         placeholder={`Question ${index + 1}`}
                         value={q.question}
                         onChange={(e) => updateQuestion(index, 'question', e.target.value)}
-                        className="w-full mb-3 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
+                        className="w-full mb-3 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent"
                       />
                       <select 
                         value={q.type}
                         onChange={(e) => updateQuestion(index, 'type', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003087] focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] focus:border-transparent"
                       >
                         <option>Multiple Choice</option>
                         <option>Short Answer</option>
@@ -362,7 +362,7 @@ export function SurveysView({ userRole }: { userRole: string }) {
                 </div>
                 <button 
                   onClick={addQuestion}
-                  className="flex items-center gap-2 text-[#003087] hover:text-[#002066] font-semibold"
+                  className="flex items-center gap-2 text-[#1a24d2] hover:text-[#002066] font-semibold"
                 >
                   <Plus className="w-4 h-4" />
                   Add Question
@@ -372,7 +372,7 @@ export function SurveysView({ userRole }: { userRole: string }) {
               <div className="flex gap-3 pt-6 border-t-2 border-gray-200">
                 <button 
                   onClick={handleCreateSurvey}
-                  className="px-6 py-3 bg-[#003087] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold"
+                  className="px-6 py-3 bg-[#1a24d2] text-white rounded-lg hover:bg-[#002066] transition-colors font-semibold"
                 >
                   Create Survey
                 </button>

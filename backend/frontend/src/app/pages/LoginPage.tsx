@@ -6,11 +6,11 @@ import campusNight from '../../assets/Roxas-Colored.jpg';
 
 /* ─── Design tokens (shared with LandingPage) ────────────── */
 const C = {
-  navy:   '#001F5B',
-  navyDk: '#00153D',
-  blue:   '#003087',
-  gold:   '#C5A96A',
-  goldLt: '#D4BC86',
+  navy:   '#0d1b3e',
+  navyDk: '#09107a',
+  blue:   '#1a24d2',
+  gold:   '#c9a227',
+  goldLt: '#f5b800',
   slate:  '#2C3E50',
   muted:  '#6B7280',
   white:  '#FFFFFF',
@@ -59,7 +59,7 @@ export function LoginPage() {
     <div style={{ minHeight: '100vh', display: 'flex', fontFamily: "'DM Sans', sans-serif", overflow: 'hidden' }}>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap');
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -240,21 +240,19 @@ export function LoginPage() {
           </div>
 
           {/* Eyebrow */}
-          <span
-            style={{
-              display: 'inline-block',
-              padding: '3px 14px',
-              borderRadius: 100,
-              border: `1px solid ${C.gold}`,
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+            <span style={{ width: 24, height: 2, background: C.gold, flexShrink: 0 }} />
+            <span style={{
+              fontFamily: "'Cinzel', serif",
               color: C.gold,
-              fontSize: 10,
-              fontWeight: 500,
-              letterSpacing: '0.14em',
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: '0.1em',
               textTransform: 'uppercase',
-              marginBottom: 20,
-            }}
-          >
-            Ad Majorem Dei Gloriam
+            }}>
+              Ad Majorem Dei Gloriam
+            </span>
+            <span style={{ width: 24, height: 2, background: C.gold, flexShrink: 0 }} />
           </span>
 
           {/* Headline */}
