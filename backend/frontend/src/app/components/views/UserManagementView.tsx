@@ -683,18 +683,22 @@ export function UserManagementView({ userRole, userEmail = '' }: UserManagementV
               Create New User
             </button>
           )}
-          <div className="bg-white border-2 border-[#1a24d2]/20 rounded-lg px-4 py-2">
-            <span className="text-sm text-gray-600">Total Users: </span>
-            <span className="text-lg font-bold text-[#1a24d2]">{users.length}</span>
-          </div>
-          <div className="bg-purple-50 border-2 border-purple-200 rounded-lg px-4 py-2">
-            <span className="text-sm text-purple-600">Admin: </span>
-            <span className="text-lg font-bold text-purple-700">{users.filter(u => u.role === 'admin').length}</span>
-          </div>
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-lg px-4 py-2">
-            <span className="text-sm text-blue-600">Alumni: </span>
-            <span className="text-lg font-bold text-blue-700">{users.filter(u => u.role === 'alumni').length}</span>
-          </div>
+          {activeTab !== 'officers' && (
+            <>
+              <div className="bg-white border-2 border-[#1a24d2]/20 rounded-lg px-4 py-2">
+                <span className="text-sm text-gray-600">Total Users: </span>
+                <span className="text-lg font-bold text-[#1a24d2]">{users.length}</span>
+              </div>
+              <div className="bg-purple-50 border-2 border-purple-200 rounded-lg px-4 py-2">
+                <span className="text-sm text-purple-600">Admin: </span>
+                <span className="text-lg font-bold text-purple-700">{users.filter(u => u.role === 'admin').length}</span>
+              </div>
+              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg px-4 py-2">
+                <span className="text-sm text-blue-600">Alumni: </span>
+                <span className="text-lg font-bold text-blue-700">{users.filter(u => u.role === 'alumni').length}</span>
+              </div>
+            </>
+          )}
           {activeTab === 'approval' && (
             <div className="bg-amber-50 border-2 border-amber-300 rounded-lg px-4 py-2">
               <span className="text-sm text-amber-600">Pending: </span>
