@@ -1193,15 +1193,23 @@ export function UserManagementView({ userRole, userEmail = '' }: UserManagementV
           </div>
 
           <div className="flex gap-2">
-            {(['approved', 'pending', 'rejected', 'all'] as const).map((f) => (
-              <button
-                key={f}
-                onClick={() => setOfficerFilter(f)}
-                className={`px-4 py-2 rounded-lg text-xs font-bold capitalize transition-colors ${officerFilter === f ? 'bg-[#1a24d2] text-white' : 'bg-white border border-gray-200 text-gray-500'}`}
-              >
-                {f}
-              </button>
-            ))}
+            {(['approved', 'pending', 'rejected', 'all'] as const).map((f) => {
+              const pendingCount = officers.filter((o) => o.status === 'pending').length;
+              return (
+                <button
+                  key={f}
+                  onClick={() => setOfficerFilter(f)}
+                  className={`px-4 py-2 rounded-lg text-xs font-bold capitalize transition-colors flex items-center gap-1.5 ${officerFilter === f ? 'bg-[#1a24d2] text-white' : 'bg-white border border-gray-200 text-gray-500'}`}
+                >
+                  {f}
+                  {f === 'pending' && pendingCount > 0 && (
+                    <span className={`inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold ${officerFilter === f ? 'bg-white text-[#1a24d2]' : 'bg-amber-500 text-white'}`}>
+                      {pendingCount}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
           <div className="bg-white rounded-xl border-2 border-[#1a24d2]/20 shadow-sm overflow-hidden">
