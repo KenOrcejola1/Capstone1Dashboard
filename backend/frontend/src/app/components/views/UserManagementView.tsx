@@ -653,8 +653,17 @@ export function UserManagementView({ userRole, userEmail = '' }: UserManagementV
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">User Management</h1>
-          <p className="text-gray-600">Manage system users and their access levels</p>
+          {activeTab === 'officers' ? (
+            <>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Officer Assignments</h1>
+              <p className="text-gray-600">Assign alumni as chapter officers and verify their assignments. Only active, approved officers appear on the public Alumni Chapters page.</p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">User Management</h1>
+              <p className="text-gray-600">Manage system users and their access levels</p>
+            </>
+          )}
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           {activeTab === 'officers' ? (
@@ -1043,8 +1052,6 @@ export function UserManagementView({ userRole, userEmail = '' }: UserManagementV
 
       {activeTab === 'officers' && (
         <div className="space-y-6">
-          <p className="text-sm text-gray-500">Assign alumni as chapter officers and verify their assignments. Only active, approved officers appear on the public Alumni Chapters page.</p>
-
           {showAssignForm && (
             <form onSubmit={handleAssignOfficer} className="bg-white rounded-xl border-2 border-[#1a24d2]/20 p-6 space-y-4 text-left shadow-sm">
               {assignFormError && <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm">{assignFormError}</div>}
