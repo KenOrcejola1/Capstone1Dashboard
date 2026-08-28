@@ -116,4 +116,16 @@ class ChapterOfficerController extends Controller
 
         return response()->json($officer->load(['chapter', 'user']));
     }
+
+    /**
+     * Permanently remove this officer assignment record. The alumnus's
+     * account is untouched — this only clears their history in this role.
+     */
+    public function destroy($id)
+    {
+        $officer = ChapterOfficer::findOrFail($id);
+        $officer->delete();
+
+        return response()->json(['message' => 'Officer assignment deleted successfully']);
+    }
 }

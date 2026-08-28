@@ -57,7 +57,7 @@ class UserController extends Controller
     // Get all users
     public function index()
     {
-        $users = User::all();
+        $users = User::with('activeOfficerAssignments')->get();
         return response()->json($users);
     }
 

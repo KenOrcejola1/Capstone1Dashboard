@@ -107,6 +107,7 @@ Route::patch('/chapter-officers/{id}/approve', [ChapterOfficerController::class,
 Route::patch('/chapter-officers/{id}/reject', [ChapterOfficerController::class, 'reject']);
 Route::patch('/chapter-officers/{id}/deactivate', [ChapterOfficerController::class, 'deactivate']);
 Route::patch('/chapter-officers/{id}/reactivate', [ChapterOfficerController::class, 'reactivate']);
+Route::delete('/chapter-officers/{id}', [ChapterOfficerController::class, 'destroy']);
 
 // Community Engagement Registrations + Payments
 Route::get('/giveback/registrations', [EngagementRegistrationController::class, 'index']);

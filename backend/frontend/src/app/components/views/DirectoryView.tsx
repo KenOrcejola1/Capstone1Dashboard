@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MessageSquare, Mail, MapPin, Briefcase, Award, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 import { WORLD_COUNTRIES } from '../../utils/countries';
+import { OfficerBadge } from '../OfficerBadge';
 
 interface Alumnus {
   id: number;
@@ -178,7 +179,27 @@ interface ChapterApi {
   id: number;
   name: string;
   description: string | null;
+  color: string | null;
   active_officers: ChapterOfficerApi[];
+}
+
+const DEFAULT_CHAPTER_COLOR = '#1a24d2';
+
+// Picks readable header text/border treatment for whatever color a chapter
+// was given, so a future light or white chapter color doesn't wash out.
+function getChapterHeaderStyle(color: string | null | undefined) {
+  const hex = (color || DEFAULT_CHAPTER_COLOR).replace('#', '');
+  const r = parseInt(hex.substring(0, 2), 16) || 0;
+  const g = parseInt(hex.substring(2, 4), 16) || 0;
+  const b = parseInt(hex.substring(4, 6), 16) || 0;
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  const isLight = luminance > 0.6;
+
+  return {
+    background: color || DEFAULT_CHAPTER_COLOR,
+    color: isLight ? '#111827' : '#ffffff',
+    borderBottom: isLight ? '1px solid #e5e7eb' : undefined,
+  };
 }
 
 function mapOfficerToAlumnus(officer: ChapterOfficerApi) {
@@ -195,6 +216,7 @@ export function DirectoryView({ userRole }: { userRole: string }) {
   const [chapters, setChapters] = useState<ChapterApi[]>([]);
   const [loadingChapters, setLoadingChapters] = useState(true);
   const [chaptersError, setChaptersError] = useState<string | null>(null);
+  const [activeChapterId, setActiveChapterId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchChapters = async () => {
@@ -207,7 +229,12 @@ export function DirectoryView({ userRole }: { userRole: string }) {
           throw new Error('Failed to load chapters.');
         }
 
-        setChapters((await response.json()) as ChapterApi[]);
+        const data = (await response.json()) as ChapterApi[];
+        setChapters(data);
+        setActiveChapterId((current) => {
+          if (current !== null && data.some((c) => c.id === current)) return current;
+          return data.length > 0 ? data[0].id : null;
+        });
       } catch (error) {
         console.error('Error fetching chapters:', error);
         setChaptersError('Unable to fetch chapters from the database.');
@@ -223,41 +250,63 @@ export function DirectoryView({ userRole }: { userRole: string }) {
     return () => window.removeEventListener('userProfileUpdated', handleProfileUpdate);
   }, []);
 
+  const activeChapter = chapters.find((c) => c.id === activeChapterId) || null;
+
   return (
     <div className="flex flex-col min-h-screen bg-[#F8FAFC]">
       <div className="p-8 space-y-6 flex-1">
         <div className="text-left">
-          <h1 className="text-2xl font-bold text-gray-900">Alumni Chapters</h1>
-          <p className="text-gray-500 text-sm">Connect with fellow Ateneans around the world</p>
+          <h1 className="text-2xl font-bold text-gray-900">ADDU Alumni Association Officers</h1>
+          <p className="text-gray-500 text-sm">Meet the dedicated leaders of our alumni community</p>
         </div>
 
-        <div className="space-y-8">
-          <div className="bg-white p-8 rounded-2xl border border-gray-100 text-left">
-            <h2 className="text-xl font-bold text-gray-900">ADDU Alumni Association Officers</h2>
-            <p className="text-gray-500 text-sm">Meet the dedicated leaders of our alumni community</p>
-          </div>
+        <div className="space-y-6">
           {loadingChapters && (
             <div className="bg-white rounded-2xl border border-gray-100 p-6 text-sm text-gray-500 text-left">Loading chapters...</div>
           )}
           {!loadingChapters && chaptersError && (
             <div className="bg-white rounded-2xl border border-gray-100 p-6 text-sm text-red-600 text-left">{chaptersError}</div>
           )}
-          {!loadingChapters && !chaptersError && chapters.map((chapter) => (
-            <div key={chapter.id} className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-              <div className="bg-[#1a24d2] p-4 flex items-center gap-3 text-white font-bold text-sm">
-                <Award className="w-5 h-5" /> {chapter.name}
+
+          {!loadingChapters && !chaptersError && chapters.length > 0 && (
+            <>
+              <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+                {chapters.map((chapter) => {
+                  const isActive = chapter.id === activeChapterId;
+                  const style = isActive
+                    ? getChapterHeaderStyle(chapter.color)
+                    : { background: '#fff', color: '#4B5563', border: '1px solid #e5e7eb' };
+                  return (
+                    <button
+                      key={chapter.id}
+                      onClick={() => setActiveChapterId(chapter.id)}
+                      className="shrink-0 whitespace-nowrap px-4 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 transition-shadow"
+                      style={style}
+                    >
+                      <Award className="w-4 h-4" /> {chapter.name}
+                    </button>
+                  );
+                })}
               </div>
-              <div className="divide-y divide-gray-50">
-                {chapter.active_officers.length === 0 ? (
-                  <div className="p-6 text-sm text-gray-400 text-left">No active officers assigned yet.</div>
-                ) : (
-                  chapter.active_officers.map((officer) => (
-                    <AlumniRow key={officer.id} alumnus={mapOfficerToAlumnus(officer)} isOfficer />
-                  ))
-                )}
-              </div>
-            </div>
-          ))}
+
+              {activeChapter && (
+                <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
+                  <div className="p-4 flex items-center gap-3 font-bold text-sm" style={getChapterHeaderStyle(activeChapter.color)}>
+                    <Award className="w-5 h-5" /> {activeChapter.name}
+                  </div>
+                  <div className="divide-y divide-gray-50">
+                    {activeChapter.active_officers.length === 0 ? (
+                      <div className="p-6 text-sm text-gray-400 text-left">No active officers assigned yet.</div>
+                    ) : (
+                      activeChapter.active_officers.map((officer) => (
+                        <AlumniRow key={officer.id} alumnus={mapOfficerToAlumnus(officer)} isOfficer />
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
       <DirectoryFooter />
@@ -284,7 +333,10 @@ function AlumniRow({ alumnus, isOfficer }: { alumnus: any, isOfficer?: boolean }
         )}
       </div>
       <div className="flex-1 min-w-[180px]">
-        <h3 className="text-[#1a24d2] font-bold text-sm hover:underline cursor-pointer">{alumnus.name}</h3>
+        <h3 className="text-[#1a24d2] font-bold text-sm hover:underline cursor-pointer flex items-center gap-1.5">
+          {alumnus.name}
+          {isOfficer && <OfficerBadge />}
+        </h3>
         <p className="text-gray-400 text-[11px]">Class of {alumnus.class}</p>
         {isOfficer && (
           <p className="text-[#1a24d2] font-bold text-[11px] mt-1">
@@ -295,8 +347,8 @@ function AlumniRow({ alumnus, isOfficer }: { alumnus: any, isOfficer?: boolean }
       </div>
       <div className="flex-1 text-gray-500 text-[12px]">{alumnus.program}</div>
       <div className="flex-1 text-gray-500 text-[12px] flex items-center gap-2">
-        <Briefcase className="w-4 h-4 text-gray-300" /> 
-        <span className="truncate">{alumnus.role}{alumnus.company ? `, ${alumnus.company}` : ''}</span>
+        {isOfficer ? <OfficerBadge /> : <Briefcase className="w-4 h-4 text-gray-300" />}
+        <span className="truncate">{isOfficer ? 'Officer' : alumnus.role}{alumnus.company ? `, ${alumnus.company}` : ''}</span>
       </div>
       <div className="flex-1 flex items-center gap-2 text-gray-400 text-[12px]">
         <MapPin className="w-4 h-4 shrink-0" /> <span className="truncate">{alumnus.location}</span>

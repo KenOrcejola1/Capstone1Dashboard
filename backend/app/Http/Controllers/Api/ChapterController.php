@@ -29,6 +29,7 @@ class ChapterController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:chapters,name',
             'description' => 'nullable|string|max:500',
+            'color' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
         ]);
 
         $chapter = Chapter::create($validated);
@@ -43,6 +44,7 @@ class ChapterController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:chapters,name,' . $chapter->id,
             'description' => 'nullable|string|max:500',
+            'color' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
         ]);
 
         $chapter->update($validated);

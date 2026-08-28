@@ -68,6 +68,17 @@ class User extends Authenticatable
     ];
 
     /**
+     * Always include is_officer when a User is serialized, so the frontend
+     * can show the officer badge next to a name wherever it appears without
+     * every caller having to remember to ask for it.
+     *
+     * @var list<string>
+     */
+    protected $appends = [
+        'is_officer',
+    ];
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -87,6 +98,18 @@ class User extends Authenticatable
     }
 
     /**
+     * Just the approved + active assignments, for eager-loading (e.g.
+     * `User::with('activeOfficerAssignments')`) so is_officer below doesn't
+     * fire an N+1 query per user when listing many at once.
+     */
+    public function activeOfficerAssignments()
+    {
+        return $this->chapterOfficerAssignments()
+            ->where('status', 'approved')
+            ->where('is_active', true);
+    }
+
+    /**
      * Whether this user currently has at least one approved, active officer
      * assignment. This is the check event-proposal features should use to
      * gate reunion proposals — an assignment that's pending, rejected, or
@@ -95,9 +118,17 @@ class User extends Authenticatable
      */
     public function hasActiveOfficerAssignment(): bool
     {
-        return $this->chapterOfficerAssignments()
-            ->where('status', 'approved')
-            ->where('is_active', true)
-            ->exists();
+        return $this->relationLoaded('activeOfficerAssignments')
+            ? $this->activeOfficerAssignments->isNotEmpty()
+            : $this->activeOfficerAssignments()->exists();
+    }
+
+    /**
+     * Powers the appended is_officer field so the frontend can show the
+     * officer badge next to this user's name wherever it's displayed.
+     */
+    public function getIsOfficerAttribute(): bool
+    {
+        return $this->hasActiveOfficerAssignment();
     }
 }

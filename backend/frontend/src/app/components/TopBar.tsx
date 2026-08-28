@@ -2,6 +2,7 @@ import { ChevronsLeft, ChevronsRight, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import ADDULogo from '../../assets/ADDULogo.jpg';
+import { OfficerBadge } from './OfficerBadge';
 
 export const TOPBAR_HEIGHT = 58;
 
@@ -24,11 +25,30 @@ export function TopBar({ sidebarOpen, onToggleSidebar, activeView, onNavigate, u
   const navigate = useNavigate();
   const [userName, setUserName] = useState(localStorage.getItem('userName') || 'User');
   const [profileImageUrl, setProfileImageUrl] = useState(localStorage.getItem('userProfileImage') || '');
+  const [isOfficer, setIsOfficer] = useState(false);
 
   useEffect(() => {
+    const fetchOfficerStatus = async () => {
+      const email = localStorage.getItem('userEmail');
+      if (!email) {
+        setIsOfficer(false);
+        return;
+      }
+      try {
+        const response = await fetch(`http://localhost:8000/api/users/${encodeURIComponent(email)}`);
+        if (response.ok) {
+          const data = await response.json();
+          setIsOfficer(Boolean(data.is_officer));
+        }
+      } catch (error) {
+        console.error('Error fetching officer status:', error);
+      }
+    };
+
     const sync = () => {
       setUserName(localStorage.getItem('userName') || 'User');
       setProfileImageUrl(localStorage.getItem('userProfileImage') || '');
+      fetchOfficerStatus();
     };
     sync();
     window.addEventListener('storage', sync);
@@ -155,8 +175,9 @@ export function TopBar({ sidebarOpen, onToggleSidebar, activeView, onNavigate, u
             )}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.25, textAlign: 'left' }}>
-            <span style={{ fontSize: 14.5, fontWeight: 600, color: '#fff', whiteSpace: 'nowrap' }}>
+            <span style={{ fontSize: 14.5, fontWeight: 600, color: '#fff', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 5 }}>
               {userName.split(' ')[0]}
+              {isOfficer && <OfficerBadge size={13} />}
             </span>
             <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)', whiteSpace: 'nowrap', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               {roleLabel}

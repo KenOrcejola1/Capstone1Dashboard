@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, type ChangeEvent } from 'react';
 import { Mail, Phone, MapPin, Briefcase, GraduationCap, Edit3, Save, X, Trash2, Camera } from 'lucide-react';
 import { Footer } from '../Footer';
+import { OfficerBadge } from '../OfficerBadge';
 import { WORLD_COUNTRIES } from '../../utils/countries';
 import { formatTelephoneNumber } from '../../utils/phoneFormat';
 
@@ -140,7 +141,8 @@ export function ProfileView({ userRole }: ProfileViewProps) {
     course: "",
     batchYear: "",
     jobTitle: "",
-    company: ""
+    company: "",
+    isOfficer: false
   });
 
   useEffect(() => {
@@ -246,7 +248,8 @@ export function ProfileView({ userRole }: ProfileViewProps) {
         course: userData.course || '',
         batchYear: userData.batch_year || '',
         jobTitle: '',
-        company: ''
+        company: '',
+        isOfficer: Boolean(userData.is_officer)
       });
 
       setProfileImageUrl(userData.profile_image_path ? `http://localhost:8000/storage/${userData.profile_image_path}` : '');
@@ -619,11 +622,12 @@ export function ProfileView({ userRole }: ProfileViewProps) {
             </div>
             <div className="flex-1 space-y-4">
               <div>
-                <h2 className="text-3xl font-bold text-gray-900">
+                <h2 className="text-3xl font-bold text-gray-900 flex items-center gap-2 flex-wrap">
                   {formData.firstName} {formData.lastName}
                   {formData.maidenName && (
                     <span className="text-xl font-medium text-gray-400"> (née {formData.maidenName})</span>
                   )}
+                  {formData.isOfficer && <OfficerBadge size={20} />}
                 </h2>
                 <p className="text-gray-500 font-medium">Class of {formData.batchYear || 'N/A'} • {formData.course || 'Course Not Set'}</p>
               </div>

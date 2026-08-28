@@ -446,7 +446,7 @@ export function RegisterPage() {
   const years = Array.from({ length: currentYear - 1949 }, (_, i) => currentYear - i);
 
   return (
-    <div className="min-h-screen flex bg-gray-100" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+    <div className="h-screen overflow-hidden flex bg-gray-100" style={{ fontFamily: "'DM Sans', sans-serif" }}>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap');
