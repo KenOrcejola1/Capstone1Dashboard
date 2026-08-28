@@ -18,6 +18,41 @@ class SurveyController extends Controller
         return view('survey.index', compact('categories'));
     }
 
+    public function available(Request $request)
+    {
+        $email = $request->query('email');
+        if (!$email || Response::where('respondent_email', strtolower(trim($email)))->exists()) {
+            return response()->json([]);
+        }
+
+        return response()->json(
+            Category::withCount('questions')
+                ->orderBy('order')
+                ->get(['id', 'title', 'description', 'order'])
+        );
+    }
+
+    public function completed(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $response = Response::where('respondent_email', strtolower(trim($request->email)))
+            ->first();
+
+        if (!$response) {
+            return response()->json([]);
+        }
+
+        return response()->json([[
+            'id' => $response->id,
+            'title' => 'Graduate Tracer Survey',
+            'category' => 'Tracer Study',
+            'completedDate' => $response->submitted_at->format('F j, Y'),
+        ]]);
+    }
+
     private function normalizePersonalInfoBirthQuestions($categories): void
     {
         $personalInfoCategory = $categories->firstWhere('order', 2);
@@ -85,7 +120,7 @@ class SurveyController extends Controller
     public function submit(Request $request)
     {
         $request->validate([
-            'email' => 'nullable|email',
+            'email' => 'required|email',
             'formData' => 'required|array',
         ]);
 
@@ -93,24 +128,27 @@ class SurveyController extends Controller
         $formData = $request->formData;
         $existingResponseId = $request->existingResponseId;
 
-        $responseId = $existingResponseId;
+        $response = $existingResponseId
+            ? Response::find($existingResponseId)
+            : ($email ? Response::where('respondent_email', $email)->first() : null);
 
-        if (!$responseId) {
+        if (!$response) {
             $response = Response::create([
                 'respondent_email' => $email,
                 'submitted_at' => now(),
             ]);
-            $responseId = $response->id;
 
             // Delete draft if resume code provided
             if ($request->resumeCode) {
                 Draft::where('resume_code', $request->resumeCode)->delete();
             }
         } else {
-            Response::where('id', $responseId)->update(['submitted_at' => now()]);
+            $response->update(['submitted_at' => now()]);
             // Clear old answers
-            ResponseAnswer::where('response_id', $responseId)->delete();
+            ResponseAnswer::where('response_id', $response->id)->delete();
         }
+
+        $responseId = $response->id;
 
         $answerRows = [];
         foreach ($formData as $questionId => $value) {

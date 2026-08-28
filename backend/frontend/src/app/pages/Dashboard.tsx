@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { HomeView } from '../components/views/HomeView';
 import { ProfileView } from '../components/views/ProfileView';
 import { DirectoryView } from '../components/views/DirectoryView';
@@ -19,12 +20,17 @@ import { TopBar, TOPBAR_HEIGHT } from '../components/TopBar';
 import { DashboardNavContext } from '../DashboardNavContext';
 
 export function Dashboard() {
+  const location = useLocation();
   const [activeView, setActiveView] = useState<
     'home'|'profile'|'directory'|'events'|'surveys'|'careers'|'news'|
     'give'|'projects'|'alumni'|'payments'|'registrations'|'analytics'|
     'internships'|'users'
   >('home');
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  useEffect(() => {
+    if (location.state?.view === 'surveys') setActiveView('surveys');
+  }, [location.state]);
 
   const userRole = (localStorage.getItem('userRole') as 'alumni' | 'admin') || 'alumni';
   const userEmail = localStorage.getItem('userEmail') || '';
@@ -40,7 +46,7 @@ export function Dashboard() {
       case 'events': 
         return <EventsView userRole={userRole} />;
       case 'surveys': 
-        return <SurveysView userRole={userRole} />;
+        return <SurveysView userRole={userRole} userEmail={userEmail} />;
       case 'careers': 
         return <CareersView userRole={userRole} />;
       case 'news': 

@@ -6,13 +6,17 @@ use Illuminate\Support\Facades\Route;
 
 // Survey routes
 Route::get('/', [SurveyController::class, 'index']);
+Route::get('/api/surveys', [SurveyController::class, 'available']);
+Route::get('/api/surveys/completed', [SurveyController::class, 'completed']);
+Route::get('/survey-management-content', [AdminController::class, 'index']);
+Route::get('/admin', fn () => abort(404));
+Route::match(['get', 'post'], '/login', fn () => redirect('http://localhost:3000/login'))->name('login');
 Route::post('/survey/check-email', [SurveyController::class, 'checkEmail']);
 Route::post('/survey/submit', [SurveyController::class, 'submit']);
 Route::post('/survey/save-draft', [SurveyController::class, 'saveDraft']);
 Route::post('/survey/resume', [SurveyController::class, 'resume']);
 
 // Admin routes
-Route::get('/admin', [AdminController::class, 'index']);
 Route::get('/admin/responses', [AdminController::class, 'responses']);
 Route::get('/admin/responses/{id}/details', [AdminController::class, 'responseDetails']);
 Route::get('/admin/export-csv', [AdminController::class, 'exportCsv']);

@@ -4,6 +4,7 @@ import { LoginPage } from './app/pages/LoginPage';
 import { RegisterPage } from './app/pages/RegisterPage';
 import { Dashboard } from './app/pages/Dashboard';
 import { TracerSurveyPage } from './app/pages/TracerSurveyPage';
+import { SurveyManagementPage } from './app/pages/SurveyManagementPage';
 import { AboutHistoryPage } from './app/pages/AboutHistoryPage';
 import { DevelopersPage } from './app/pages/DevelopersPage';
 
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/surveymanagement" element={<SurveyManagementPage />} />
         <Route path="/survey/tracer" element={<TracerSurveyPage />} />
         <Route path="/about" element={<AboutHistoryPage />} />
         <Route path="/developers" element={<DevelopersPage />} />

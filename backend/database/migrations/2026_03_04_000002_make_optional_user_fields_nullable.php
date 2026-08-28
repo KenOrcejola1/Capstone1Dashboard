@@ -31,12 +31,11 @@ return new class extends Migration
             $table->string('valid_id_file_path')->nullable()->change();
         });
 
-        // Postgres can't combine a type-change + check-constraint + drop-not-null
-        // in one ALTER like Laravel's enum()->change() generates. Just drop NOT NULL
-        // directly for these enum-backed columns instead.
-        DB::statement('ALTER TABLE users ALTER COLUMN sex DROP NOT NULL');
-        DB::statement('ALTER TABLE users ALTER COLUMN religion DROP NOT NULL');
-        DB::statement('ALTER TABLE users ALTER COLUMN marital_status DROP NOT NULL');
+        if (DB::connection()->getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE users ALTER COLUMN sex DROP NOT NULL');
+            DB::statement('ALTER TABLE users ALTER COLUMN religion DROP NOT NULL');
+            DB::statement('ALTER TABLE users ALTER COLUMN marital_status DROP NOT NULL');
+        }
     }
 
     /**
