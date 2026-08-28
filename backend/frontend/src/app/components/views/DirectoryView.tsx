@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { MessageSquare, Mail, MapPin, Briefcase, Award, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { MessageSquare, Mail, MapPin, Briefcase, Award, Facebook, Twitter, Linkedin, Instagram, LayoutGrid, ChevronLeft, ChevronRight } from 'lucide-react';
 import { WORLD_COUNTRIES } from '../../utils/countries';
 import { OfficerBadge } from '../OfficerBadge';
 
@@ -216,7 +216,12 @@ export function DirectoryView({ userRole }: { userRole: string }) {
   const [chapters, setChapters] = useState<ChapterApi[]>([]);
   const [loadingChapters, setLoadingChapters] = useState(true);
   const [chaptersError, setChaptersError] = useState<string | null>(null);
-  const [activeChapterId, setActiveChapterId] = useState<number | null>(null);
+  const [activeChapterId, setActiveChapterId] = useState<number | 'all'>('all');
+  const tabScrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollTabs = (direction: 'left' | 'right') => {
+    tabScrollRef.current?.scrollBy({ left: direction === 'left' ? -220 : 220, behavior: 'smooth' });
+  };
 
   useEffect(() => {
     const fetchChapters = async () => {
@@ -232,8 +237,8 @@ export function DirectoryView({ userRole }: { userRole: string }) {
         const data = (await response.json()) as ChapterApi[];
         setChapters(data);
         setActiveChapterId((current) => {
-          if (current !== null && data.some((c) => c.id === current)) return current;
-          return data.length > 0 ? data[0].id : null;
+          if (current === 'all' || data.some((c) => c.id === current)) return current;
+          return 'all';
         });
       } catch (error) {
         console.error('Error fetching chapters:', error);
@@ -250,7 +255,7 @@ export function DirectoryView({ userRole }: { userRole: string }) {
     return () => window.removeEventListener('userProfileUpdated', handleProfileUpdate);
   }, []);
 
-  const activeChapter = chapters.find((c) => c.id === activeChapterId) || null;
+  const activeChapter = activeChapterId === 'all' ? null : chapters.find((c) => c.id === activeChapterId) || null;
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F8FAFC]">
@@ -270,24 +275,110 @@ export function DirectoryView({ userRole }: { userRole: string }) {
 
           {!loadingChapters && !chaptersError && chapters.length > 0 && (
             <>
-              <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
-                {chapters.map((chapter) => {
-                  const isActive = chapter.id === activeChapterId;
-                  const style = isActive
-                    ? getChapterHeaderStyle(chapter.color)
-                    : { background: '#fff', color: '#4B5563', border: '1px solid #e5e7eb' };
-                  return (
-                    <button
-                      key={chapter.id}
-                      onClick={() => setActiveChapterId(chapter.id)}
-                      className="shrink-0 whitespace-nowrap px-4 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 transition-shadow"
-                      style={style}
-                    >
-                      <Award className="w-4 h-4" /> {chapter.name}
-                    </button>
-                  );
-                })}
+              <style>{`
+                .chapter-tab-scroll::-webkit-scrollbar { display: none; }
+                .chapter-tab-scroll { scrollbar-width: none; -ms-overflow-style: none; }
+              `}</style>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => scrollTabs('left')}
+                  aria-label="Scroll chapters left"
+                  className="shrink-0 w-8 h-8 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-700 flex items-center justify-center transition-colors"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+
+                <div ref={tabScrollRef} className="chapter-tab-scroll flex gap-2 overflow-x-auto scroll-smooth">
+                  <button
+                    onClick={() => setActiveChapterId('all')}
+                    className="shrink-0 whitespace-nowrap px-4 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 transition-shadow"
+                    style={activeChapterId === 'all' ? { background: '#1a24d2', color: '#fff' } : { background: '#fff', color: '#4B5563', border: '1px solid #e5e7eb' }}
+                  >
+                    <LayoutGrid className="w-4 h-4" /> All Chapters
+                  </button>
+                  {chapters.map((chapter) => {
+                    const isActive = chapter.id === activeChapterId;
+                    const style = isActive
+                      ? getChapterHeaderStyle(chapter.color)
+                      : { background: '#fff', color: '#4B5563', border: '1px solid #e5e7eb' };
+                    return (
+                      <button
+                        key={chapter.id}
+                        onClick={() => setActiveChapterId(chapter.id)}
+                        className="shrink-0 whitespace-nowrap px-4 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 transition-shadow"
+                        style={style}
+                      >
+                        <Award className="w-4 h-4" /> {chapter.name}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <button
+                  onClick={() => scrollTabs('right')}
+                  aria-label="Scroll chapters right"
+                  className="shrink-0 w-8 h-8 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-700 flex items-center justify-center transition-colors"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
               </div>
+
+              {activeChapterId === 'all' && (
+                <>
+                  <div className="flex items-center gap-3">
+                    <div className="bg-white border border-gray-100 rounded-lg px-3.5 py-1.5 text-xs text-gray-500 shadow-sm">
+                      <span className="font-bold text-gray-900">{chapters.length}</span> Chapters
+                    </div>
+                    <div className="bg-white border border-gray-100 rounded-lg px-3.5 py-1.5 text-xs text-gray-500 shadow-sm">
+                      <span className="font-bold text-[#1a24d2]">{chapters.reduce((sum, c) => sum + c.active_officers.length, 0)}</span> Officers Assigned
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                    {chapters.map((chapter) => {
+                      const headerStyle = getChapterHeaderStyle(chapter.color);
+                      const isLightHeader = headerStyle.color === '#111827';
+                      const countBadgeStyle = isLightHeader
+                        ? { background: 'rgba(0,0,0,0.08)' }
+                        : { background: 'rgba(255,255,255,0.2)' };
+                      return (
+                        <div
+                          key={chapter.id}
+                          onClick={() => setActiveChapterId(chapter.id)}
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveChapterId(chapter.id); }}
+                          className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col cursor-pointer"
+                        >
+                          <div className="px-4 py-3 flex items-center justify-between gap-2 font-bold text-xs" style={headerStyle}>
+                            <span className="flex items-center gap-2 min-w-0">
+                              <Award className="w-4 h-4 shrink-0" /> <span className="truncate">{chapter.name}</span>
+                            </span>
+                            <span
+                              className="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold"
+                              style={countBadgeStyle}
+                            >
+                              {chapter.active_officers.length}
+                            </span>
+                          </div>
+                          <div className="divide-y divide-gray-50 flex-1">
+                            {chapter.active_officers.length === 0 ? (
+                              <div className="flex flex-col items-center justify-center gap-2 py-8 text-center">
+                                <Award className="w-6 h-6 text-gray-200" />
+                                <p className="text-xs text-gray-400">No active officers yet</p>
+                              </div>
+                            ) : (
+                              chapter.active_officers.map((officer) => (
+                                <CompactOfficerRow key={officer.id} alumnus={mapOfficerToAlumnus(officer)} />
+                              ))
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
 
               {activeChapter && (
                 <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
@@ -356,6 +447,40 @@ function AlumniRow({ alumnus, isOfficer }: { alumnus: any, isOfficer?: boolean }
       <div className="flex gap-2 shrink-0">
         <button className="flex items-center gap-2 px-4 py-2 border border-[#1a24d2] rounded-lg text-[#1a24d2] font-bold text-xs hover:bg-blue-50 transition-all"><MessageSquare className="w-3.5 h-3.5" /> Message</button>
         <button className="flex items-center gap-2 px-4 py-2 border border-[#1a24d2] rounded-lg text-[#1a24d2] font-bold text-xs hover:bg-blue-50 transition-all"><Mail className="w-3.5 h-3.5" /> Email</button>
+      </div>
+    </div>
+  );
+}
+
+// Condensed officer row used on the "All Chapters" overview, where every
+// chapter's officers need to fit in a small tile without much scrolling.
+function CompactOfficerRow({ alumnus }: { alumnus: any }) {
+  const [imageFailed, setImageFailed] = useState(false);
+  const hasProfileImage = Boolean(alumnus.profileImageUrl) && !imageFailed;
+
+  return (
+    <div className="px-4 py-2.5 flex items-center gap-2.5 text-left transition-colors hover:bg-gray-50/70">
+      <div className="w-8 h-8 bg-[#1a24d2] rounded-full flex items-center justify-center text-white font-bold text-[10px] shrink-0 overflow-hidden ring-2 ring-white shadow-sm">
+        {hasProfileImage ? (
+          <img
+            src={alumnus.profileImageUrl}
+            alt={`${alumnus.name} profile`}
+            className="w-full h-full object-cover"
+            onError={() => setImageFailed(true)}
+          />
+        ) : (
+          alumnus.initials
+        )}
+      </div>
+      <div className="min-w-0">
+        <p className="text-[13px] font-bold text-gray-900 flex items-center gap-1 truncate">
+          <span className="truncate">{alumnus.name}</span>
+          <OfficerBadge size={12} />
+        </p>
+        <p className="text-[11px] text-gray-400 truncate">
+          {alumnus.officerRole}
+          {alumnus.schoolYear && ` · SY ${alumnus.schoolYear}`}
+        </p>
       </div>
     </div>
   );
