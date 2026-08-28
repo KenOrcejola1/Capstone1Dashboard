@@ -1276,9 +1276,14 @@ export function UserManagementView({ userRole, userEmail = '' }: UserManagementV
                               </>
                             )}
                             {officer.status === 'rejected' && (
-                              <button onClick={() => updateOfficerStatus(officer.id, 'approve')} title="Reapprove" className="p-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                                <CheckCircle className="w-4 h-4" />
-                              </button>
+                              <>
+                                <button onClick={() => updateOfficerStatus(officer.id, 'approve')} title="Reapprove" className="p-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                                  <CheckCircle className="w-4 h-4" />
+                                </button>
+                                <button onClick={() => deleteOfficerAssignment(officer.id, officerName(officer.user))} title="Delete this assignment" className="p-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </>
                             )}
                           </div>
                         </td>
