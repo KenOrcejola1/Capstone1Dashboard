@@ -49,6 +49,26 @@ class ChapterOfficerController extends Controller
             return response()->json(['message' => 'No user found with that email.'], 422);
         }
 
+        // A person can only hold one officer assignment at a time — pending
+        // (awaiting review) or approved+active both count as "assigned".
+        // Rejected or deactivated assignments don't block a new one.
+        $existingAssignment = $alumnus->chapterOfficerAssignments()
+            ->where(function ($query) {
+                $query->where('status', 'pending')
+                    ->orWhere(function ($active) {
+                        $active->where('status', 'approved')->where('is_active', true);
+                    });
+            })
+            ->with('chapter')
+            ->first();
+
+        if ($existingAssignment) {
+            $statusLabel = $existingAssignment->status === 'pending' ? 'pending as' : 'assigned as';
+            return response()->json([
+                'message' => "This alumnus is already {$statusLabel} {$existingAssignment->position} of {$existingAssignment->chapter->name}. Remove that assignment before assigning a new one.",
+            ], 422);
+        }
+
         $admin = User::where('email', $validated['admin_email'])->first();
 
         $officer = ChapterOfficer::create([
