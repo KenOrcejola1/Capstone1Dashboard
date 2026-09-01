@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ADDU brand typography (matches addu.edu.ph): serif headings, sans-serif body */
+.font-opensans h1,
+.font-opensans h2,
+.font-opensans h3,
+.font-opensans h4 {
+  font-family: '"Cormorant Garamond"', Georgia, "Times New Roman", serif;
+}
