@@ -103,6 +103,7 @@ Route::delete('/chapters/{id}', [ChapterController::class, 'destroy']);
 // Chapter Officers
 Route::get('/chapter-officers', [ChapterOfficerController::class, 'index']);
 Route::post('/chapter-officers', [ChapterOfficerController::class, 'store']);
+Route::patch('/chapter-officers/{id}', [ChapterOfficerController::class, 'update']);
 Route::patch('/chapter-officers/{id}/approve', [ChapterOfficerController::class, 'approve']);
 Route::patch('/chapter-officers/{id}/reject', [ChapterOfficerController::class, 'reject']);
 Route::patch('/chapter-officers/{id}/deactivate', [ChapterOfficerController::class, 'deactivate']);

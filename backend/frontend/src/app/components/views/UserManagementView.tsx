@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, Search, Edit, Trash2, Plus, X, Mail, Phone, MapPin, GraduationCap, Calendar, Shield, Lock, Unlock, Check, XCircle, Eye, Award, CheckCircle, UserMinus, RotateCcw } from 'lucide-react';
+import { Users, Search, Edit, Trash2, Plus, X, Mail, Phone, MapPin, GraduationCap, Calendar, Shield, Lock, Unlock, Check, XCircle, Eye, Award, CheckCircle, AlertTriangle } from 'lucide-react';
 import { OfficerBadge } from '../OfficerBadge';
 
 const PROGRAM_OPTIONS = [
@@ -140,7 +140,8 @@ const CHAPTER_OFFICER_POSITIONS = [
 interface ChapterOfficerRow {
   id: number;
   position: string;
-  school_year: string;
+  term_start_date: string;
+  term_end_date: string;
   status: 'pending' | 'approved' | 'rejected';
   is_active: boolean;
   chapter: Chapter;
@@ -155,6 +156,71 @@ interface ChapterOfficerRow {
 
 function officerName(user: ChapterOfficerRow['user']) {
   return user.name?.trim() || [user.first_name, user.last_name].filter(Boolean).join(' ').trim() || user.email;
+}
+
+function formatTermDate(dateStr: string) {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  if (Number.isNaN(date.getTime())) return dateStr;
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+}
+
+function formatTermRange(startDate: string, endDate: string) {
+  if (!startDate && !endDate) return '—';
+  return `${formatTermDate(startDate)} – ${formatTermDate(endDate)}`;
+}
+
+// How many calendar days remain until the term end date (negative once it's
+// passed). Compared by UTC calendar date so time-of-day/timezone don't
+// shift the count by a day.
+const TERM_ENDING_SOON_THRESHOLD_DAYS = 30;
+const TERM_GLOW_THRESHOLD_DAYS = 7;
+
+function getDaysUntilTermEnds(endDate: string): number | null {
+  if (!endDate) return null;
+  const end = new Date(endDate);
+  if (Number.isNaN(end.getTime())) return null;
+  const endUTC = Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate());
+  const now = new Date();
+  const todayUTC = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.round((endUTC - todayUTC) / (1000 * 60 * 60 * 24));
+}
+
+function TermCountdown({ endDate }: { endDate: string }) {
+  const days = getDaysUntilTermEnds(endDate);
+  if (days === null) return null;
+
+  if (days < 0) {
+    const daysAgo = Math.abs(days);
+    return (
+      <div className="mt-1 flex items-center gap-1 text-red-600 text-xs font-semibold">
+        <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+        Term ended {daysAgo} day{daysAgo === 1 ? '' : 's'} ago
+      </div>
+    );
+  }
+
+  if (days <= TERM_ENDING_SOON_THRESHOLD_DAYS) {
+    return (
+      <div className="mt-1 flex items-center gap-1 text-amber-600 text-xs font-semibold">
+        <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+        {days === 0 ? 'Term ends today' : `${days} day${days === 1 ? '' : 's'} until term ends`}
+      </div>
+    );
+  }
+
+  return null;
+}
+
+// Row-level highlight so a term nearing/at/past its end date is impossible
+// to miss when scanning the whole table, not just the small sub-message.
+function getTermUrgencyRowClass(officer: ChapterOfficerRow): string {
+  if (!(officer.status === 'approved' && officer.is_active)) return '';
+  const days = getDaysUntilTermEnds(officer.term_end_date);
+  if (days === null) return '';
+  if (days <= 0) return 'bg-red-50 hover:bg-red-100';
+  if (days <= TERM_GLOW_THRESHOLD_DAYS) return 'bg-orange-50 hover:bg-orange-100';
+  return '';
 }
 
 function OfficerStatusBadge({ status, isActive }: { status: string; isActive: boolean }) {
@@ -190,10 +256,53 @@ export function UserManagementView({ userRole, userEmail = '' }: UserManagementV
   const [showAssignForm, setShowAssignForm] = useState(false);
   const [assignFormError, setAssignFormError] = useState<string | null>(null);
   const [submittingAssign, setSubmittingAssign] = useState(false);
-  const [assignForm, setAssignForm] = useState({ chapter_id: '', email: '', position: '', school_year: '' });
+  const [assignForm, setAssignForm] = useState({ chapter_id: '', email: '', position: '', term_start_date: '', term_end_date: '' });
   const [positionChoice, setPositionChoice] = useState('');
   const [officerNameQuery, setOfficerNameQuery] = useState('');
   const [showOfficerNameSuggestions, setShowOfficerNameSuggestions] = useState(false);
+  const [editingOfficer, setEditingOfficer] = useState<ChapterOfficerRow | null>(null);
+  const [editOfficerForm, setEditOfficerForm] = useState({ position: '', term_start_date: '', term_end_date: '' });
+  const [editOfficerPositionChoice, setEditOfficerPositionChoice] = useState('');
+  const [editOfficerError, setEditOfficerError] = useState<string | null>(null);
+  const [submittingEditOfficer, setSubmittingEditOfficer] = useState(false);
+
+  const openEditOfficer = (officer: ChapterOfficerRow) => {
+    setEditingOfficer(officer);
+    setEditOfficerForm({
+      position: officer.position,
+      term_start_date: officer.term_start_date ? officer.term_start_date.slice(0, 10) : '',
+      term_end_date: officer.term_end_date ? officer.term_end_date.slice(0, 10) : '',
+    });
+    setEditOfficerPositionChoice(
+      (CHAPTER_OFFICER_POSITIONS as readonly string[]).includes(officer.position) ? officer.position : 'Other'
+    );
+    setEditOfficerError(null);
+  };
+
+  const handleEditOfficer = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingOfficer) return;
+    setEditOfficerError(null);
+    setSubmittingEditOfficer(true);
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/chapter-officers/${editingOfficer.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editOfficerForm),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setEditOfficerError(data.message || 'Failed to update assignment.');
+        return;
+      }
+      setEditingOfficer(null);
+      fetchOfficers();
+    } catch (error) {
+      setEditOfficerError('Connection error. Make sure the server is running.');
+    } finally {
+      setSubmittingEditOfficer(false);
+    }
+  };
 
   const alumniDisplayName = (u: User) => [u.first_name, u.last_name].filter(Boolean).join(' ').trim() || u.name;
 
@@ -249,7 +358,7 @@ export function UserManagementView({ userRole, userEmail = '' }: UserManagementV
         setAssignFormError(data.message || 'Failed to assign officer.');
         return;
       }
-      setAssignForm({ chapter_id: '', email: '', position: '', school_year: '' });
+      setAssignForm({ chapter_id: '', email: '', position: '', term_start_date: '', term_end_date: '' });
       setPositionChoice('');
       setOfficerNameQuery('');
       setShowAssignForm(false);
@@ -296,6 +405,16 @@ export function UserManagementView({ userRole, userEmail = '' }: UserManagementV
         o.chapter?.name?.toLowerCase().includes(query) ||
         o.position.toLowerCase().includes(query)
       );
+    })
+    // Ended/soon-to-end terms surface first; sorting ascending by days
+    // remaining naturally puts the most overdue ones at the very top.
+    .sort((a, b) => {
+      const daysA = getDaysUntilTermEnds(a.term_end_date);
+      const daysB = getDaysUntilTermEnds(b.term_end_date);
+      if (daysA === null && daysB === null) return 0;
+      if (daysA === null) return 1;
+      if (daysB === null) return -1;
+      return daysA - daysB;
     });
   const [pendingUsers, setPendingUsers] = useState<User[]>([]);
   const [loadingPending, setLoadingPending] = useState(false);
@@ -1152,15 +1271,25 @@ export function UserManagementView({ userRole, userEmail = '' }: UserManagementV
                   )}
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">School Year</label>
-                  <input
-                    required
-                    type="text"
-                    placeholder="e.g. 2026-2027"
-                    value={assignForm.school_year}
-                    onChange={(e) => setAssignForm({ ...assignForm, school_year: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
-                  />
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">Term</label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      required
+                      type="date"
+                      value={assignForm.term_start_date}
+                      onChange={(e) => setAssignForm({ ...assignForm, term_start_date: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] text-sm"
+                    />
+                    <span className="text-gray-400 shrink-0">to</span>
+                    <input
+                      required
+                      type="date"
+                      value={assignForm.term_end_date}
+                      min={assignForm.term_start_date || undefined}
+                      onChange={(e) => setAssignForm({ ...assignForm, term_end_date: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] text-sm"
+                    />
+                  </div>
                 </div>
               </div>
               <div className="flex gap-3">
@@ -1240,14 +1369,14 @@ export function UserManagementView({ userRole, userEmail = '' }: UserManagementV
                       <th className="px-6 py-4 text-left font-semibold">Alumnus</th>
                       <th className="px-6 py-4 text-left font-semibold">Chapter</th>
                       <th className="px-6 py-4 text-left font-semibold">Position</th>
-                      <th className="px-6 py-4 text-left font-semibold">School Year</th>
+                      <th className="px-6 py-4 text-left font-semibold">Term</th>
                       <th className="px-6 py-4 text-left font-semibold">Status</th>
                       <th className="px-6 py-4 text-center font-semibold">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {filteredOfficers.map((officer) => (
-                      <tr key={officer.id} className="hover:bg-gray-50 transition-colors">
+                      <tr key={officer.id} className={`transition-colors ${getTermUrgencyRowClass(officer) || 'hover:bg-gray-50'}`}>
                         <td className="px-6 py-4">
                           <div className="font-bold text-sm text-gray-900 flex items-center gap-1.5">
                             {officerName(officer.user)}
@@ -1257,41 +1386,47 @@ export function UserManagementView({ userRole, userEmail = '' }: UserManagementV
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-600">{officer.chapter?.name}</td>
                         <td className="px-6 py-4 text-sm text-gray-600">{officer.position}</td>
-                        <td className="px-6 py-4 text-sm text-gray-600">{officer.school_year}</td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          {formatTermRange(officer.term_start_date, officer.term_end_date)}
+                          {officer.status === 'approved' && officer.is_active && <TermCountdown endDate={officer.term_end_date} />}
+                        </td>
                         <td className="px-6 py-4"><OfficerStatusBadge status={officer.status} isActive={officer.is_active} /></td>
                         <td className="px-6 py-4">
-                          <div className="flex gap-2 justify-center">
+                          <div className="flex items-center justify-center gap-2">
+                            <button onClick={() => openEditOfficer(officer)} title="Edit position/term" className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                              <Edit className="w-4 h-4" />
+                            </button>
                             {officer.status === 'pending' && (
                               <>
-                                <button onClick={() => updateOfficerStatus(officer.id, 'approve')} title="Approve" className="p-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                                <button onClick={() => updateOfficerStatus(officer.id, 'approve')} title="Approve" className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors">
                                   <CheckCircle className="w-4 h-4" />
                                 </button>
-                                <button onClick={() => updateOfficerStatus(officer.id, 'reject')} title="Reject" className="p-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                                <button onClick={() => updateOfficerStatus(officer.id, 'reject')} title="Reject" className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                   <XCircle className="w-4 h-4" />
                                 </button>
                               </>
                             )}
                             {officer.status === 'approved' && officer.is_active && (
-                              <button onClick={() => updateOfficerStatus(officer.id, 'deactivate')} title="Deactivate / expire this assignment" className="p-1.5 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
-                                <UserMinus className="w-4 h-4" />
+                              <button onClick={() => updateOfficerStatus(officer.id, 'deactivate')} title="Deactivate / expire this assignment" className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors">
+                                <Lock className="w-4 h-4" />
                               </button>
                             )}
                             {officer.status === 'approved' && !officer.is_active && (
                               <>
-                                <button onClick={() => updateOfficerStatus(officer.id, 'reactivate')} title="Reactivate this assignment" className="p-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                                  <RotateCcw className="w-4 h-4" />
+                                <button onClick={() => updateOfficerStatus(officer.id, 'reactivate')} title="Reactivate this assignment" className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors">
+                                  <Unlock className="w-4 h-4" />
                                 </button>
-                                <button onClick={() => deleteOfficerAssignment(officer.id, officerName(officer.user))} title="Delete this assignment" className="p-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                                <button onClick={() => deleteOfficerAssignment(officer.id, officerName(officer.user))} title="Delete this assignment" className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                   <Trash2 className="w-4 h-4" />
                                 </button>
                               </>
                             )}
                             {officer.status === 'rejected' && (
                               <>
-                                <button onClick={() => updateOfficerStatus(officer.id, 'approve')} title="Reapprove" className="p-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                                <button onClick={() => updateOfficerStatus(officer.id, 'approve')} title="Reapprove" className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors">
                                   <CheckCircle className="w-4 h-4" />
                                 </button>
-                                <button onClick={() => deleteOfficerAssignment(officer.id, officerName(officer.user))} title="Delete this assignment" className="p-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                                <button onClick={() => deleteOfficerAssignment(officer.id, officerName(officer.user))} title="Delete this assignment" className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                   <Trash2 className="w-4 h-4" />
                                 </button>
                               </>
@@ -1304,6 +1439,88 @@ export function UserManagementView({ userRole, userEmail = '' }: UserManagementV
                 </table>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Edit Officer Assignment Modal — position and term dates only */}
+      {editingOfficer && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-gradient-to-r from-[#1a24d2] to-[#0055cc] text-white p-6 flex items-center justify-between rounded-t-2xl">
+              <div>
+                <h2 className="text-xl font-bold">Edit Assignment</h2>
+                <p className="text-sm text-white/80">{officerName(editingOfficer.user)} · {editingOfficer.chapter?.name}</p>
+              </div>
+              <button onClick={() => setEditingOfficer(null)} className="text-white hover:bg-white/20 p-2 rounded-lg transition-colors">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <form onSubmit={handleEditOfficer} className="p-6 space-y-4">
+              {editOfficerError && <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm">{editOfficerError}</div>}
+
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">Position</label>
+                <select
+                  required
+                  value={editOfficerPositionChoice}
+                  onChange={(e) => {
+                    const choice = e.target.value;
+                    setEditOfficerPositionChoice(choice);
+                    setEditOfficerForm({ ...editOfficerForm, position: choice === 'Other' ? '' : choice });
+                  }}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2]"
+                >
+                  <option value="" disabled>Select position</option>
+                  {CHAPTER_OFFICER_POSITIONS.map((position) => (
+                    <option key={position} value={position}>{position}</option>
+                  ))}
+                </select>
+                {editOfficerPositionChoice === 'Other' && (
+                  <input
+                    required
+                    type="text"
+                    placeholder="Specify position"
+                    value={editOfficerForm.position}
+                    onChange={(e) => setEditOfficerForm({ ...editOfficerForm, position: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] mt-2"
+                  />
+                )}
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">Term</label>
+                <div className="flex items-center gap-2">
+                  <input
+                    required
+                    type="date"
+                    value={editOfficerForm.term_start_date}
+                    onChange={(e) => setEditOfficerForm({ ...editOfficerForm, term_start_date: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] text-sm"
+                  />
+                  <span className="text-gray-400 shrink-0">to</span>
+                  <input
+                    required
+                    type="date"
+                    value={editOfficerForm.term_end_date}
+                    min={editOfficerForm.term_start_date || undefined}
+                    onChange={(e) => setEditOfficerForm({ ...editOfficerForm, term_end_date: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a24d2] text-sm"
+                  />
+                </div>
+                <p className="text-xs text-gray-400 mt-1.5">Tip: set an end date within 30 days (or in the past) to test the term-ending countdown.</p>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button type="submit" disabled={submittingEditOfficer} className="flex-1 px-6 py-2.5 bg-[#1a24d2] text-white rounded-lg font-bold text-sm disabled:opacity-50">
+                  {submittingEditOfficer ? 'Saving...' : 'Save Changes'}
+                </button>
+                <button type="button" onClick={() => setEditingOfficer(null)} className="px-6 py-2.5 border border-gray-200 rounded-lg font-bold text-sm text-gray-600">
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

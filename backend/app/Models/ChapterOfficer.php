@@ -10,7 +10,8 @@ class ChapterOfficer extends Model
         'chapter_id',
         'user_id',
         'position',
-        'school_year',
+        'term_start_date',
+        'term_end_date',
         'status',
         'is_active',
         'assigned_by',
@@ -21,6 +22,8 @@ class ChapterOfficer extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'reviewed_at' => 'datetime',
+        'term_start_date' => 'date',
+        'term_end_date' => 'date',
     ];
 
     public function chapter()

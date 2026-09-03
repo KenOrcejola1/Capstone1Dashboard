@@ -19,7 +19,8 @@ class ChapterOfficerDemoSeeder extends Seeder
     public function run(): void
     {
         $password = '12345678';
-        $schoolYear = '2026-2027';
+        $termStart = '2026-08-01';
+        $termEnd = '2027-05-31';
         $admin = User::where('role', 'admin')->first();
 
         $users = [
@@ -124,10 +125,11 @@ class ChapterOfficerDemoSeeder extends Seeder
                 [
                     'chapter_id' => $chapter->id,
                     'user_id' => $user->id,
-                    'school_year' => $schoolYear,
+                    'term_start_date' => $termStart,
                     'position' => $a['position'],
                 ],
                 [
+                    'term_end_date' => $termEnd,
                     'status' => 'approved',
                     'is_active' => true,
                     'assigned_by' => $admin?->id,

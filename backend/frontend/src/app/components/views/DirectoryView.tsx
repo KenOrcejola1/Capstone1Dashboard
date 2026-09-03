@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { MessageSquare, Mail, MapPin, Briefcase, Award, Facebook, Twitter, Linkedin, Instagram, LayoutGrid, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MessageSquare, Mail, MapPin, Briefcase, Award, Facebook, Twitter, Linkedin, Instagram, LayoutGrid, ChevronLeft, ChevronRight, AlertTriangle } from 'lucide-react';
 import { WORLD_COUNTRIES } from '../../utils/countries';
 import { OfficerBadge } from '../OfficerBadge';
 
@@ -171,8 +171,16 @@ function mapUserToAlumnus(user: DirectoryUser): Alumnus {
 interface ChapterOfficerApi {
   id: number;
   position: string;
-  school_year: string;
+  term_start_date: string;
+  term_end_date: string;
   user: DirectoryUser;
+}
+
+function formatTermDate(dateStr?: string) {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  if (Number.isNaN(date.getTime())) return dateStr;
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 }
 
 interface ChapterApi {
@@ -208,8 +216,68 @@ function mapOfficerToAlumnus(officer: ChapterOfficerApi) {
     ...base,
     id: officer.id,
     officerRole: officer.position,
-    schoolYear: officer.school_year,
+    term: officer.term_start_date && officer.term_end_date
+      ? `${formatTermDate(officer.term_start_date)} – ${formatTermDate(officer.term_end_date)}`
+      : '',
+    termEndDate: officer.term_end_date,
   };
+}
+
+// How many calendar days remain until the term end date (negative once it's
+// passed). Compared by UTC calendar date so time-of-day/timezone don't
+// shift the count by a day.
+const TERM_ENDING_SOON_THRESHOLD_DAYS = 30;
+
+function getDaysUntilTermEnds(endDate?: string): number | null {
+  if (!endDate) return null;
+  const end = new Date(endDate);
+  if (Number.isNaN(end.getTime())) return null;
+  const endUTC = Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate());
+  const now = new Date();
+  const todayUTC = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.round((endUTC - todayUTC) / (1000 * 60 * 60 * 24));
+}
+
+// Lets fellow alumni know when an officer's term is wrapping up or already
+// over — shown alongside their term dates wherever officers are listed.
+function TermCountdown({ endDate, className = '' }: { endDate?: string; className?: string }) {
+  const days = getDaysUntilTermEnds(endDate);
+  if (days === null) return null;
+
+  if (days < 0) {
+    const daysAgo = Math.abs(days);
+    return (
+      <span className={`inline-flex items-center gap-1 text-red-600 font-semibold ${className}`}>
+        <AlertTriangle className="w-3 h-3 shrink-0" />
+        Term ended {daysAgo} day{daysAgo === 1 ? '' : 's'} ago
+      </span>
+    );
+  }
+
+  if (days <= TERM_ENDING_SOON_THRESHOLD_DAYS) {
+    return (
+      <span className={`inline-flex items-center gap-1 text-amber-600 font-semibold ${className}`}>
+        <AlertTriangle className="w-3 h-3 shrink-0" />
+        {days === 0 ? 'Term ends today' : `${days} day${days === 1 ? '' : 's'} until term ends`}
+      </span>
+    );
+  }
+
+  return null;
+}
+
+const TERM_GLOW_THRESHOLD_DAYS = 7;
+const ORANGE_GLOW = { boxShadow: '0 0 0 1px rgba(249,115,22,0.4), 0 0 16px rgba(249,115,22,0.35)', backgroundColor: 'rgba(255,247,237,0.7)' };
+const RED_GLOW = { boxShadow: '0 0 0 1px rgba(220,38,38,0.4), 0 0 16px rgba(220,38,38,0.35)', backgroundColor: 'rgba(254,242,242,0.7)' };
+
+// Same highlight rule as the admin table, so any alumnus browsing the
+// public chapters page notices an officer's term wrapping up too.
+function getTermGlowStyle(endDate?: string) {
+  const days = getDaysUntilTermEnds(endDate);
+  if (days === null) return undefined;
+  if (days <= 0) return RED_GLOW;
+  if (days <= TERM_GLOW_THRESHOLD_DAYS) return ORANGE_GLOW;
+  return undefined;
 }
 
 export function DirectoryView({ userRole }: { userRole: string }) {
@@ -410,7 +478,10 @@ function AlumniRow({ alumnus, isOfficer }: { alumnus: any, isOfficer?: boolean }
   const hasProfileImage = Boolean(alumnus.profileImageUrl) && !imageFailed;
 
   return (
-    <div className="p-6 flex flex-col lg:flex-row items-center gap-6 text-left transition-colors hover:bg-gray-50/50">
+    <div
+      className="p-6 flex flex-col lg:flex-row items-center gap-6 text-left transition-colors hover:bg-gray-50/50"
+      style={isOfficer ? getTermGlowStyle(alumnus.termEndDate) : undefined}
+    >
       <div className="w-12 h-12 bg-[#1a24d2] rounded-full flex items-center justify-center text-white font-bold text-xs shrink-0 overflow-hidden">
         {hasProfileImage ? (
           <img
@@ -430,10 +501,13 @@ function AlumniRow({ alumnus, isOfficer }: { alumnus: any, isOfficer?: boolean }
         </h3>
         <p className="text-gray-400 text-[11px]">Class of {alumnus.class}</p>
         {isOfficer && (
-          <p className="text-[#1a24d2] font-bold text-[11px] mt-1">
-            {alumnus.officerRole}
-            {alumnus.schoolYear && <span className="text-gray-400 font-medium"> · SY {alumnus.schoolYear}</span>}
-          </p>
+          <>
+            <p className="text-[#1a24d2] font-bold text-[11px] mt-1">
+              {alumnus.officerRole}
+              {alumnus.term && <span className="text-gray-400 font-medium"> · {alumnus.term}</span>}
+            </p>
+            <TermCountdown endDate={alumnus.termEndDate} className="text-[11px] mt-1" />
+          </>
         )}
       </div>
       <div className="flex-1 text-gray-500 text-[12px]">{alumnus.program}</div>
@@ -459,7 +533,10 @@ function CompactOfficerRow({ alumnus }: { alumnus: any }) {
   const hasProfileImage = Boolean(alumnus.profileImageUrl) && !imageFailed;
 
   return (
-    <div className="px-4 py-2.5 flex items-center gap-2.5 text-left transition-colors hover:bg-gray-50/70">
+    <div
+      className="px-4 py-2.5 flex items-center gap-2.5 text-left transition-colors hover:bg-gray-50/70"
+      style={getTermGlowStyle(alumnus.termEndDate)}
+    >
       <div className="w-8 h-8 bg-[#1a24d2] rounded-full flex items-center justify-center text-white font-bold text-[10px] shrink-0 overflow-hidden ring-2 ring-white shadow-sm">
         {hasProfileImage ? (
           <img
@@ -479,8 +556,9 @@ function CompactOfficerRow({ alumnus }: { alumnus: any }) {
         </p>
         <p className="text-[11px] text-gray-400 truncate">
           {alumnus.officerRole}
-          {alumnus.schoolYear && ` · SY ${alumnus.schoolYear}`}
+          {alumnus.term && ` · ${alumnus.term}`}
         </p>
+        <TermCountdown endDate={alumnus.termEndDate} className="text-[10px] mt-0.5" />
       </div>
     </div>
   );

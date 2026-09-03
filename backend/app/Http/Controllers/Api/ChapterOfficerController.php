@@ -39,7 +39,8 @@ class ChapterOfficerController extends Controller
         $validated = $request->validate([
             'chapter_id' => 'required|exists:chapters,id',
             'position' => 'required|string|max:255',
-            'school_year' => 'required|string|max:20',
+            'term_start_date' => 'required|date',
+            'term_end_date' => 'required|date|after:term_start_date',
             'email' => 'required|email',
             'admin_email' => 'required|email',
         ]);
@@ -69,19 +70,61 @@ class ChapterOfficerController extends Controller
             ], 422);
         }
 
+        // The position itself can only be held by one person per chapter at
+        // a time — same "pending or approved+active counts as occupied"
+        // rule as above, just scoped to chapter+position instead of user.
+        $positionHolder = ChapterOfficer::where('chapter_id', $validated['chapter_id'])
+            ->where('position', $validated['position'])
+            ->where(function ($query) {
+                $query->where('status', 'pending')
+                    ->orWhere(function ($active) {
+                        $active->where('status', 'approved')->where('is_active', true);
+                    });
+            })
+            ->with(['user', 'chapter'])
+            ->first();
+
+        if ($positionHolder) {
+            $statusLabel = $positionHolder->status === 'pending' ? 'has a pending assignment for' : 'already holds';
+            return response()->json([
+                'message' => "{$positionHolder->user->name} {$statusLabel} {$positionHolder->position} of {$positionHolder->chapter->name}. Remove that assignment before assigning someone else to this position.",
+            ], 422);
+        }
+
         $admin = User::where('email', $validated['admin_email'])->first();
 
         $officer = ChapterOfficer::create([
             'chapter_id' => $validated['chapter_id'],
             'user_id' => $alumnus->id,
             'position' => $validated['position'],
-            'school_year' => $validated['school_year'],
+            'term_start_date' => $validated['term_start_date'],
+            'term_end_date' => $validated['term_end_date'],
             'status' => 'pending',
             'is_active' => true,
             'assigned_by' => $admin?->id,
         ]);
 
         return response()->json($officer->load(['chapter', 'user']), 201);
+    }
+
+    /**
+     * Admin edits an existing assignment's position and/or term dates only
+     * — the chapter and the alumnus stay fixed (use delete + reassign for
+     * that instead).
+     */
+    public function update(Request $request, $id)
+    {
+        $officer = ChapterOfficer::findOrFail($id);
+
+        $validated = $request->validate([
+            'position' => 'required|string|max:255',
+            'term_start_date' => 'required|date',
+            'term_end_date' => 'required|date|after:term_start_date',
+        ]);
+
+        $officer->update($validated);
+
+        return response()->json($officer->load(['chapter', 'user']));
     }
 
     public function approve(Request $request, $id)
